@@ -52,6 +52,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class MY_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
+
+        $configPaths[] = APPPATH . 'config/hoosk.php';
+        if (defined('ENVIRONMENT')) {
+            $configPaths[] = APPPATH . 'config/' . ENVIRONMENT . '/hoosk.php';
+        }
+
+        $configFound = false;
+        foreach ($configPaths as $cPath) {
+            if (file_exists($cPath)) {
+                $configFound = true;
+                break;
+            }
+        }
+
+        if ($configFound == false) {
+            $this->load->helper('url');
+            redirect('installer/index');
+            exit;
+        }
+
         $this->load->config('hoosk', true);
         foreach ($this->config->item('hoosk') as $name => $value) {
             if ($name == 'RSS_FEED') {

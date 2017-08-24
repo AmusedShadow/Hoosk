@@ -17,11 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
  */
-if (defined('BASE_URL')) {
-    $config['base_url'] = BASE_URL;
-} else {
-    $config['base_url'] = '';
-}
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -383,7 +379,7 @@ $config['sess_table_name']         = 'hoosk_sessions';
 |
  */
 $config['cookie_prefix']   = "hoosk";
-$config['cookie_domain']   = "." . EMAIL_URL;
+$config['cookie_domain']   = '';
 $config['cookie_path']     = "/";
 $config['cookie_secure']   = FALSE;
 $config['cookie_httponly'] = FALSE;
