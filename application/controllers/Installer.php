@@ -56,6 +56,23 @@ class Installer extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set(@date_default_timezone_get());
+
+        $configPaths[] = APPPATH . 'config/hoosk.php';
+        if (defined('ENVIRONMENT')) {
+            $configPaths[] = APPPATH . 'config/' . ENVIRONMENT . '/hoosk.php';
+        }
+
+        $configFound = false;
+        foreach ($configPaths as $cPath) {
+            if (file_exists($cPath)) {
+                $configFound = true;
+                break;
+            }
+        }
+
+        if ($configFound == true) {
+            show_error('The installation process has already run.');
+        }
     }
 
     public function index() {
@@ -104,17 +121,17 @@ class Installer extends CI_Controller {
         $url = ltrim($url, '/');
 
         $config = array(
-            'DB_HOST'     => $this->input->post('dbHost'),
-            'DB_USERNAME' => $this->input->post('dbUserName'),
-            'DB_PASS'     => $this->input->post('dbPass'),
-            'DB_NAME'     => $this->input->post('dbName'),
-            'DB_DRIVER'   => $this->input->post('dbDriver'),
-            'BASE_URL'    => $url,
-            'EMAIL_URL'   => $url,
-            'SITE_NAME'   => $this->input->post('siteName'),
-            'SALT'        => $this->salt,
-            'ADMIN_THEME' => $url . '/theme/admin',
-            'RSS_FEED'    => 'true',
+            'DB_HOST'       => $this->input->post('dbHost'),
+            'DB_USERNAME'   => $this->input->post('dbUserName'),
+            'DB_PASS'       => $this->input->post('dbPass'),
+            'DB_NAME'       => $this->input->post('dbName'),
+            'DB_DRIVER'     => $this->input->post('dbDriver'),
+            'BASE_URL'      => $url,
+            'EMAIL_URL'     => $url,
+            'SITE_NAME_TXT' => $this->input->post('siteName'),
+            'SALT'          => $this->salt,
+            'ADMIN_THEME'   => $url . '/theme/admin',
+            'RSS_FEED'      => 'true',
         );
 
         $configFile = '<?php' . PHP_EOL;
@@ -274,20 +291,31 @@ class Installer extends CI_Controller {
             $table->bigint('unixStamp');
         }, $this->DB);
 
-        /*
-        $this->DB->insert('hoosk_post',array(
-        'postURL' => 'hello_hoosk',
-        'postTitle' => 'Hello Hoosk.',
-        'postExceprt' => 'Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I''d like to ASS you a few questions.',
-        'postContentHTML' => ''
-        'postContent',
-        'postImage',
-        'categoryID',
-        'published',
-        'datePosted',
-        'unixStamp'
+        $this->DB->insert('hoosk_post', array(
+            'postURL'         => 'hello_hoosk',
+            'postTitle'       => 'Hello Hoosk.',
+            'postExcerpt'     => 'Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I\'d like to ASS you a few questions.',
+            'postContentHTML' => '<div class=\'row\'><div class=\'col-md-6\'><p>Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I\'d like to ASS you a few questions. We\'re going for a ride on the information super highway. Your entrance was good, his was better. Kinda hot in these rhinos. It\'s because i\'m green isn\'t it! Here she comes to wreck the day. Alrighty Then Excuse me, I\'d like to ASS you a few questions. </p>\n<a href="www.google.com" class="btn btn-default ">Button</a>\n</div><div class=\'col-md-6\'><p>Your entrance was good, his was better. We got no food we got no money and our pets heads are falling off! Haaaaaaarry. Look at that, it\'s exactly three seconds before I honk your nose and pull your underwear over your head. It\'s because i\'m green isn\'t it! Hey, maybe I will give you a call sometime. Your number still 911? Excuse me, I\'d like to ASS you a few questions. </p>\n</div></div>',
+            'postContent'     => '{"data":[{"type":"columns","data":{"columns":[{"width":6,"blocks":[{"type":"text","data":{"text":"Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I\'d like to ASS you a few questions. We\'re going for a ride on the information super highway. Your entrance was good, his was better. Kinda hot in these rhinos. It\'s because i\'m green isn\'t it! Here she comes to wreck the day. Alrighty Then Excuse me, I\'d like to ASS you a few questions. \\n"}},{"type":"button","data":{"size":"","style":"btn-default","is_block":false,"url":"www.google.com","null":"0","html":"Button"}}]},{"width":6,"blocks":[{"type":"text","data":{"text":"Your entrance was good, his was better. We got no food we got no money and our pets heads are falling off! Haaaaaaarry. Look at that, it\'s exactly three seconds before I honk your nose and pull your underwear over your head. It\'s because i\'m green isn\'t it! Hey, maybe I will give you a call sometime. Your number still 911? Excuse me, I\'d like to ASS you a few questions. \\n"}}]}],"preset":"columns-6-6"}}]}',
+            'postImage'       => 'large_logo.png',
+            'categoryID'      => 1,
+            'published'       => 0,
+            'datePosted'      => '12/17/2016 22:12:23',
+            'unixStamp'       => '1482012743',
         ));
-         */
+
+        $this->DB->insert('hoosk_post', array(
+            'postURL'         => 'me_im_dishonest',
+            'postTitle'       => 'Me? I\'m dishonest',
+            'postExcerpt'     => 'A drug person can learn to cope with things like seeing their dead grandmother crawling up their leg with a knife in her teeth. But no one should be asked to handle this trip. Well, then, I confess, it is my intention to commandeer one of these ships, pick up a crew in Tortuga, raid, pillage, plunder and otherwise pilfer my weasely black guts out.',
+            'postContentHTML' => '',
+            'postContent'     => '',
+            'postImage'       => 'responsive_hoosk.png',
+            'categoryID'      => 3,
+            'published'       => 1,
+            'datePosted'      => '06/12/2014 02:58',
+            'unixStamp'       => '1402538280',
+        ));
 
         /*
     '<div class=''row''><div class=''col-md-6''><p>Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I''d like to ASS you a few questions. We''re going for a ride on the information super highway. Your entrance was good, his was better. Kinda hot in these rhinos. It''s because i''m green isn''t it! Here she comes to wreck the day. Alrighty Then Excuse me, I''d like to ASS you a few questions. </p>\n<a href="www.google.com" class="btn btn-default ">Button</a>\n</div><div class=''col-md-6''><p>Your entrance was good, his was better. We got no food we got no money and our pets heads are falling off! Haaaaaaarry. Look at that, it''s exactly three seconds before I honk your nose and pull your underwear over your head. It''s because i''m green isn''t it! Hey, maybe I will give you a call sometime. Your number still 911? Excuse me, I''d like to ASS you a few questions. </p>\n</div></div>', '{"data":[{"type":"columns","data":{"columns":[{"width":6,"blocks":[{"type":"text","data":{"text":"Brain freeze. Kinda hot in these rhinos. Here she comes to wreck the day. Brain freeze. Excuse me, I''d like to ASS you a few questions. We''re going for a ride on the information super highway. Your entrance was good, his was better. Kinda hot in these rhinos. It''s because i''m green isn''t it! Here she comes to wreck the day. Alrighty Then Excuse me, I''d like to ASS you a few questions. \\n"}},{"type":"button","data":{"size":"","style":"btn-default","is_block":false,"url":"www.google.com","null":"0","html":"Button"}}]},{"width":6,"blocks":[{"type":"text","data":{"text":"Your entrance was good, his was better. We got no food we got no money and our pets heads are falling off! Haaaaaaarry. Look at that, it''s exactly three seconds before I honk your nose and pull your underwear over your head. It''s because i''m green isn''t it! Hey, maybe I will give you a call sometime. Your number still 911? Excuse me, I''d like to ASS you a few questions. \\n"}}]}],"preset":"columns-6-6"}}]}', 'large_logo.png', 1, 0, '12/17/2016 22:12:23', 1482012743),(4, 'me_im_dishonest', 'Me? I''m dishonest', 'A drug person can learn to cope with things like seeing their dead grandmother crawling up their leg with a knife in her teeth. But no one should be asked to handle this trip. Well, then, I confess, it is my intention to commandeer one of these ships, pick up a crew in Tortuga, raid, pillage, plunder and otherwise pilfer my weasely black guts out.', '', '', 'responsive_hoosk.png', 3, 1, '06/12/2014 02:58', 1402538280),(7, 'yes_i_used_a_machine_gun', 'Yes, I used a machine gun.', 'You wouldn''t hit a man with no trousers on, would you? You''re only supposed to blow the bloody doors off! You know, your bobby dangler, giggle stick, your general-two-colonels, master of ceremonies... Yeah,', '<div class=''row''><div class=''col-md-6''><p>You''re only supposed to blow the bloody doors off! Jasper: Your baby is the miracle the whole world has been waiting for. Yes, I used a machine gun. You know, your bobby dangler, giggle stick, your general&#45;two&#45;colonels, master of ceremonies... Yeah, don''t be shy, let''s have a look. My lord! You''re a tripod. My lord! You''re a tripod. I took a Viagra, got stuck in me throat, I''ve had a stiff neck for hours. When I get back, remind to tell you about the time I took 100 nuns to Nairobi! At this point, I''d set you up with a chimpanzee if it''d brought you back to the world! Pull my finger! It''s not the size mate, it''s how you use it. You wouldn''t hit a man with no trousers on, would you? </p>\n</div><div class=''col-md-6''><p>Your were only supposed to blow the bloody doors off. My lord! You''re a tripod. When I get back, remind to tell you about the time I took 100 nuns to Nairobi! It''s not the size mate, it''s how you use it. At this point, I''d set you up with a chimpanzee if it''d brought you back to the world! </p>\n<>Hola Mundo!!!</></div></div>', '{"data":[{"type":"columns","data":{"columns":[{"width":6,"blocks":[{"type":"text","data":{"text":" You''re only supposed to blow the bloody doors off! Jasper: Your baby is the miracle the whole world has been waiting for. Yes, I used a machine gun. You know, your bobby dangler, giggle stick, your general\\\\-two\\\\-colonels, master of ceremonies... Yeah, don''t be shy, let''s have a look. My lord! You''re a tripod. My lord! You''re a tripod. I took a Viagra, got stuck in me throat, I''ve had a stiff neck for hours. When I get back, remind to tell you about the time I took 100 nuns to Nairobi! At this point, I''d set you up with a chimpanzee if it''d brought you back to the world! Pull my finger! It''s not the size mate, it''s how you use it. You wouldn''t hit a man with no trousers on, would you? \\n\\n"}}]},{"width":6,"blocks":[{"type":"text","data":{"text":"Your were only supposed to blow the bloody doors off. My lord! You''re a tripod. When I get back, remind to tell you about the time I took 100 nuns to Nairobi! It''s not the size mate, it''s how you use it. At this point, I''d set you up with a chimpanzee if it''d brought you back to the world! \\n"}},{"type":"heading","data":{"text":"Hola Mundo!!!","heading":""}}]}],"preset":"columns-6-6"}}]}', 'jumbotron.jpg', 4, 1, '06/12/2014 03:30', 1402540200);~
@@ -330,7 +358,8 @@ class Installer extends CI_Controller {
 
     protected function hoosk_sessions() {
         Schema::create_table('hoosk_sessions', function ($table) {
-            $table->auto_increment_integer('id');
+            $table->auto_increment_integer('sessionID');
+            $table->string('id', 250);
             $table->string('ip_address', 45);
             $table->integer('timestamp');
             $table->text('data');
@@ -362,13 +391,13 @@ class Installer extends CI_Controller {
             'siteLogo'               => 'logo.png',
             'siteFavicon'            => 'favicon.png',
             'siteTheme'              => 'dark',
-            'siteFoot'               => '&copy; Hoosk CMS ' . date('Y', time()),
+            'siteFooter'             => 'Hoosk CMS ' . date('Y', time()),
             'siteLang'               => 'english',
             'siteMaintenance'        => 0,
             'siteMaintenanceHeading' => 'Down for maintenance',
             'siteMaintenanceMeta'    => 'Down for maintenance',
             'siteMaintenanceContent' => 'This site is currently down for maintenance, please check back soon',
-            'siteAdditionalJS'       => '',
+            'siteAdditionalJS'       => ' ',
         ));
     }
 
