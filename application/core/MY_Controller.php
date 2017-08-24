@@ -53,6 +53,8 @@ class MY_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
+        date_default_timezone_set(@date_default_timezone_get());
+
         $configPaths[] = APPPATH . 'config/hoosk.php';
         if (defined('ENVIRONMENT')) {
             $configPaths[] = APPPATH . 'config/' . ENVIRONMENT . '/hoosk.php';

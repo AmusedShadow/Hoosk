@@ -53,6 +53,11 @@ class Installer extends CI_Controller {
     protected $DB   = '';
     protected $salt = '';
 
+    public function __construct() {
+        parent::__construct();
+        date_default_timezone_set(@date_default_timezone_get());
+    }
+
     public function index() {
         $this->load->helper('url');
 
