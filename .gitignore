@@ -11,6 +11,7 @@
 Thumbs.db
 ehthumbs.db
 config.php
+!/application/config/config.php
 .ftpconfig
 # Folder config file
 Desktop.ini
