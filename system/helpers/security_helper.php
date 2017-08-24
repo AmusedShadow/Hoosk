@@ -36,6 +36,7 @@
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 /**
  * CodeIgniter Security Helpers
  *
@@ -45,7 +46,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/helpers/security_helper.html
  */
+
 // ------------------------------------------------------------------------
+
 if ( ! function_exists('xss_clean'))
 {
 	/**
@@ -60,7 +63,9 @@ if ( ! function_exists('xss_clean'))
 		return get_instance()->security->xss_clean($str, $is_image);
 	}
 }
+
 // ------------------------------------------------------------------------
+
 if ( ! function_exists('sanitize_filename'))
 {
 	/**
@@ -74,7 +79,9 @@ if ( ! function_exists('sanitize_filename'))
 		return get_instance()->security->sanitize_filename($filename);
 	}
 }
+
 // --------------------------------------------------------------------
+
 if ( ! function_exists('do_hash'))
 {
 	/**
@@ -92,10 +99,13 @@ if ( ! function_exists('do_hash'))
 		{
 			$type = 'md5';
 		}
+
 		return hash($type, $str);
 	}
 }
+
 // ------------------------------------------------------------------------
+
 if ( ! function_exists('strip_image_tags'))
 {
 	/**
@@ -109,7 +119,9 @@ if ( ! function_exists('strip_image_tags'))
 		return get_instance()->security->strip_image_tags($str);
 	}
 }
+
 // ------------------------------------------------------------------------
+
 if ( ! function_exists('encode_php_tags'))
 {
 	/**
