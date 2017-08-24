@@ -112,7 +112,7 @@ switch (ENVIRONMENT)
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-	$system_path = 'hoosk/system';
+	$system_path = 'system';
 
 /*
  *---------------------------------------------------------------
@@ -127,7 +127,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = 'hoosk/hoosk0';
+	$application_folder = 'application';
 
 /*
  *---------------------------------------------------------------
