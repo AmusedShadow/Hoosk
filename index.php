@@ -36,28 +36,6 @@
  * @filesource
  */
 
-if (!defined('BASE_URL')) {
-    //die('The base_url constant must be defined!');
-    define('BASE_URL', '127.0.0.1');
-} else {
-    //we really shouldn't be defining global contants in any file but
-    //the application/config/constants.php file
-
-    //used for echoing in templates
-    define('ADMIN_THEME', BASE_URL . '/theme/admin');
-}
-
-//define some more constants in the wrong area
-
-//Used for encryption - be creative, if this is changed once set up then passwords will need reset
-//while I agree the salt should be a constant - it should be auto generated during install so
-//that we don't need to have a dirty conscious if a lazy administrator doesn't set it
-define('SALT', 'Once Up0n @ h00sK!');
-
-//this should not be a constant but rather a configuration item
-//RSS off flag
-define('RSS_FEED', true);
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
