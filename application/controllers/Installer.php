@@ -77,6 +77,7 @@ class Installer extends CI_Controller {
         $this->form_validation->set_rules('dbName', 'Database Name', 'required');
         $this->form_validation->set_rules('dbUserName', 'Database Username', 'required');
         $this->form_validation->set_rules('dbPass', 'Database Password', 'required'); //technically this isn't required
+        $this->form_validation->set_rules('dbDriver', 'Database Driver', 'required|callback__validDriver');
         $this->form_validation->set_rules('dbHost', 'Database Host', 'required|callback__testDbConnection');
 
         if ($this->form_validation->run() === false) {
@@ -107,6 +108,7 @@ class Installer extends CI_Controller {
             'DB_USERNAME' => $this->input->post('dbUserName'),
             'DB_PASS'     => $this->input->post('dbPass'),
             'DB_NAME'     => $this->input->post('dbName'),
+            'DB_DRIVER'   => $this->input->post('dbDriver'),
             'BASE_URL'    => $url,
             'EMAIL_URL'   => $url,
             'SITE_NAME'   => $this->input->post('siteName'),
@@ -124,13 +126,29 @@ class Installer extends CI_Controller {
         file_put_contents(APPPATH . 'config' . DIRECTORY_SEPARATOR . 'hoosk.php', $configFile);
     }
 
+    public function _validDriver($str = '') {
+        $str  = trim(strtolower($str));
+        $path = FCPATH . 'system/database/drivers/pdo/subdrivers/pdo_' . $str . '_driver.php';
+        if (!file_exists($path)) {
+            $this->form_validation->set_message('_validDriver', 'The SQL driver you selected is not valid!');
+            return false;
+        }
+
+        return true;
+    }
+
     public function _testDbConnection() {
+        if ($this->_validDriver($this->input->post('dbDriver')) == false) {
+            return true;
+        }
+
         $testConfig = array(
             'hostname'    => $this->input->post('dbHost'),
             'username'    => $this->input->post('dbUserName'),
             'password'    => $this->input->post('dbPass'),
             'database'    => $this->input->post('dbName'),
-            'dbdriver'    => 'mysql',
+            'dbdriver'    => 'pdo',
+            'subdriver'   => $this->input->post('dbDriver'),
             'dbprefix'    => '',
             'pconnection' => false,
             'db_debug'    => false,

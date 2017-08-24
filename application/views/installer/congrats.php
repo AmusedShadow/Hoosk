@@ -23,7 +23,7 @@
     <div class="container">
       <div class="row">
         <div class="col col-lg-12 col-sm-12">
-        <img src="images/large_logo.png" />
+        <img src="/assets/images/large_logo.png" />
         <h1>Installation Completed!</h1>
         <p>The default username is <strong>demo</strong> and password is <strong>demo</strong></p>
         <p><strong>Change these when you login!</strong></p>
