@@ -1,3 +1,9 @@
+#hoosk files
+/application/config/hoosk.php
+/application/config/development/hoosk.php
+/application/config/production/hoosk.php
+/application/config/testing/hoosk.php
+
 #php-cs-fixer
 .php_cs.cache
 

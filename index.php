@@ -38,14 +38,15 @@
 
 if (!file_exists('config.php')) {
 	//I don't think this will "technically" work if the site is SSL only but lets deal with that later
-	header('Location: '.$_SERVER['HTTP_HOST'].'/index.php');
-	exit;
+	//header('Location: '.$_SERVER['HTTP_HOST'].'/index.php');
+	//exit;
 } else {
-	include('config.php');
+	//include('config.php');
 }
 
 if (!defined('BASE_URL')) {
-	die('The base_url constant must be defined!');
+	//die('The base_url constant must be defined!');
+	define('BASE_URL','127.0.0.1');
 } else {
 	//we really shouldn't be defining global contants in any file but 
 	//the application/config/constants.php file

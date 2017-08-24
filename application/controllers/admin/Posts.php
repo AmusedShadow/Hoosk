@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Posts extends CI_Controller
+class Posts extends MY_Controller
 {
     public function __construct()
     {

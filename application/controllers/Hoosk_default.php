@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Hoosk_default extends CI_Controller
+class Hoosk_default extends MY_Controller
 {
     public function __construct()
     {

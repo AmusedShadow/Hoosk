@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Navigation extends CI_Controller
+class Navigation extends MY_Controller
 {
     public function __construct()
     {
