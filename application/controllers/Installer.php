@@ -78,7 +78,7 @@ class Installer extends CI_Controller {
             $this->load->view('installer/install');
         } else {
             $this->load->helper('string'); //this will be used to generate our salt
-            $this->salt = random_string('alnum', 150);
+            $this->salt = random_string('alnum', 150); //generate our salt
             $this->schema();
             $this->buildConfig();
             $this->load->view('installer/congrats');
@@ -405,7 +405,7 @@ class Installer extends CI_Controller {
         $this->DB->insert('hoosk_user', array(
             'username' => 'demo',
             'email'    => 'me@example.com',
-            'password' => hash('md5', 'demo' . $this->salt),
+            'password' => hash('md5', 'demo' . $this->salt), //use the random salt we generated in the index method
             'RS'       => '',
         ));
     }
