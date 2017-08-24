@@ -1,8 +1,4 @@
 <?php
-if (!file_exists('config.php')) {
-	header("Location: ".str_replace("/index.php", "", htmlspecialchars($_SERVER["PHP_SELF"]))."/install");
-	die();
-}
 /**
  * CodeIgniter
  *
@@ -39,11 +35,36 @@ if (!file_exists('config.php')) {
  * @since	Version 1.0.0
  * @filesource
  */
-/** Config **/
-include('config.php');
 
-//used for echoing in templates
-define ('ADMIN_THEME', BASE_URL.'/theme/admin');
+if (!file_exists('config.php')) {
+	//I don't think this will "technically" work if the site is SSL only but lets deal with that later
+	header('Location: '.$_SERVER['HTTP_HOST'].'/index.php');
+	exit;
+} else {
+	include('config.php');
+}
+
+if (!defined('BASE_URL')) {
+	die('The base_url constant must be defined!');
+} else {
+	//we really shouldn't be defining global contants in any file but 
+	//the application/config/constants.php file
+	
+	//used for echoing in templates
+	define ('ADMIN_THEME', BASE_URL.'/theme/admin');
+}
+
+//define some more constants in the wrong area
+
+//Used for encryption - be creative, if this is changed once set up then passwords will need reset
+//while I agree the salt should be a constant - it should be auto generated during install so 
+//that we don't need to have a dirty conscious if a lazy administrator doesn't set it
+define ('SALT', 'Once Up0n @ h00sK!');
+
+//this should not be a constant but rather a configuration item
+//RSS off flag
+define ('RSS_FEED', true);
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -62,12 +83,6 @@ define ('ADMIN_THEME', BASE_URL.'/theme/admin');
  * NOTE: If you change these, also change the error_reporting() code below
  */
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
-
-//Used for encryption - be creative, if this is changed once set up then passwords will need reset
-define ('SALT', 'Once Up0n @ h00sK!');
-
-//RSS off flag
-define ('RSS_FEED', true);
 
 /*
  *---------------------------------------------------------------
