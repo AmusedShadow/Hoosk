@@ -4,39 +4,39 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                    <img src="/assets/images/large_logo.png" class="login_logo" />
+                    <img src="<?php echo ADMIN_THEME; ?>/images/large_logo.png" class="login_logo" />
                     </div>
                     <div class="panel-body">
-                    <?php if (isset($error)) {
-    if ($error == "1") {
-        echo "<div class='alert alert-danger'>" . $this->lang->line('login_incorrect') . "</div>";
-    }
-}?>
-                        <?php echo form_open('/admin/login/check'); ?>
+                    <?php if (isset($error)){
+					if ($error == "1"){
+						echo "<div class='alert alert-danger'>".$this->lang->line('login_incorrect')."</div>";
+					}
+				} ?>
+                        <?php echo form_open(BASE_URL.'/admin/login/check'); ?>
                             <fieldset>
                                 <div class="form-group">
                                     <label for="username"><?php echo $this->lang->line('login_username'); ?></label>
-										<?php $data = array(
-    'name'        => 'username',
-    'id'          => 'username',
-    'class'       => 'form-control',
-    'value'       => set_value('username'),
-    'placeholder' => $this->lang->line('login_username'),
-);
+										<?php 	$data = array(
+                                              'name'        => 'username',
+                                              'id'          => 'username',
+                                              'class'       => 'form-control',
+                                              'value'		=> set_value('username'),
+                                              'placeholder'	=> $this->lang->line('login_username')
+                                            );
 
-echo form_input($data);?>
+                                            echo form_input($data); ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="password"><?php echo $this->lang->line('login_password'); ?>:</label>
-									 <?php $data = array(
-    'name'        => 'password',
-    'id'          => 'password',
-    'class'       => 'form-control',
-    'value'       => set_value('password'),
-    'placeholder' => $this->lang->line('login_password'),
-);
+									 <?php 	$data = array(
+                                          'name'        => 'password',
+                                          'id'          => 'password',
+                                          'class'       => 'form-control',
+                                          'value'		=> set_value('password'),
+                                          'placeholder'	=> $this->lang->line('login_password')
+                                        );
 
-echo form_password($data);?>
+                                        echo form_password($data); ?>
                                 </div>
 
                                 <div class="form-group">
@@ -52,10 +52,10 @@ echo form_password($data);?>
         </div>
     </div>
 <!-- jQuery -->
-    <script src="/theme/admin/js/jquery.js"></script>
+    <script src="<?php echo ADMIN_THEME; ?>/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="/theme/admin/js/bootstrap.min.js"></script>
+    <script src="<?php echo ADMIN_THEME; ?>/js/bootstrap.min.js"></script>
 
 </body>
 
