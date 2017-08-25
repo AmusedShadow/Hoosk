@@ -2,10 +2,8 @@
     exit('No direct script access allowed');
 }
 
-class Hoosk_model extends CI_Model
-{
-    public function __construct()
-    {
+class Hoosk_model extends CI_Model {
+    public function __construct() {
         // Call the Model constructor
         parent::__construct();
         $this->load->database();
@@ -14,8 +12,7 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** Dash Querys ************ */
     /*     * *************************** */
-    public function getSiteName()
-    {
+    public function getSiteName() {
         $this->db->select("*");
         $this->db->where("siteID", 0);
         $query = $this->db->get('hoosk_settings');
@@ -30,8 +27,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function checkMaintenance()
-    {
+    public function checkMaintenance() {
         $this->db->select("*");
         $this->db->where("siteID", 0);
         $query = $this->db->get('hoosk_settings');
@@ -46,8 +42,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getTheme()
-    {
+    public function getTheme() {
         // Get Theme
         $this->db->select("*");
         $this->db->where("siteID", 0);
@@ -63,8 +58,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getLang()
-    {
+    public function getLang() {
         // Get Theme
         $this->db->select("*");
         $this->db->where("siteID", 0);
@@ -80,8 +74,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getUpdatedPages()
-    {
+    public function getUpdatedPages() {
         // Get most recently updated pages
         $this->db->select("pageTitle, hoosk_page_attributes.pageID, pageUpdated, pageContentHTML");
         $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
@@ -100,13 +93,11 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** User Querys ************ */
     /*     * *************************** */
-    public function countUsers()
-    {
+    public function countUsers() {
         return $this->db->count_all('hoosk_user');
     }
 
-    public function getUsers($limit, $offset = 0)
-    {
+    public function getUsers($limit, $offset = 0) {
         // Get a list of all user accounts
         $this->db->select("userName, email, userID");
         $this->db->order_by("userName", "asc");
@@ -120,8 +111,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getUser($id)
-    {
+    public function getUser($id) {
         // Get the user details
         $this->db->select("*");
         $this->db->where("userID", $id);
@@ -134,8 +124,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getUserEmail($id)
-    {
+    public function getUserEmail($id) {
         // Get the user email address
         $this->db->select("email");
         $this->db->where("userID", $id);
@@ -148,19 +137,18 @@ class Hoosk_model extends CI_Model
         }
     }
 
-    public function createUser()
-    {
+    public function createUser() {
         // Create the user account
         $data = array(
             'userName' => $this->input->post('username'),
             'email'    => $this->input->post('email'),
             'password' => md5($this->input->post('password') . SALT),
+            'RS'       => '',
         );
         $this->db->insert('hoosk_user', $data);
     }
 
-    public function updateUser($id)
-    {
+    public function updateUser($id) {
         // update the user account
         $data = array(
             'email'    => $this->input->post('email'),
@@ -170,14 +158,12 @@ class Hoosk_model extends CI_Model
         $this->db->update('hoosk_user', $data);
     }
 
-    public function removeUser($id)
-    {
+    public function removeUser($id) {
         // Delete a user account
         $this->db->delete('hoosk_user', array('userID' => $id));
     }
 
-    public function login($username, $password)
-    {
+    public function login($username, $password) {
         $this->db->select("*");
         $this->db->where("userName", $username);
         $this->db->where("password", $password);
@@ -201,8 +187,7 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** Page Querys ************ */
     /*     * *************************** */
-    public function pageSearch($term)
-    {
+    public function pageSearch($term) {
         $this->db->select("*");
         $this->db->like("pageTitle", $term);
         $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
@@ -216,25 +201,23 @@ class Hoosk_model extends CI_Model
             $results = $query->result_array();
             foreach ($results as $p):
                 echo '<tr>';
-            echo '<td>' . $p['navTitle'] . '</td>';
-            echo '<td>' . $p['pageUpdated'] . '</td>';
-            echo '<td>' . $p['pageCreated'] . '</td>';
-            echo '<td>' . ($p['pagePublished'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
-            echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/pages/jumbo/' . $p['pageID'] . '" class="btn btn-small btn-primary">' . $this->lang->line('btn_jumbotron') . '</a> <a href="' . BASE_URL . '/admin/pages/edit/' . $p['pageID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/pages/delete/' . $p['pageID'] . '"><i class="fa fa-remove"> </i></a></td>';
-            echo '</tr>';
+                echo '<td>' . $p['navTitle'] . '</td>';
+                echo '<td>' . $p['pageUpdated'] . '</td>';
+                echo '<td>' . $p['pageCreated'] . '</td>';
+                echo '<td>' . ($p['pagePublished'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
+                echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/pages/jumbo/' . $p['pageID'] . '" class="btn btn-small btn-primary">' . $this->lang->line('btn_jumbotron') . '</a> <a href="' . BASE_URL . '/admin/pages/edit/' . $p['pageID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/pages/delete/' . $p['pageID'] . '"><i class="fa fa-remove"> </i></a></td>';
+                echo '</tr>';
             endforeach;
         } else {
             echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
         }
     }
 
-    public function countPages()
-    {
+    public function countPages() {
         return $this->db->count_all('hoosk_page_attributes');
     }
 
-    public function getPages($limit, $offset = 0)
-    {
+    public function getPages($limit, $offset = 0) {
         // Get a list of all pages
         $this->db->select("*");
         $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
@@ -247,8 +230,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getPagesAll()
-    {
+    public function getPagesAll() {
         // Get a list of all pages
         $this->db->select("*");
         $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
@@ -260,13 +242,16 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function createPage()
-    {
+    public function createPage() {
         // Create the page
         $data = array(
-            'pagePublished' => $this->input->post('pagePublished'),
-            'pageTemplate'  => $this->input->post('pageTemplate'),
-            'pageURL'       => $this->input->post('pageURL'),
+            'pagePublished'   => $this->input->post('pagePublished'),
+            'pageTemplate'    => $this->input->post('pageTemplate'),
+            'pageURL'         => $this->input->post('pageURL'),
+            'pageParent'      => 0,
+            'pageBanner'      => 0,
+            'enableJumbotron' => 0,
+            'enableSlider'    => 0,
         );
         $this->db->insert('hoosk_page_attributes', $data);
         if ($this->input->post('content') != "") {
@@ -288,6 +273,8 @@ class Hoosk_model extends CI_Model
                     'navTitle'        => $this->input->post('navTitle'),
                     'pageContent'     => $this->input->post('content'),
                     'pageContentHTML' => $HTMLContent,
+                    'jumbotron'       => '',
+                    'jumbotronHTML'   => '',
                 );
 
                 $this->db->insert('hoosk_page_content', $contentdata);
@@ -303,8 +290,7 @@ class Hoosk_model extends CI_Model
         }
     }
 
-    public function getPage($id)
-    {
+    public function getPage($id) {
         // Get the page details
         $this->db->select("*");
         $this->db->where("hoosk_page_attributes.pageID", $id);
@@ -317,8 +303,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getPageBanners($id)
-    {
+    public function getPageBanners($id) {
         // Get the page banners
         $this->db->select("*");
         $this->db->where("pageID", $id);
@@ -330,16 +315,14 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function removePage($id)
-    {
+    public function removePage($id) {
         // Delete a page
         $this->db->delete('hoosk_page_content', array('pageID' => $id));
         $this->db->delete('hoosk_page_meta', array('pageID' => $id));
         $this->db->delete('hoosk_page_attributes', array('pageID' => $id));
     }
 
-    public function getPageURL($id)
-    {
+    public function getPageURL($id) {
         // Get the page URL
         $this->db->select("pageURL");
         $this->db->where("pageID", $id);
@@ -352,8 +335,7 @@ class Hoosk_model extends CI_Model
         }
     }
 
-    public function updatePage($id)
-    {
+    public function updatePage($id) {
         // Update the page
 
         if ($this->input->post('content') != "") {
@@ -394,8 +376,7 @@ class Hoosk_model extends CI_Model
         $this->db->update('hoosk_page_meta', $metadata);
     }
 
-    public function updateJumbotron($id)
-    {
+    public function updateJumbotron($id) {
         // Update the jumbotron
         if ($this->input->post('jumbotron') != "") {
             $sirTrevorInput = $this->input->post('jumbotron');
@@ -455,13 +436,11 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** Navigation Querys ****** */
     /*     * *************************** */
-    public function countNavigation()
-    {
+    public function countNavigation() {
         return $this->db->count_all('hoosk_navigation');
     }
 
-    public function getAllNav($limit, $offset = 0)
-    {
+    public function getAllNav($limit, $offset = 0) {
         // Get a list of all pages
         $this->db->select("*");
         $this->db->limit($limit, $offset);
@@ -472,8 +451,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getNav($id)
-    {
+    public function getNav($id) {
         // Get a list of all pages
         $this->db->select("*");
         $this->db->where("navSlug", $id);
@@ -485,8 +463,7 @@ class Hoosk_model extends CI_Model
     }
 
     //Get page details for building nav
-    public function getPageNav($url)
-    {
+    public function getPageNav($url) {
         // Get the page details
         $this->db->select("*");
         $this->db->where("hoosk_page_attributes.pageURL", $url);
@@ -499,8 +476,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function insertNav()
-    {
+    public function insertNav() {
         $navigationHTML = $this->input->post('convertedNav');
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
         $navigationEdit = $this->input->post('seriaNav');
@@ -515,8 +491,7 @@ class Hoosk_model extends CI_Model
         $this->db->insert('hoosk_navigation', $data);
     }
 
-    public function updateNav($id)
-    {
+    public function updateNav($id) {
         $navigationHTML = $this->input->post('convertedNav');
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
         $navigationEdit = $this->input->post('seriaNav');
@@ -531,14 +506,12 @@ class Hoosk_model extends CI_Model
         $this->db->update('hoosk_navigation', $data);
     }
 
-    public function removeNav($id)
-    {
+    public function removeNav($id) {
         // Delete a nav
         $this->db->delete('hoosk_navigation', array('navSlug' => $id));
     }
 
-    public function getSettings()
-    {
+    public function getSettings() {
         // Get the settings
         $this->db->select("*");
         $this->db->where("siteID", 0);
@@ -549,8 +522,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function updateSettings()
-    {
+    public function updateSettings() {
         $data = array(
             'siteTheme'              => $this->input->post('siteTheme'),
             'siteLang'               => $this->input->post('siteLang'),
@@ -579,8 +551,7 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** Post Querys ************ */
     /*     * *************************** */
-    public function postSearch($term)
-    {
+    public function postSearch($term) {
         $this->db->select("*");
         $this->db->like("postTitle", $term);
         $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
@@ -593,25 +564,23 @@ class Hoosk_model extends CI_Model
             $results = $query->result_array();
             foreach ($results as $p):
                 echo '<tr>';
-            echo '<td>' . $p['postTitle'] . '</td>';
-            echo '<td>' . $p['categoryTitle'] . '</td>';
-            echo '<td>' . $p['datePosted'] . '</td>';
-            echo '<td>' . ($p['published'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
-            echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/posts/edit/' . $p['postID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/posts/delete/' . $p['postID'] . '"><i class="fa fa-remove"> </i></a></td>';
-            echo '</tr>';
+                echo '<td>' . $p['postTitle'] . '</td>';
+                echo '<td>' . $p['categoryTitle'] . '</td>';
+                echo '<td>' . $p['datePosted'] . '</td>';
+                echo '<td>' . ($p['published'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
+                echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/posts/edit/' . $p['postID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/posts/delete/' . $p['postID'] . '"><i class="fa fa-remove"> </i></a></td>';
+                echo '</tr>';
             endforeach;
         } else {
             echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
         }
     }
 
-    public function countPosts()
-    {
+    public function countPosts() {
         return $this->db->count_all('hoosk_post');
     }
 
-    public function getPosts($limit, $offset = 0)
-    {
+    public function getPosts($limit, $offset = 0) {
         // Get a list of all posts
         $this->db->select("*");
         $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
@@ -624,8 +593,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function createPost()
-    {
+    public function createPost() {
         // Create the post
         if ($this->input->post('content') != "") {
             $sirTrevorInput = $this->input->post('content');
@@ -644,6 +612,7 @@ class Hoosk_model extends CI_Model
             'published'       => $this->input->post('published'),
             'datePosted'      => $this->input->post('datePosted'),
             'unixStamp'       => $this->input->post('unixStamp'),
+            'postImage'       => '',
         );
         if ($this->input->post('postImage') != "") {
             $data['postImage'] = $this->input->post('postImage');
@@ -651,8 +620,7 @@ class Hoosk_model extends CI_Model
         $this->db->insert('hoosk_post', $data);
     }
 
-    public function getPost($id)
-    {
+    public function getPost($id) {
         // Get the post details
         $this->db->select("*");
         $this->db->where("postID", $id);
@@ -664,14 +632,12 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function removePost($id)
-    {
+    public function removePost($id) {
         // Delete a post
         $this->db->delete('hoosk_post', array('postID' => $id));
     }
 
-    public function updatePost($id)
-    {
+    public function updatePost($id) {
         // Update the post
 
         if ($this->input->post('content') != "") {
@@ -702,13 +668,11 @@ class Hoosk_model extends CI_Model
     /*     * *************************** */
     /*     * ** Category Querys ******** */
     /*     * *************************** */
-    public function countCategories()
-    {
+    public function countCategories() {
         return $this->db->count_all('hoosk_post_category');
     }
 
-    public function getCategories()
-    {
+    public function getCategories() {
         // Get a list of all categories
         $this->db->select("*");
         $query = $this->db->get('hoosk_post_category');
@@ -718,8 +682,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function getCategoriesAll($limit, $offset = 0)
-    {
+    public function getCategoriesAll($limit, $offset = 0) {
         // Get a list of all categories
         $this->db->select("*");
         $this->db->limit($limit, $offset);
@@ -730,8 +693,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function createCategory()
-    {
+    public function createCategory() {
         // Create the category
 
         $data = array(
@@ -743,8 +705,7 @@ class Hoosk_model extends CI_Model
         $this->db->insert('hoosk_post_category', $data);
     }
 
-    public function getCategory($id)
-    {
+    public function getCategory($id) {
         // Get the category details
         $this->db->select("*");
         $this->db->where("categoryID", $id);
@@ -755,14 +716,12 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function removeCategory($id)
-    {
+    public function removeCategory($id) {
         // Delete a category
         $this->db->delete('hoosk_post_category', array('categoryID' => $id));
     }
 
-    public function updateCategory($id)
-    {
+    public function updateCategory($id) {
         // Update the category
         $data = array(
             'categoryTitle'       => $this->input->post('categoryTitle'),
@@ -778,8 +737,7 @@ class Hoosk_model extends CI_Model
     /*     * ** Social Querys ********** */
     /*     * *************************** */
 
-    public function getSocial()
-    {
+    public function getSocial() {
         $this->db->select("*");
         $query = $this->db->get('hoosk_social');
         if ($query->num_rows() > 0) {
@@ -788,8 +746,7 @@ class Hoosk_model extends CI_Model
         return array();
     }
 
-    public function updateSocial()
-    {
+    public function updateSocial() {
         $this->db->select("*");
         $query = $this->db->get("hoosk_social");
         if ($query->num_rows() > 0) {
