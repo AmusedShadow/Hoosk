@@ -55,23 +55,25 @@ class MY_Controller extends CI_Controller {
 
         date_default_timezone_set(@date_default_timezone_get());
 
-        $configPaths[] = APPPATH . 'config/hoosk.php';
-        if (defined('ENVIRONMENT')) {
-            $configPaths[] = APPPATH . 'config/' . ENVIRONMENT . '/hoosk.php';
-        }
-
-        $configFound = false;
-        foreach ($configPaths as $cPath) {
-            if (file_exists($cPath)) {
-                $configFound = true;
-                break;
+        if ($this->router->class != 'installer') {
+            $configPaths[] = APPPATH . 'config/hoosk.php';
+            if (defined('ENVIRONMENT')) {
+                $configPaths[] = APPPATH . 'config/' . ENVIRONMENT . '/hoosk.php';
             }
-        }
 
-        if ($configFound == false) {
-            $this->load->helper('url');
-            redirect('installer/index');
-            exit;
+            $configFound = false;
+            foreach ($configPaths as $cPath) {
+                if (file_exists($cPath)) {
+                    $configFound = true;
+                    break;
+                }
+            }
+
+            if ($configFound == false) {
+                $this->load->helper('url');
+                redirect('installer/index');
+                exit;
+            }
         }
 
         $this->load->config('hoosk', true);

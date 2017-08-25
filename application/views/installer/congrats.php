@@ -28,7 +28,7 @@
         <p>The default username is <strong>demo</strong> and password is <strong>demo</strong></p>
         <p><strong>Change these when you login!</strong></p>
         <p>Please now delete the /install directory</p>
-		<a href="http://<?php echo $_POST['siteURL']; ?>/install/complete" class="btn-success btn">Login</a>
+		<a href="<?php echo site_url('admin/login'); ?>" class="btn-success btn">Login</a>
         </div>
       </div>
     </div>
