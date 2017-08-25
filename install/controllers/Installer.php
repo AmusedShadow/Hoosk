@@ -153,13 +153,18 @@ class Installer extends CI_Controller {
             'RSS_FEED'      => 'true',
         );
 
-        $configFile = '<?php' . PHP_EOL;
-        $configFile .= 'defined(\'BASEPATH\') OR exit(\'No direct script access allowed\');' . PHP_EOL . PHP_EOL;
+        $configFile = '<?php' . PHP_EOL . PHP_EOL;
         foreach ($config as $name => $value) {
             $configFile .= '$config[\'' . $name . '\'] = ' . '\'' . str_replace("'", "\\'", $value) . '\';' . PHP_EOL;
         }
 
-        file_put_contents(APPPATH . 'config' . DIRECTORY_SEPARATOR . 'hoosk.php', $configFile);
+        $configFile .= PHP_EOL . PHP_EOL;
+        $configFile .= 'foreach ($config as $name => $value) {' . PHP_EOL;
+        $configFile .= '    define($name,$value);' . PHP_EOL;
+        $configFile .= '}' . PHP_EOL;
+
+        //file_put_contents(APPPATH . 'config' . DIRECTORY_SEPARATOR . 'hoosk.php', $configFile);
+        file_put_Contents(FCPATH . 'config.php', $configFile);
     }
 
     public function _validDriver($str = '') {
