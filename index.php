@@ -2,7 +2,7 @@
 if (!file_exists('config.php')) {
     $url = 'http://' . $_SERVER['HTTP_HOST'];
 
-    header('Location: ' . $url . '/install');
+    header('Location: ' . trim($url) . '/install');
     exit;
 }
 /**
