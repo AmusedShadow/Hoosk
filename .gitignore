@@ -4,7 +4,7 @@
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
-config.php
+/config.php
 .ftpconfig
 # Folder config file
 Desktop.ini
