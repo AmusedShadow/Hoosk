@@ -1,20 +1,24 @@
 <?php if (!empty($_POST)):
     $file = '../config.php';
 
-    $contents = "<?php \n";
-    $contents .= "//Database details \n";
-    $contents .= "define ('DB_HOST', '" . $_POST['dbHost'] . "'); \n";
-    $contents .= "//Username \n";
-    $contents .= "define ('DB_USERNAME', '" . $_POST['dbUserName'] . "'); \n";
-    $contents .= "//Pass \n";
-    $contents .= "define ('DB_PASS', '" . $_POST['dbPass'] . "'); \n";
-    $contents .= "//Database Name \n";
-    $contents .= "define ('DB_NAME', '" . $_POST['dbName'] . "'); \n";
-    $contents .= "//Base URL \n";
-    $contents .= "define ('BASE_URL', 'http://" . $_POST['siteURL'] . "'); \n";
-    $contents .= "//Email/Cookie URL \n";
-    $contents .= "define ('EMAIL_URL', '" . $_POST['siteURL'] . "'); \n";
-    $contents .= "?>";
+    $contents = "<?php".PHP_EOL;
+    $contents .= "//Database details".PHP_EOL;
+    $contents .= "define ('DB_HOST', '" . $_POST['dbHost'] . "');".PHP_EOL;
+    $contents .= "//Username".PHP_EOL;
+    $contents .= "define ('DB_USERNAME', '" . $_POST['dbUserName'] . "');".PHP_EOL;
+    $contents .= "//Pass".PHP_EOL;
+    $contents .= "define ('DB_PASS', '" . $_POST['dbPass'] . "');".PHP_EOL;
+    $contents .= "//Database Name".PHP_EOL;
+    $contents .= "define ('DB_NAME', '" . $_POST['dbName'] . "');".PHP_EOL;
+    $contents .= "//Base URL".PHP_EOL;
+    $contents .= "define ('BASE_URL', 'http://" . $_POST['siteURL'] . "');".PHP_EOL;
+    $contents .= "//Email/Cookie URL".PHP_EOL;
+    $contents .= "define ('EMAIL_URL', '" . $_POST['siteURL'] . "');".PHP_EOL;
+    $contents .= PHP_EOL;
+    $contents .= "define('ADMIN_THEME',BASE_URL . '/theme/admin');".PHP_EOL;
+    $contents .= "define('SALT','Once Up0n @ h00sK!');".PHP_EOL;
+    $contents .= "define('RSS_FEED',true);".PHP_EOL;
+    $contents .= "?>".PHP_EOL;
 
     $mysql_host     = $_POST['dbHost'];
     $mysql_username = $_POST['dbUserName'];
@@ -23,25 +27,25 @@
     // Name of the file
     $filename = 'hoosk.sql';
 
-// Connect to MySQL server
+	// Connect to MySQL server
     $con = mysqli_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysqli_error());
-// Select database
+	// Select database
     mysqli_select_db($con, $mysql_database) or die('Error selecting MySQL database: ' . mysqli_error());
 
-// Temporary variable, used to store current query
+	// Temporary variable, used to store current query
     $templine = '';
-// Read in entire file
+	// Read in entire file
     $lines = file($filename);
-// Loop through each line
+	// Loop through each line
     foreach ($lines as $line) {
-// Skip it if it's a comment
+		// Skip it if it's a comment
         if (substr($line, 0, 2) == '--' || $line == '') {
             continue;
         }
 
-// Add this line to the current segment
+		// Add this line to the current segment
         $templine .= $line;
-// If it has a semicolon at the end, it's the end of the query
+		// If it has a semicolon at the end, it's the end of the query
         if (substr(trim($line), -1, 1) == '~') {
             $templine = str_replace(";~", ";", $templine);
             // Perform the query
@@ -51,9 +55,9 @@
         }
     }
     file_put_contents($file, $contents);
-// Create connection
+	// Create connection
     $conn = new mysqli($mysql_host, $mysql_username, $mysql_password, $mysql_database);
-// Check connection
+	// Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
