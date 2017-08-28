@@ -43,5 +43,9 @@ class Capsule extends Manager {
                 'prefix'    => $data['dbprefix'],
             ));
         }
+
+        if (!in_array('eloquent', array_keys(is_loaded()))) {
+            $CI->load->library('eloquent');
+        }
     }
 }

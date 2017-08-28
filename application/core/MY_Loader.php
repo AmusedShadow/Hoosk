@@ -5,10 +5,8 @@
 // EXTENDS/MODIFIES LOADER CLASS TO BRANCH TO /CINCH/THEME DIRECTORY FOR PUBLIC FILES
 // SEE AROUND LINE 65
 
-class MY_Loader extends CI_Loader
-{
-    public function __construct()
-    {
+class MY_Loader extends CI_Loader {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -22,8 +20,7 @@ class MY_Loader extends CI_Loader
      * @param    array
      * @return    void
      */
-    protected function _ci_load($_ci_data)
-    {
+    protected function _ci_load($_ci_data) {
 
         // Set the default data variables
         foreach (array('_ci_view', '_ci_vars', '_ci_path', '_ci_return') as $_ci_val) {
@@ -134,5 +131,26 @@ class MY_Loader extends CI_Loader
             $_ci_CI->output->append_output(ob_get_contents());
             @ob_end_clean();
         }
+    }
+
+    /**
+     * Database Loader
+     *
+     * @param   mixed   $params     Database configuration options
+     * @param   bool    $return     Whether to return the database object
+     * @param   bool    $query_builder  Whether to enable Query Builder
+     *                  (overrides the configuration setting)
+     *
+     * @return  object|bool Database object if $return is set to TRUE,
+     *                  FALSE on failure, CI_Loader instance in any other case
+     */
+    public function database($params = '', $return = FALSE, $query_builder = NULL) {
+        // Grab the super object
+        $CI = &get_instance();
+        if (!isset($CI->capsule)) {
+            $CI->load->library('capsule');
+        }
+
+        return parent::database($params, $return, $query_builder);
     }
 }
