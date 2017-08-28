@@ -71,7 +71,10 @@ class Installer extends CI_Controller {
      * @return bool
      */
     public function _tryConfigWrite() {
-        $value = is_really_writable(FCPATH . 'config.php');
+        $path = FCPATH . 'config.php';
+
+        file_put_contents($path, '--');
+        $value = file_exists($path);
         if ($value == false) {
             $this->form_validation->set_message('_tryConfigWrite', 'Unable to write configuration to: ' . FCPATH . 'config.php');
             return false;
