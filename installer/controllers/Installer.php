@@ -132,6 +132,7 @@ class Installer extends CI_Controller {
 			"define('DB_USERNAME','{db_username}'); //database username",
 			"define('DB_PASS','{db_password}'); //database password",
 			"define('DB_NAME','{db_name}'); //database name",
+			"define('DB_DRIVER','{db_driver}');",
 			'',
 			"//url details",
 			"define('BASE_URL','http://{url_base}'); //base url",
@@ -158,6 +159,7 @@ class Installer extends CI_Controller {
 		$fileData = str_replace('{site_name}',$postData['siteName'],$fileData);
 		$fileData = str_replace('{url_base}',$postData['siteUrl'],$fileData);
 		$fileData = str_replace('{url_email}',$postData['siteUrl'],$fileData);
+		$fileData = str_replace('{db_driver}','mysql',$fileData);
 
 		//save our file
 		file_put_contents(FCPATH.'config.php',$fileData);
