@@ -137,14 +137,27 @@ class Hoosk_model extends CI_Model {
         }
     }
 
-    public function createUser() {
+    public function createUser($username = '', $email = '', $password = '') {
+        if (empty($username)) {
+            $username = $this->input->post('username');
+        }
+
+        if (empty($email)) {
+            $email = $this->input->post('email');
+        }
+
+        if (empty($password)) {
+            $password=  $this->input->post('password');
+        }
+
         // Create the user account
         $data = array(
-            'userName' => $this->input->post('username'),
-            'email'    => $this->input->post('email'),
-            'password' => md5($this->input->post('password') . SALT),
+            'userName' => $username,
+            'email'    => $email,
+            'password' => md5($password . SALT),
             'RS'       => '',
         );
+        
         $this->db->insert('hoosk_user', $data);
     }
 

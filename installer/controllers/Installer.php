@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Installer extends CI_Controller {
+	protected $salt = '';
+
 	/**
 	 * construct
 	 * Class construct
@@ -57,6 +59,7 @@ class Installer extends CI_Controller {
 			//if the form validation has run successfully then lets do this!
 			$this->_buildConfigFile(); //build the configuration file and save it
 			$this->_sqlStep(); //setup sql tables and such
+			$this->_fixDefaultAccount(); //removes the existing demo account and creates a new one
 			$this->load->view('installer/congrats'); //load our congrats view
 		}
 	}
@@ -124,6 +127,13 @@ class Installer extends CI_Controller {
 	 * @access public
 	 */
 	protected function _buildConfigFile() {
+		//load the string helper
+		$this->load->helper('string');
+
+		//build our salt string
+		$this->salt = random_string('alnum', 180);
+		define('SALT',$this->salt);
+
 		//our config lines
 		$lines = array(
 			'<?php',
@@ -141,7 +151,7 @@ class Installer extends CI_Controller {
 			'',
 			'//base settings',
 			"define('ADMIN_THEME',BASE_URL . '/theme/admin');",
-			"define('SALT','Once Up0n @ h00sK!');",
+			"define('SALT','".$this->salt."');",
 			"define('RSS_FEED',true);",
 			"define('SITENAME_TXT','{site_name}');"
 		);
@@ -249,5 +259,12 @@ class Installer extends CI_Controller {
 	            $templine = '';
 	        }
 	    }
+	}
+
+	protected function _fixDefaultAccount() {
+		$model = new Hoosk_model(); //we didn't load this the CodeIgniter way - maybe we should fix this in the future
+		$model->removeUser(1);
+
+		$model->createUser('demo','info@hoosk.org','demo');
 	}
 }
