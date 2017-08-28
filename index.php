@@ -1,15 +1,7 @@
 <?php
-if (!file_exists('config.php')) {
-	if (!file_exists('install/index.php')) {
-		die('Installer not found!');
-	}
-
-    $url = 'http://' . $_SERVER['HTTP_HOST'];
-
-    header('Location: ' . trim($url) . '/install');
-    exit;
-} else {
-	include ('config.php');
+$installerRun = false;
+if (file_exists('config.php')) {
+	$installerRun = true;
 }
 /**
  * CodeIgniter
@@ -121,7 +113,11 @@ $system_path = 'system';
  *
  * NO TRAILING SLASH!
  */
-$application_folder = 'application';
+if ($installerRun==false) {
+	$application_folder = 'installer';
+} else {
+	$application_folder = 'application';
+}
 
 /*
  *---------------------------------------------------------------
@@ -167,7 +163,10 @@ $view_folder = '';
 
 	// The controller function you wish to be called.
 	// $routing['function']	= '';
-
+if ($installerRun==false) {
+	$routing['controller'] = 'installer';
+	$routing['function'] = 'index';
+}
 
 /*
  * -------------------------------------------------------------------
@@ -311,6 +310,10 @@ $view_folder = '';
 	}
 
 	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+if ($installerRun==true) {
+	include('config.php');
+}
 
 /*
  * --------------------------------------------------------------------

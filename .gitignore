@@ -1,5 +1,7 @@
 #php-cs-fixer
 .php_cs.cache
+/application/sessions/*
+!/application/sessions/index.html
 
 # Windows image file caches
 Thumbs.db

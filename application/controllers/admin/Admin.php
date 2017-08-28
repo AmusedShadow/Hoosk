@@ -176,11 +176,4 @@ class Admin extends CI_Controller
             echo 1;
         }
     }
-
-    public function complete()
-    {
-        unlink(FCPATH . "install/hoosk.sql");
-        unlink(FCPATH . "install/index.php");
-        redirect(BASE_URL . '/admin', 'refresh');
-    }
 }
