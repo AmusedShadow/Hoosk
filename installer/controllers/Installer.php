@@ -166,13 +166,13 @@ class Installer extends CI_Controller {
 		$postData = $this->_getPostVars();
 
 		//replace our temp variables
-		$fileData = str_replace('{db_hostname}',$postData['dbHost'],$fileData);
-		$fileData = str_replace('{db_username}',$postData['dbUserName'],$fileData);
-		$fileData = str_replace('{db_password}',$postData['dbPass'],$fileData);
-		$fileData = str_replace('{db_name}',$postData['dbName'],$fileData);
-		$fileData = str_replace('{site_name}',$postData['siteName'],$fileData);
-		$fileData = str_replace('{url_base}',$postData['siteUrl'],$fileData);
-		$fileData = str_replace('{url_email}',$postData['siteUrl'],$fileData);
+		$fileData = str_replace('{db_hostname}',str_replace("'","\'",$postData['dbHost']),$fileData);
+		$fileData = str_replace('{db_username}',str_replace("'","\'",$postData['dbUserName']),$fileData);
+		$fileData = str_replace('{db_password}',str_replace("'","\'",$postData['dbPass']),$fileData);
+		$fileData = str_replace('{db_name}',str_replace("'","\'",$postData['dbName']),$fileData);
+		$fileData = str_replace('{site_name}',str_replace("'","\'",$postData['siteName']),$fileData);
+		$fileData = str_replace('{url_base}',str_replace("'","\'",$postData['siteUrl']),$fileData);
+		$fileData = str_replace('{url_email}',str_replace("'","\'",$postData['siteUrl']),$fileData);
 		$fileData = str_replace('{db_driver}','mysql',$fileData);
 
 		//save our file
