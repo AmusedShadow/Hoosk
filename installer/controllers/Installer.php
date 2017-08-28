@@ -49,7 +49,7 @@ class Installer extends CI_Controller {
         $this->form_validation->set_rules('dbHost', 'Database Hostname', 'required');
         $this->form_validation->set_rules('dbUserName', 'Database Username', 'required');
         $this->form_validation->set_rules('dbPass', 'Database Password', 'required');
-        $this->form_validation->set_rules('dbName', 'Database Name', 'required|callback__tryDatabaseConnect');
+        $this->form_validation->set_rules('dbName', 'Database Name', 'required|callback__tryDatabaseConnect|callback__tryConfigWrite');
 
         //if the validation hasn't run or returned falsed lets load the installer view
         if ($this->form_validation->run() === false) {
@@ -61,6 +61,23 @@ class Installer extends CI_Controller {
             $this->_fixDefaultAccount(); //removes the existing demo account and creates a new one
             $this->load->view('installer/congrats'); //load our congrats view
         }
+    }
+
+    /**
+     * _tryConfigWrite
+     * Make sure we are able to write a configuration file
+     *
+     * @access public
+     * @return bool
+     */
+    public function _tryConfigWrite() {
+        $value = is_really_writable(FCPATH . 'config.php');
+        if ($value == false) {
+            $this->form_validation->set_message('_tryConfigWrite', 'Unable to write configuration to: ' . FCPATH . 'config.php');
+            return false;
+        }
+
+        return true;
     }
 
     /**
