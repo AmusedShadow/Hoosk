@@ -58,7 +58,7 @@ class Installer extends CI_Controller {
 		} else {
 			//if the form validation has run successfully then lets do this!
 			$this->_buildConfigFile(); //build the configuration file and save it
-			$this->_sqlStep(); //setup sql tables and such
+			$this->_runMigrations(); //setup sql tables and such
 			$this->_fixDefaultAccount(); //removes the existing demo account and creates a new one
 			$this->load->view('installer/congrats'); //load our congrats view
 		}
@@ -132,7 +132,6 @@ class Installer extends CI_Controller {
 
 		//build our salt string
 		$this->salt = random_string('alnum', 180);
-		define('SALT',$this->salt);
 
 		//our config lines
 		$lines = array(
@@ -234,40 +233,18 @@ class Installer extends CI_Controller {
 		$this->index();
 	}
 
-	/**
-	 * _sqlStep
-	 * Steps for running the SQL process
-	 *
-	 * @access protected
-	 */
-	protected function _sqlStep() {
-		$lines = file(APPPATH.'hoosk.sql');
+	protected function _runMigrations() {
+		$this->load->library('Schema');
+		$this->load->library('migration');
 
-		// Loop through each line
-	    foreach ($lines as $line) {
-			// Skip it if it's a comment
-	        if (substr($line, 0, 2) == '--' || $line == '') {
-	            continue;
-	        }
-
-			// Add this line to the current segment
-	        $templine .= $line;
-			// If it has a semicolon at the end, it's the end of the query
-	        if (substr(trim($line), -1, 1) == '~') {
-	            $templine = str_replace(";~", ";", $templine);
-	            // Perform the query
-	            
-	           	$this->db->query($templine);
-	            // Reset temp variable to empty
-	            $templine = '';
-	        }
-	    }
+		if ($this->migration->current() === FALSE)
+        {
+                show_error($this->migration->error_string());
+        }
 	}
 
 	protected function _fixDefaultAccount() {
-		$model = new Hoosk_model(); //we didn't load this the CodeIgniter way - maybe we should fix this in the future
-		$model->removeUser(1);
-
+		define('SALT',$this->salt);
 		$model->createUser('demo','info@hoosk.org','demo');
 	}
 }

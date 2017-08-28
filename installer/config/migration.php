@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | and disable it back when you're done.
 |
 */
-$config['migration_enabled'] = FALSE;
+$config['migration_enabled'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +70,26 @@ $config['migration_auto_latest'] = FALSE;
 |
 */
 $config['migration_version'] = 0;
+
+if (file_exists(APPPATH.'migrations')) {
+	$allMigrations = glob(APPPATH.'migrations'.DIRECTORY_SEPARATOR.'*.php');
+
+	$versions = array();
+	foreach ($allMigrations as $file) {
+		$pathinfo = pathinfo($file);
+
+		if (!isset($pathinfo['filename'])) {
+			continue;
+		}
+
+		$x = explode('_',$pathinfo['filename']);
+		$versions[] = $x[0];
+	}
+
+	$config['migration_version'] = max($versions);
+}
+
+//$config['migration_version'] = 0; //set this to the migration version you want
 
 /*
 |--------------------------------------------------------------------------

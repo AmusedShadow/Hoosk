@@ -31,6 +31,7 @@ Plugins and libraries that I have made use of in Hoosk:
 - CodeIgniter - https://github.com/bcit-ci/CodeIgniter
 - Fontawesome - https://github.com/FortAwesome/Font-Awesome
 - sb-admin - https://github.com/BlackrockDigital/startbootstrap-sb-admin
+- CodeIgniter Schema - https://github.com/jamierumbelow/codeigniter-schema
 
 ##
 ![BrowserStack](http://hoosk.org/browserstack-logo.png)
