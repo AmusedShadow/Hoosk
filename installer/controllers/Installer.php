@@ -263,6 +263,8 @@ class Installer extends CI_Controller {
 
     protected function _fixDefaultAccount() {
         define('SALT', $this->salt);
+
+        $model = new Hoosk_model;
         $model->createUser('demo', 'info@hoosk.org', 'demo');
     }
 }
