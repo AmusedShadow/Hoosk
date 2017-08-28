@@ -153,7 +153,9 @@ class Installer extends CI_Controller {
 			"define('ADMIN_THEME',BASE_URL . '/theme/admin');",
 			"define('SALT','".$this->salt."');",
 			"define('RSS_FEED',true);",
-			"define('SITENAME_TXT','{site_name}');"
+			"define('SITENAME_TXT','{site_name}');",
+			'',
+			'$assign_to_config[\'encryption_key\'] = \''.random_string('alnum',32).'\'; //custom encryption key'
 		);
 
 		//implode our lines by a new line character
