@@ -19,6 +19,7 @@ class Hoosk_model extends CI_Model {
         $this->load->EloquentModel('Banner_model');
         $this->load->EloquentModel('Navigation_model');
         $this->load->EloquentModel('Post_model');
+        $this->load->EloquentModel('Post_category_model');
 
         $this->settings = $this->settings_model->where('siteID', '=', 0)->first()->toArray();
     }
@@ -312,9 +313,8 @@ class Hoosk_model extends CI_Model {
 
     public function getPage($id) {
         $query = $this->page_attributes_model
-            ->select('*')
             ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
-            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_meta_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
             ->where($this->page_attributes_model->getTable() . '.pageID', '=', $id)
             ->get();
 
@@ -328,18 +328,23 @@ class Hoosk_model extends CI_Model {
         }
 
         return $return;
+
     }
 
     public function getPageBanners($id) {
-        $query = $this->banner_model->where('pageID', '=', $id)
-            ->orderBy('sliderOrder', 'ASC')
-            ->first();
+        $query = $this->banner_model
+            ->where('pageID', '=', $id)
+            ->orderBy('slideOrder', 'ASC')
+            ->get();
 
-        if (count($query) == 0) {
-            return array();
+        $return = array();
+        if (count($query) > 0) {
+            foreach ($query as $row) {
+                $return[] = $row->toArray();
+            }
         }
 
-        return $query->toArray();
+        return $return;
     }
 
     public function removePage($id) {
@@ -554,7 +559,8 @@ class Hoosk_model extends CI_Model {
 
     public function getSettings() {
         // Get the settings
-        return $this->settings;
+        $return[] = $this->settings;
+        return $return;
     }
 
     public function updateSettings() {
@@ -629,6 +635,8 @@ class Hoosk_model extends CI_Model {
         if ($offset > 0) {
             $query->offset($offset);
         }
+
+        $query = $query->get();
 
         $return = array();
         if (count($query) > 0) {
