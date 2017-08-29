@@ -21,111 +21,76 @@ class Hoosk_page_model extends CI_Model {
     /*     * *************************** */
 
     public function getPage($pageURL) {
-        // Get page
-        $this->db->select("*");
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $this->db->where("pagePublished", 1);
-        $this->db->where("pageURL", $pageURL);
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                $page = array(
-                    'pageID'          => $u['pageID'],
-                    'pageTitle'       => $u['pageTitle'],
-                    'pageKeywords'    => $u['pageKeywords'],
-                    'pageDescription' => $u['pageDescription'],
-                    'pageContentHTML' => $u['pageContentHTML'],
-                    'pageTemplate'    => $u['pageTemplate'],
-                    'enableJumbotron' => $u['enableJumbotron'],
-                    'enableSlider'    => $u['enableSlider'],
-                    'jumbotronHTML'   => $u['jumbotronHTML'],
-                );
-            endforeach;
-            return $page;
-        }
-        return array('pageID' => "", 'pageTemplate' => "");
+        $query = $this->page_attributes_model
+            ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->where($this->page_attributes_model->getTable() . '.pagePublished', '=', 1)
+            ->where($this->page_attributes_model->getTable() . '.pageURL', '=', $pageURL)
+            ->first();
 
-        /*
-    $this->page_attributes_model
-    ->leftJoin($this->page_content_model->getTable(),$this->page_content_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
-    ->leftJoin($this->page_meta_model->getTable(),$this->page_meta_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
-    ->where()
-     */
+        $return = array('pageID' => '', 'pageTemplate' => '');
+        if (count($query) > 0) {
+            $return = $query->toArray();
+        }
+
+        return $return;
     }
 
     public function getCategory($catSlug) {
-        // Get category
-        $this->db->select("*");
-        $this->db->where("categorySlug", $catSlug);
-        $query = $this->db->get('hoosk_post_category');
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                $category = array(
-                    'pageID'          => $u['categoryID'],
-                    'categoryID'      => $u['categoryID'],
-                    'pageTitle'       => $u['categoryTitle'],
-                    'pageKeywords'    => '',
-                    'pageDescription' => $u['categoryDescription'],
-                );
-            endforeach;
-            return $category;
+        $query = $this->post_category_model->where('categorySlug', '=', $catSlug)
+            ->first();
+
+        $return = array('categoryID' => '');
+        if (count($query) > 0) {
+            $u = $query->toArray();
+
+            $return = array(
+                'pageID'          => $u['categoryID'],
+                'categoryID'      => $u['categoryID'],
+                'pageTitle'       => $u['categoryTitle'],
+                'pageKeywords'    => '',
+                'pageDescription' => $u['categoryDescription'],
+            );
         }
-        return array('categoryID' => "");
+
+        return $return;
     }
 
     public function getArticle($postURL) {
-        // Get article
-        $this->db->select("*");
-        $this->db->where("postURL", $postURL);
-        $this->db->where("published", 1);
-        $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
-        $query = $this->db->get('hoosk_post');
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                $category = array(
-                    'pageID'          => $u['postID'],
-                    'postID'          => $u['postID'],
-                    'pageTitle'       => $u['postTitle'],
-                    'pageKeywords'    => '',
-                    'pageDescription' => $u['postExcerpt'],
-                    'postContent'     => $u['postContentHTML'],
-                    'datePosted'      => $u['datePosted'],
-                    'categoryTitle'   => $u['categoryTitle'],
-                    'categorySlug'    => $u['categorySlug'],
-                );
-            endforeach;
-            return $category;
+        $query = $this->post_model
+            ->leftJoin($this->post_category_model->getTable(), $this->post_category_model->getTable() . '.categoryID', '=', $this->post_model->getTable() . '.categoryID')
+            ->where($this->post_model->getTable() . '.postURL', '=', $postURL)
+            ->where($this->post_model->getTable() . '.published', '=', 1)
+            ->first();
+
+        $return = array('postID' => '');
+        if (count($query) > 0) {
+            $u = $query->toArray();
+
+            $return = array(
+                'pageID'          => $u['postID'],
+                'postID'          => $u['postID'],
+                'pageTitle'       => $u['postTitle'],
+                'pageKeywords'    => '',
+                'pageDescription' => $u['postExcerpt'],
+                'postContent'     => $u['postContentHTML'],
+                'datePosted'      => $u['datePosted'],
+                'categoryTitle'   => $u['categoryTitle'],
+                'categorySlug'    => $u['categorySlug'],
+            );
         }
-        return array('postID' => "");
+
+        return $return;
     }
 
     public function getSettings() {
-        // Get settings
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                $page = array(
-                    'siteLogo'               => $u['siteLogo'],
-                    'siteFavicon'            => $u['siteFavicon'],
-                    'siteTitle'              => $u['siteTitle'],
-                    'siteTheme'              => $u['siteTheme'],
-                    'siteFooter'             => $u['siteFooter'],
-                    'siteMaintenanceHeading' => $u['siteMaintenanceHeading'],
-                    'siteMaintenanceMeta'    => $u['siteMaintenanceMeta'],
-                    'siteMaintenanceContent' => $u['siteMaintenanceContent'],
-                    'siteMaintenance'        => $u['siteMaintenance'],
-                    'siteAdditionalJS'       => $u['siteAdditionalJS'],
-                );
-            endforeach;
-            return $page;
+        $query = $this->settings_model->where('siteID', '=', 0)->first();
+
+        $return = array();
+        if (count($query) > 0) {
+            $return = $query->toArray();
         }
-        return array();
+
+        return $return;
     }
 }
