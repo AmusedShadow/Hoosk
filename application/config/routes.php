@@ -109,8 +109,8 @@ $route['category/(:any)/(:any)']               = "hoosk_default/category";
 $route['article/(:any)']                       = "hoosk_default/article";
 $route['feed/(:any)']                          = "hoosk_default/feed";
 
-$route['search/term/(:any}'] = 'search/index';
 $route['search/term']        = 'search/index';
+$route['search/term/(:any)'] = 'search/index';
 
 $route['(.+)']                 = "hoosk_default";
 $route['default_controller']   = "hoosk_default";

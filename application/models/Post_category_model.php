@@ -28,4 +28,30 @@ class Post_category_model extends Eloquent {
      * @var bool
      */
     public $incrementing = true;
+
+    public function search($term) {
+        $results = array();
+
+        $m      = $this->newInstance();
+        $search = $m->select('categoryID')->where('categoryTitle', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'post_category',
+                'column' => 'categoryTitle',
+                'id'     => $row->categoryID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('categoryID')->where('categorySlug', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'post_category',
+                'column' => 'categorySlug',
+                'id'     => $row->categoryID,
+            );
+        }
+
+        return collect($results);
+    }
 }

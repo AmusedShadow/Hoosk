@@ -28,4 +28,50 @@ class Page_content_model extends Eloquent {
      * @var bool
      */
     public $incrementing = true;
+
+    public function search($term) {
+        $results = array();
+
+        $m      = $this->newInstance();
+        $search = $m->select('contentID')->where('pageTitle', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'page_content',
+                'column' => 'pageTitle',
+                'id'     => $row->contentID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('contentID')->where('navTitle', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'page_content',
+                'column' => 'navTitle',
+                'id'     => $row->contentID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('contentID')->where('pageContentHTML', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'page_content',
+                'column' => 'pageContentHTML',
+                'id'     => $row->contentID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('contentID')->where('jumbotronHTML', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'page_content',
+                'column' => 'jumbotronHTML',
+                'id'     => $row->contentID,
+            );
+        }
+
+        return collect($results);
+    }
 }

@@ -28,4 +28,50 @@ class Post_model extends Eloquent {
      * @var bool
      */
     public $incrementing = true;
+
+    public function search($term) {
+        $results = array();
+
+        $m      = $this->newInstance();
+        $search = $m->select('postID')->where('postURL', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'posts',
+                'column' => 'postURL',
+                'id'     => $row->postID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('postID')->where('postTitle', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'posts',
+                'column' => 'postTitle',
+                'id'     => $row->postID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('postID')->where('postExcerpt', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'posts',
+                'column' => 'postExcerpt',
+                'id'     => $row->postID,
+            );
+        }
+
+        $m      = $this->newInstance();
+        $search = $m->select('postID')->where('postContentHTML', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'posts',
+                'column' => 'postContentHTML',
+                'id'     => $row->postID,
+            );
+        }
+
+        return collect($results);
+    }
 }

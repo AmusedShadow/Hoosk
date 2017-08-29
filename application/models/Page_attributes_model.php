@@ -28,4 +28,21 @@ class Page_attributes_model extends Eloquent {
      * @var bool
      */
     public $incrementing = true;
+
+    public function search($term) {
+        $results = array();
+
+        $m = $this->newInstance();
+
+        $search = $m->select('pageID')->where('pageURL', 'LIKE', '%' . $term . '%')->get();
+        foreach ($search as $row) {
+            $results[] = array(
+                'type'   => 'page_attributes',
+                'column' => 'pageURL',
+                'id'     => $row->pageID,
+            );
+        }
+
+        return collect($results);
+    }
 }
