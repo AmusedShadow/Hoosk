@@ -25,7 +25,11 @@
                 	<a href="<?php echo BASE_URL; ?>/admin/pages"><?php echo $this->lang->line('nav_pages_all'); ?></a>
                 </li>
             </ol>
-            
+
+        </div>
+
+        <div class="col-lg-12">
+          <a href="<?php echo site_url('/admin/pages/new'); ?>" class="btn btn-primary pull-right"><?php echo $this->lang->line('nav_pages_new'); ?></a>
         </div>
     </div>
 </div>
@@ -44,16 +48,16 @@
                   </tr>
                 </thead>
                 <tbody id="pageContainer">
-                    <?php 
-					foreach ($pages as $p) {
-						echo '<tr>';
-							echo '<td>'.$p['navTitle'].'</td>';
-							echo '<td>'.$p['pageUpdated'].'</td>';
-							echo '<td>'.$p['pageCreated'].'</td>';
-                            echo '<td>'.($p['pagePublished'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>').'</td>';
-							echo '<td class="td-actions"><a href="'.BASE_URL.'/admin/pages/jumbo/'.$p['pageID'].'" class="btn btn-small btn-primary">'.$this->lang->line('btn_jumbotron').'</a> <a href="'.BASE_URL.'/admin/pages/edit/'.$p['pageID'].'" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="'.BASE_URL.'/admin/pages/delete/'.$p['pageID'].'"><i class="fa fa-remove"> </i></a></td>';
-						echo '</tr>';
-					} ?>
+                    <?php
+foreach ($pages as $p) {
+    echo '<tr>';
+    echo '<td>' . $p['navTitle'] . '</td>';
+    echo '<td>' . $p['pageUpdated'] . '</td>';
+    echo '<td>' . $p['pageCreated'] . '</td>';
+    echo '<td>' . ($p['pagePublished'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
+    echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/pages/jumbo/' . $p['pageID'] . '" class="btn btn-small btn-primary">' . $this->lang->line('btn_jumbotron') . '</a> <a href="' . BASE_URL . '/admin/pages/edit/' . $p['pageID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/pages/delete/' . $p['pageID'] . '"><i class="fa fa-remove"> </i></a></td>';
+    echo '</tr>';
+}?>
                 </tbody>
               </table>
               <div class="text-center" id="loadingSpinner">
@@ -65,7 +69,7 @@
      </div>
       <!-- /colmd12 -->
   </div>
-  <!-- /row --> 
+  <!-- /row -->
 </div>
-<!-- /container --> 
+<!-- /container -->
 <?php echo $footer; ?>

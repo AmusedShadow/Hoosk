@@ -16,6 +16,10 @@
                 </li>
             </ol>
         </div>
+
+        <div class="col-lg-12">
+          <a href="<?php echo site_url('/admin/posts/categories/new'); ?>" class="btn btn-primary pull-right"><?php echo $this->lang->line('nav_categories_new'); ?></a>
+        </div>
     </div>
 </div>
 <div class="container-fluid">
@@ -29,20 +33,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <?php 
-					foreach ($categories as $c) {
-						echo '<tr>';
-						echo '<td>'.$c['categoryTitle'].'</td>';
-						echo '<td class="td-actions"><a href="'.BASE_URL.'/admin/posts/categories/edit/'.$c['categoryID'].'" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="'.BASE_URL.'/admin/posts/categories/delete/'.$c['categoryID'].'"><i class="fa fa-remove"></i></a></td>';
-						echo '</tr>';
-					} ?>
+                    <?php
+foreach ($categories as $c) {
+    echo '<tr>';
+    echo '<td>' . $c['categoryTitle'] . '</td>';
+    echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/posts/categories/edit/' . $c['categoryID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/posts/categories/delete/' . $c['categoryID'] . '"><i class="fa fa-remove"></i></a></td>';
+    echo '</tr>';
+}?>
                 </tbody>
               </table>
               <?php echo $this->pagination->create_links(); ?>
          </div>
           <!-- /colmd12 -->
       </div>
-      <!-- /row --> 
+      <!-- /row -->
     </div>
-    <!-- /container --> 
+    <!-- /container -->
 <?php echo $footer; ?>

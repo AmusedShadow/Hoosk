@@ -16,6 +16,10 @@
                 </li>
             </ol>
         </div>
+
+        <div class="col-lg-12">
+          <a href="<?php echo site_url('/admin/users/new'); ?>" class="btn btn-primary pull-right"><?php echo $this->lang->line('nav_users_new'); ?></a>
+        </div>
     </div>
 </div>
 
@@ -31,14 +35,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <?php 
-					foreach ($users as $u) {
-						echo '<tr>';
-						echo '<td>'.$u['userName'].'</td>';
-						echo '<td>'.$u['email'].'</td>';
-						echo '<td class="td-actions"><a href="'.BASE_URL.'/admin/users/edit/'.$u['userID'].'" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="'.BASE_URL.'/admin/users/delete/'.$u['userID'].'"><i class="fa fa-remove"> </i></a></td>';
-						echo '</tr>';
-					} ?>
+                    <?php
+foreach ($users as $u) {
+    echo '<tr>';
+    echo '<td>' . $u['userName'] . '</td>';
+    echo '<td>' . $u['email'] . '</td>';
+    echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/users/edit/' . $u['userID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/users/delete/' . $u['userID'] . '"><i class="fa fa-remove"> </i></a></td>';
+    echo '</tr>';
+}?>
                 </tbody>
               </table>
               <?php echo $this->pagination->create_links(); ?>

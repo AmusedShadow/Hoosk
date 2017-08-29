@@ -17,6 +17,12 @@
             </ol>
         </div>
     </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+          <a href="<?php echo site_url('/admin/navigation/new'); ?>" class="btn btn-primary pull-right"><?php echo $this->lang->line('nav_navigation_new'); ?></a>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid">
@@ -30,20 +36,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($nav as $n):?>
+                <?php foreach ($nav as $n): ?>
 						    <tr>
-						      <td><?php echo $n['navTitle']?></td>
+						      <td><?php echo $n['navTitle'] ?></td>
 						      <td class="td-actions">
-                    <a href="<?php echo BASE_URL; ?>/admin/navigation/edit/<?php echo $n['navSlug']?>" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a>
-                    <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="<?php echo BASE_URL.'/admin/navigation/delete/'.$n['navSlug']; ?>"><i class="fa fa-remove"> </i></a>
+                    <a href="<?php echo BASE_URL; ?>/admin/navigation/edit/<?php echo $n['navSlug'] ?>" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a>
+                    <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="<?php echo BASE_URL . '/admin/navigation/delete/' . $n['navSlug']; ?>"><i class="fa fa-remove"> </i></a>
                   </td>
 						    </tr>
-					     <?php endforeach; ?>
+					     <?php endforeach;?>
                 </tbody>
               </table>
               <?php echo $this->pagination->create_links(); ?>
-		
+
         	</div>
-      </div>         
+      </div>
  </div>
 <?php echo $footer; ?>

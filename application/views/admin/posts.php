@@ -26,7 +26,11 @@
                 </li>
             </ol>
         </div>
-        
+
+                <div class="col-lg-12">
+          <a href="<?php echo site_url('/admin/posts/new'); ?>" class="btn btn-primary pull-right"><?php echo $this->lang->line('nav_posts_new'); ?></a>
+        </div>
+
     </div>
 </div>
 
@@ -44,16 +48,16 @@
                   </tr>
                 </thead>
                 <tbody id="postContainer">
-                    <?php 
-					foreach ($posts as $p) {
-						echo '<tr>';
-							echo '<td>'.$p['postTitle'].'</td>';
-							echo '<td>'.$p['categoryTitle'].'</td>';
-							echo '<td>'.$p['datePosted'].'</td>';
-                            echo '<td>'.($p['published'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>').'</td>';
-							echo '<td class="td-actions"><a href="'.BASE_URL.'/admin/posts/edit/'.$p['postID'].'" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="'.BASE_URL.'/admin/posts/delete/'.$p['postID'].'"><i class="fa fa-remove"> </i></a></td>';
-						echo '</tr>';
-					} ?>
+                    <?php
+foreach ($posts as $p) {
+    echo '<tr>';
+    echo '<td>' . $p['postTitle'] . '</td>';
+    echo '<td>' . $p['categoryTitle'] . '</td>';
+    echo '<td>' . $p['datePosted'] . '</td>';
+    echo '<td>' . ($p['published'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
+    echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/posts/edit/' . $p['postID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/posts/delete/' . $p['postID'] . '"><i class="fa fa-remove"> </i></a></td>';
+    echo '</tr>';
+}?>
                 </tbody>
               </table>
               <div class="text-center" id="loadingSpinner">
@@ -64,7 +68,7 @@
 			  </div>
             </div>
           </div>
-         
+
      </div>
 
 <?php echo $footer; ?>
