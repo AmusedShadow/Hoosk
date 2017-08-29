@@ -778,12 +778,13 @@ class Hoosk_model extends CI_Model {
 
     public function getCategory($id) {
         $query = $this->post_category_model->where('categoryID', '=', $id)->first();
-
-        if (count($query) == 0) {
-            return array();
+        
+        $return = array();
+        if (count($query)>0) {
+            $return[] = $query->toArray();
         }
 
-        return $query->toArray();
+        return $return;
     }
 
     public function removeCategory($id) {
