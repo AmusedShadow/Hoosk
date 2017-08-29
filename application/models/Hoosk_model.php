@@ -333,7 +333,7 @@ class Hoosk_model extends CI_Model {
 
     public function getPageBanners($id) {
         $query = $this->banner_model->where('pageID', '=', $id)
-            ->orderBy('sliderOrder', 'ASC')
+            ->orderBy('slideOrder', 'ASC')
             ->first();
 
         if (count($query) == 0) {
