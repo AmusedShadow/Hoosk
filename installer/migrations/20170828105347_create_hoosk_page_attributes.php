@@ -55,7 +55,7 @@ class Migration_create_hoosk_page_attributes extends CI_Migration {
                 'pageParent'      => '0',
                 'pageTemplate'    => 'news',
                 'pageBanner'      => '0',
-                'pageURL'         => 'news',
+                'pageURL'         => 'blog',
                 'enableJumbotron' => '0',
                 'enableSlider'    => '0',
                 'enableSearch'    => '1',

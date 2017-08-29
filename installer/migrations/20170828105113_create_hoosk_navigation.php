@@ -26,7 +26,7 @@ class Migration_create_hoosk_navigation extends CI_Migration {
             array(
                 'navSlug'  => 'header',
                 'navTitle' => 'Header Nav',
-                'navHTML'  => '<ul class="nav navbar-nav"><li><a href="http://beta.hoosk.org">Home</a></li><li><a href="/contact">Contact</a></li><li><a href="/news">News</a></li></ul>',
+                'navHTML'  => '<ul class="nav navbar-nav"><li><a href="/index.php">Home</a></li><li><a href="/contact">Contact</a></li><li><a href="/blog">Blog</a></li></ul>',
                 'navEdit'  => '',
             ),
             array(
