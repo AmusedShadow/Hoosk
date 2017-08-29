@@ -559,7 +559,8 @@ class Hoosk_model extends CI_Model {
 
     public function getSettings() {
         // Get the settings
-        return $this->settings;
+        $return[] = $this->settings;
+        return $return;
     }
 
     public function updateSettings() {
