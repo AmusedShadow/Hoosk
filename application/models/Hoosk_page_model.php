@@ -11,7 +11,7 @@ class Hoosk_page_model extends CI_Model {
         $this->load->EloquentModel('Page_content_model');
         $this->load->EloquentModel('Page_meta_model');
         $this->load->EloquentModel('Page_attributes_model');
-        $this->load->EloquentModel('Post_category');
+        $this->load->EloquentModel('Post_category_model');
         $this->load->EloquentModel('Post_model');
         $this->load->EloquentModel('Settings_model');
     }
