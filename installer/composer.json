@@ -1,5 +1,5 @@
 {
 	"autoload": {
-		"classmap": ["../application/models","../system/core/Model.php"]
+		"classmap": ["../application/models","../system/core/Model.php","../application/vendor"]
 	}
 }

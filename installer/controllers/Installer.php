@@ -50,9 +50,14 @@ class Installer extends CI_Controller {
         $this->form_validation->set_rules('dbUserName', 'Database Username', 'required');
         $this->form_validation->set_rules('dbPass', 'Database Password', 'required');
         $this->form_validation->set_rules('dbName', 'Database Name', 'required|callback__tryDatabaseConnect|callback__tryConfigWrite');
+        $this->form_validation->set_rules('timezone', 'Timezone', 'required');
 
         //if the validation hasn't run or returned falsed lets load the installer view
         if ($this->form_validation->run() === false) {
+            //list of time zones and such
+            $this->timezones();
+
+            //load the view
             $this->load->view('installer/install');
         } else {
             //if the form validation has run successfully then lets do this!
@@ -115,6 +120,9 @@ class Installer extends CI_Controller {
             'autoinit'    => false,
         );
 
+        $cfg['default'] = $testConfig;
+        $this->config->set_item('database', $cfg);
+
         //if we have all of the required information lets try testing our connection
         if ((!empty($testConfig['hostname'])) && (!empty($testConfig['username']))
             && (!empty($testConfig['password'])) && (!empty($testConfig['database']))) {
@@ -174,6 +182,8 @@ class Installer extends CI_Controller {
             "define('SITENAME_TXT','{site_name}');",
             '',
             '$assign_to_config[\'encryption_key\'] = \'' . random_string('alnum', 32) . '\'; //custom encryption key',
+            '',
+            'date_default_timezone_set(\'' . $this->input->post('timezone') . '\');',
             '',
         );
 
@@ -264,7 +274,18 @@ class Installer extends CI_Controller {
     protected function _fixDefaultAccount() {
         define('SALT', $this->salt);
 
-        $model = new Hoosk_model;
-        $model->createUser('demo', 'info@hoosk.org', 'demo');
+        $this->load->model('hoosk_model');
+
+        $this->hoosk_model->createUser('demo', 'info@hoosk.org', 'demo');
+    }
+
+    protected function timezones() {
+        $tz       = DateTimeZone::listIdentifiers();
+        $compiled = array();
+        foreach ($tz as $row) {
+            $compiled[$row] = $row;
+        }
+
+        $this->load->vars('timezones', $compiled);
     }
 }

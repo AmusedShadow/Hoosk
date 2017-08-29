@@ -38,8 +38,8 @@
     <div class="col col-lg-3 col-sm-3"></div>
     	<div class="col col-lg-6 col-sm-6">
     	<?php
-    		echo validation_errors('<div class="alert alert-info">','</div>');
-    	?>
+echo validation_errors('<div class="alert alert-info">', '</div>');
+?>
             <form action="#" method="post">
         		<div class="control-group">
 					<label class="control-label" for="siteName">Site Name</label>
@@ -50,7 +50,7 @@
         		<div class="control-group">
 					<label class="control-label" for="siteURL">Site URL</label>
 					<div class="controls">
-						<input type="text" id="siteURL" name="siteURL" value="<?php echo set_value('siteURL',site_url()); ?>" class="span5">
+						<input type="text" id="siteURL" name="siteURL" value="<?php echo set_value('siteURL', site_url()); ?>" class="span5">
 					</div> <!-- /controls -->
 				</div> <!-- /control-group -->
         		<hr>
@@ -75,7 +75,16 @@
          		<div class="control-group">
 					<label class="control-label" for="dbHost">Database Host</label>
 					<div class="controls">
-						<input type="text" id="dbHost" name="dbHost" value="<?php echo set_value('dbHost','localhost'); ?>" class="span5">
+						<input type="text" id="dbHost" name="dbHost" value="<?php echo set_value('dbHost', 'localhost'); ?>" class="span5">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
+				<div class="control-group">
+					<label class="control-label" for="timezone">Timezone</label>
+					<div class="controls">
+						<?php
+echo form_dropdown('timezone', $timezones);
+?>
 					</div> <!-- /controls -->
 				</div> <!-- /control-group -->
 
