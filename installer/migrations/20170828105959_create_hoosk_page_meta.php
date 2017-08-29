@@ -21,22 +21,35 @@ class Migration_create_hoosk_page_meta extends CI_Migration {
     }
 
     protected function seed() {
-        $this->db->insert($this->table, array(
-            'pageID'          => 1,
-            'pageKeywords'    => 'Hoosk Keywords',
-            'pageDescription' => 'Hoosk Description',
-        ));
+        $data = array(
+            array(
+                'pageID'          => 1,
+                'pageKeywords'    => 'Hoosk Keywords',
+                'pageDescription' => 'Hoosk Description',
+            ),
+            array(
+                'pageID'          => 2,
+                'pageKeywords'    => 'Contact',
+                'pageDescription' => 'Contact',
+            ),
+            array(
+                'pageID'          => 3,
+                'pageKeywords'    => 'test',
+                'pageDescription' => 'test',
+            ),
+        );
 
-        $this->db->insert($this->table, array(
-            'pageID'          => 2,
-            'pageKeywords'    => 'Contact',
-            'pageDescription' => 'Contact',
-        ));
+        foreach ($data as $insert) {
+            $query = $this->db->from($this->table);
+            foreach ($insert as $name => $value) {
+                $query->where($name, $value);
+            }
 
-        $this->db->insert($this->table, array(
-            'pageID'          => 3,
-            'pageKeywords'    => 'test',
-            'pageDescription' => 'test',
-        ));
+            $query = $query->get();
+
+            if ($query->num_rows() == 0) {
+                $this->db->insert($this->table, $insert);
+            }
+        }
     }
 }

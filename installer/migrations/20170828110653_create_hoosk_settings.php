@@ -31,20 +31,23 @@ class Migration_create_hoosk_settings extends CI_Migration {
     }
 
     protected function seed() {
-        $this->db->insert($this->table, array(
-            'siteID'                 => 0,
-            'siteTitle'              => 'Hoosk Demo',
-            'siteDescription'        => 'Hoosk',
-            'siteLogo'               => 'logo.png',
-            'siteFavicon'            => 'favicon.png',
-            'siteTheme'              => 'dark',
-            'siteFooter'             => '&copy; Hoosk CMS ' . date('Y'),
-            'siteLang'               => 'english/',
-            'siteMaintenance'        => 0,
-            'siteMaintenanceHeading' => 'Down for maintenance',
-            'siteMaintenanceMeta'    => 'Down for maintenance',
-            'siteMaintenanceContent' => 'This site is currently down for maintenance, please check back soon.',
-            'siteAdditionalJS'       => '',
-        ));
+        $query = $this->db->select('siteID')->from($this->table)->where('siteID', 0)->get();
+        if ($query->num_rows() == 0) {
+            $this->db->insert($this->table, array(
+                'siteID'                 => 0,
+                'siteTitle'              => 'Hoosk Demo',
+                'siteDescription'        => 'Hoosk',
+                'siteLogo'               => 'logo.png',
+                'siteFavicon'            => 'favicon.png',
+                'siteTheme'              => 'dark',
+                'siteFooter'             => '&copy; Hoosk CMS ' . date('Y'),
+                'siteLang'               => 'english/',
+                'siteMaintenance'        => 0,
+                'siteMaintenanceHeading' => 'Down for maintenance',
+                'siteMaintenanceMeta'    => 'Down for maintenance',
+                'siteMaintenanceContent' => 'This site is currently down for maintenance, please check back soon.',
+                'siteAdditionalJS'       => '',
+            ));
+        }
     }
 }

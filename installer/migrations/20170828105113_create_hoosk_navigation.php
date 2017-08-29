@@ -22,18 +22,31 @@ class Migration_create_hoosk_navigation extends CI_Migration {
     }
 
     protected function seed() {
-        $this->db->insert($this->table, array(
-            'navSlug'  => 'header',
-            'navTitle' => 'Header Nav',
-            'navHTML'  => '<ul class="nav navbar-nav"><li><a href="http://beta.hoosk.org">Home</a></li><li><a href="/contact">Contact</a></li><li><a href="/news">News</a></li></ul>',
-            'navEdit'  => '',
-        ));
+        $data = array(
+            array(
+                'navSlug'  => 'header',
+                'navTitle' => 'Header Nav',
+                'navHTML'  => '<ul class="nav navbar-nav"><li><a href="http://beta.hoosk.org">Home</a></li><li><a href="/contact">Contact</a></li><li><a href="/news">News</a></li></ul>',
+                'navEdit'  => '',
+            ),
+            array(
+                'navSlug'  => 'test',
+                'navTitle' => 'test',
+                'navHTML'  => '<ul class="nav navbar-nav"></ul>',
+                'navEdit'  => '',
+            ),
+        );
 
-        $this->db->insert($this->table, array(
-            'navSlug'  => 'test',
-            'navTitle' => 'test',
-            'navHTML'  => '<ul class="nav navbar-nav"></ul>',
-            'navEdit'  => '',
-        ));
+        foreach ($data as $insert) {
+            $query = $this->db->from($this->table);
+            foreach ($insert as $name => $value) {
+                $query->where($name, $value);
+            }
+
+            $query = $query->get();
+            if ($query->num_rows() == 0) {
+                $this->db->insert($this->table, $insert);
+            }
+        }
     }
 }

@@ -48,11 +48,14 @@ class Migration_create_hoosk_social extends CI_Migration {
         );
 
         foreach ($networks as $social) {
-            $this->db->insert($this->table, array(
-                'socialName'    => $social,
-                'socialLink'    => '',
-                'socialEnabled' => 0,
-            ));
+            $query = $this->db->select('socialID')->from($this->table)->where('socialName', $social)->limit(0, 1)->get();
+            if ($query->num_rows() == 0) {
+                $this->db->insert($this->table, array(
+                    'socialName'    => $social,
+                    'socialLink'    => '',
+                    'socialEnabled' => 0,
+                ));
+            }
         }
     }
 }

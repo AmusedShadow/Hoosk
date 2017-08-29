@@ -21,28 +21,39 @@ class Migration_create_hoosk_post_category extends CI_Migration {
     }
 
     protected function seed() {
-        $this->db->insert($this->table, array(
-            'categoryTitle'       => 'Uncategorized',
-            'categorySlug'        => 'uncategorized-asd',
-            'categoryDescription' => 'This is the default category for things that dont quite fit anywhere',
-        ));
+        $data = array(
+            array(
+                'categoryTitle'       => 'Uncategorized',
+                'categorySlug'        => 'uncategorized-asd',
+                'categoryDescription' => 'This is the default category for things that dont quite fit anywhere',
+            ),
+            array(
+                'categoryTitle'       => 'Hoosk Updates',
+                'categorySlug'        => 'hoosk_updates',
+                'categoryDescription' => 'Latest hoosk updates',
+            ),
+            array(
+                'categoryTitle'       => 'FAQs',
+                'categorySlug'        => 'faqs',
+                'categoryDescription' => 'Hoosk FAQs',
+            ),
+            array(
+                'categoryTitle'       => 'Test Category',
+                'categorySlug'        => 'test',
+                'categoryDescription' => 'test',
+            ),
+        );
 
-        $this->db->insert($this->table, array(
-            'categoryTitle'       => 'Hoosk Updates',
-            'categorySlug'        => 'hoosk_updates',
-            'categoryDescription' => 'Latest hoosk updates',
-        ));
+        foreach ($data as $insert) {
+            $query = $this->db->from($this->table);
+            foreach ($insert as $name => $value) {
+                $query->where($name, $value);
+            }
 
-        $this->db->insert($this->table, array(
-            'categoryTitle'       => 'FAQs',
-            'categorySlug'        => 'faqs',
-            'categoryDescription' => 'Hoosk FAQs',
-        ));
-
-        $this->db->insert($this->table, array(
-            'categoryTitle'       => 'Test Category',
-            'categorySlug'        => 'test',
-            'categoryDescription' => 'test',
-        ));
+            $query = $query->get();
+            if ($query->num_rows() == 0) {
+                $this->db->insert($this->table, $insert);
+            }
+        }
     }
 }
