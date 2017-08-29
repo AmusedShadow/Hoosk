@@ -63,6 +63,7 @@ $lang['settings_maintenance_meta']    = "Maintenance Page Meta Description";
 $lang['settings_maintenance_content'] = "Maintenance Page Content:";
 $lang['settings_additional_js']       = "Additional Javascript (such as Google Analytics) this will be loaded into all pages, remember to include script tags where necessary:";
 $lang['settings_image_error']         = "Error! The file is not an image.";
+$lang['settings_search']              = 'Enable Frontend Search';
 
 //Page - All Pages
 $lang['pages_header']          = "All Pages";

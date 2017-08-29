@@ -74,4 +74,23 @@ class Page_content_model extends Eloquent {
 
         return collect($results);
     }
+
+    public function getPage($id) {
+        $CI = &get_instance();
+        $CI->load->EloquentModel('Page_attributes_model');
+        $attributes = $CI->page_attributes_model->getTable();
+        $content = $this->getTable();
+
+        $m = $this->newInstance();
+        $query = $m->leftJoin($attributes,$attributes.'.pageID','=',$content.'.pageID')
+        ->where($content.'.pageID','=',$id)
+        ->first();
+
+        $return = array();
+        if (count($query)>0) {
+            $return = $query->toArray();
+        }
+
+        return $return;
+    }
 }

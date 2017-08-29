@@ -215,6 +215,23 @@
 						echo form_textarea($data); ?>
 					</div> <!-- /controls -->				
 				</div> <!-- /form-group -->
+
+				<hr />
+                <div class="form-group">
+					<label class="control-label" for="siteSearch"><?php echo $this->lang->line('settings_search'); ?></label>
+					<div class="controls">
+					<?php
+						$att = 'id="siteSearch" class="form-control"';
+						$data = array(
+							"0" => "Disabled",
+							"1" => "Enabled"
+						);
+						
+						
+						echo form_dropdown('siteSearch', $data, $s['enableSearch'], $att); ?>
+					</div> <!-- /controls -->				
+				</div> <!-- /form-group -->
+
            </div>
            <div class="panel-footer">
 

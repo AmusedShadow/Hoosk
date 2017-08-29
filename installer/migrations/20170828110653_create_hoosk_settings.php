@@ -21,6 +21,7 @@ class Migration_create_hoosk_settings extends CI_Migration {
             $table->text('siteMaintenanceMeta');
             $table->text('siteMaintenanceContent');
             $table->text('siteAdditionalJS');
+            $table->tinyint('enableSearch');
         });
 
         $this->seed();
@@ -47,6 +48,7 @@ class Migration_create_hoosk_settings extends CI_Migration {
                 'siteMaintenanceMeta'    => 'Down for maintenance',
                 'siteMaintenanceContent' => 'This site is currently down for maintenance, please check back soon.',
                 'siteAdditionalJS'       => '',
+                'enableSearch'           => 1,
             ));
         }
     }

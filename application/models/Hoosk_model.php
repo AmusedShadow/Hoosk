@@ -573,6 +573,7 @@ class Hoosk_model extends CI_Model {
             'siteMaintenanceMeta'    => $this->input->post('siteMaintenanceMeta'),
             'siteMaintenanceContent' => $this->input->post('siteMaintenanceContent'),
             'siteAdditionalJS'       => $this->input->post('siteAdditionalJS'),
+            'enableSearch'           => $this->input->post('siteSearch'),
         );
 
         if ($this->input->post('siteTitle') != "") {
