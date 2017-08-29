@@ -519,6 +519,8 @@ class Hoosk_model extends CI_Model {
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
         $navigationEdit = $serial;
         $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button><button style="display: none;" data-action="expand" type="button">Expand</button>', "", $navigationEdit);
+        //$navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button>',"",$navigationEdit);
+        //$navigationEdit = str_replace('<button data-action="expand" type="button" style="display: none;">Expand</button>','',$navigationEdit);
 
         $data = array(
             'navSlug'  => $this->input->post('navSlug'),
@@ -532,17 +534,19 @@ class Hoosk_model extends CI_Model {
 
     public function updateNav($id, $nav = null, $serial = null) {
         if (is_null($nav)) {
-            $nav = $this->input->post('convertedNav');
+            $nav = trim($this->input->post('convertedNav'));
         }
 
         if (is_null($serial)) {
-            $serial = $this->input->post('seriaNav');
+            $serial = trim($this->input->post('seriaNav'));
         }
 
         $navigationHTML = $nav;
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
         $navigationEdit = $serial;
         $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button><button style="display: none;" data-action="expand" type="button">Expand</button>', "", $navigationEdit);
+        $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button>',"",$navigationEdit);
+        $navigationEdit = str_replace('<button data-action="expand" type="button" style="display: none;">Expand</button>','',$navigationEdit);
 
         $data = array(
             'navTitle' => $this->input->post('navTitle'),
