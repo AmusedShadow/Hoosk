@@ -19,7 +19,7 @@ class Hoosk_model extends CI_Model {
         $this->load->EloquentModel('Banner_model');
         $this->load->EloquentModel('Navigation_model');
         $this->load->EloquentModel('Post_model');
-        $this->load->EloquentModel('Post_category');
+        $this->load->EloquentModel('Post_category_model');
 
         $this->settings = $this->settings_model->where('siteID', '=', 0)->first()->toArray();
     }
