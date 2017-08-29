@@ -765,7 +765,7 @@ class Hoosk_model extends CI_Model {
         }
 
         if (empty($desc)) {
-            $desc = $tihs->input->post('categoryDescription');
+            $desc = $this->input->post('categoryDescription');
         }
 
         $this->post_category_model->insert(array(
