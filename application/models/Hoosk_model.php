@@ -312,10 +312,20 @@ class Hoosk_model extends CI_Model {
     }
 
     public function getPage($id) {
+        /*
+        $this->db->select("*");
+        $this->db->where("hoosk_page_attributes.pageID", $id);
+        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
+        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
+        $query = $this->db->get('hoosk_page_attributes');
+        if ($query->num_rows() > 0) {
+        return $query->result_array();
+        }
+        return array();
+         */
         $query = $this->page_attributes_model
-            ->select('*')
             ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
-            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_meta_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
             ->where($this->page_attributes_model->getTable() . '.pageID', '=', $id)
             ->get();
 
@@ -329,18 +339,23 @@ class Hoosk_model extends CI_Model {
         }
 
         return $return;
+
     }
 
     public function getPageBanners($id) {
-        $query = $this->banner_model->where('pageID', '=', $id)
+        $query = $this->banner_model
+            ->where('pageID', '=', $id)
             ->orderBy('slideOrder', 'ASC')
-            ->first();
+            ->get();
 
-        if (count($query) == 0) {
-            return array();
+        $return = array();
+        if (count($query) > 0) {
+            foreach ($query as $row) {
+                $return[] = $row->toArray();
+            }
         }
 
-        return $query->toArray();
+        return $return;
     }
 
     public function removePage($id) {
