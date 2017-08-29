@@ -77,12 +77,17 @@ class ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59
         ),
     );
 
+    public static $classMap = array (
+        'LinebreakConverter' => __DIR__ . '/../..' . '/third_party/WAK/LinebreakConverter.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59::$classMap;
 
         }, null, ClassLoader::class);
     }

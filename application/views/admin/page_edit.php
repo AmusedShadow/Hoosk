@@ -213,7 +213,7 @@
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor-bootstrap.js"></script>
 <script type="text/javascript">
 	new SirTrevor.Editor({ el: $('.js-st-instance'),
-  	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe"]
+  	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe","Linebreaks"]
 	});
 	SirTrevor.onBeforeSubmit();
 </script>

@@ -3,5 +3,8 @@
         "illuminate/database": "^5.4",
         "illuminate/events": "^5.4",
         "illuminate/container": "^5.4"
+    },
+    "autoload": {
+    	"classmap": ["third_party/WAK"]
     }
 }

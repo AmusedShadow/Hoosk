@@ -36,6 +36,12 @@ class ToHtmlContext {
 			case 'image_extended':
                 $this->converter = new ImageExtendedConverter();
                 break;
+
+            case 'linebreak':
+            case 'linebreaks':
+                $this->converter = new LinebreakConverter();
+                break;
+
             default:
                 $this->converter = new BaseConverter();
                 break;

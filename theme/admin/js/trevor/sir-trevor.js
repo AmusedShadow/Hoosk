@@ -2079,6 +2079,23 @@
       this.$('[name=heading]').val(data.heading);
     }
   });
+
+  //test
+    SirTrevor.Blocks.Linebreaks = SirTrevor.Block.extend({
+    type: 'Linebreaks',
+
+    title: function(){ return 'Linebreaks'; },
+
+    editorHTML: '<div class="heading-block"><select name="linebreak" class="form-control"><option value="br">Invisible Break</option></div><div class="st-required st-text-block st-text-block--heading" contenteditable="true"></div>',
+
+    icon_name: 'bin',
+
+    loadData: function(data){
+      this.getTextBlock().html('<br />');
+      this.$('[break=linebreak]').val(data.linebreak);
+    }
+  });
+
   /*
     Simple Image Block
   */
