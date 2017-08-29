@@ -29,8 +29,11 @@ class Capsule extends Manager {
         $this->setAsGlobal();
         $this->bootEloquent();
 
-        $CI->config->load('database', true);
         $config = $CI->config->item('database');
+        if (!$config) {
+            $CI->config->load('database', true);
+        }
+
         foreach ($config as $name => $data) {
             $this->addConnection(array(
                 'driver'    => $data['subdriver'],
