@@ -15,6 +15,16 @@
 <script src="<?php echo ADMIN_THEME; ?>/js/excanvas.min.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/bootstrap.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/base.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-3.1.3/dt-1.10.15/b-1.4.0/b-colvis-1.4.0/b-html5-1.4.0/b-print-1.4.0/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/sc-1.4.2/se-1.2.2/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-3.1.3/dt-1.10.15/b-1.4.0/b-colvis-1.4.0/b-html5-1.4.0/b-print-1.4.0/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/sc-1.4.2/se-1.2.2/datatables.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#table').DataTable();
+    } );
+</script>
 </head>
 <body>
 <div id="wrapper">
