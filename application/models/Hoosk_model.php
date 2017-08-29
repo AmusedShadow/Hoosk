@@ -3,137 +3,110 @@
 }
 
 class Hoosk_model extends CI_Model {
+    protected $settings = array();
+
     public function __construct() {
         // Call the Model constructor
         parent::__construct();
         $this->load->database();
+
+        $this->load->EloquentModel('Settings_model');
+        $this->load->EloquentModel('Page_content_model');
+        $this->load->EloquentModel('Page_attributes_model');
+        $this->load->EloquentModel('Page_meta_model');
+        $this->load->EloquentModel('User_model');
+        $this->load->EloquentModel('Social_model');
+        $this->load->EloquentModel('Banner_model');
+        $this->load->EloquentModel('Navigation_model');
+
+        $this->settings = $this->settings_model->where('siteID', '=', 0)->first()->toArray();
     }
 
     /*     * *************************** */
     /*     * ** Dash Querys ************ */
     /*     * *************************** */
     public function getSiteName() {
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                return $u['siteTitle'];
-            endforeach;
-        }
-
-        return array();
+        return (isset($this->settings['siteTitle'])) ? $this->settings['siteTitle'] : array();
     }
 
     public function checkMaintenance() {
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                return $u['siteMaintenance'];
-            endforeach;
-        }
-
-        return array();
+        return (isset($this->settings['siteMaintenance'])) ? $this->settings['siteMaintenance'] : array();
     }
 
     public function getTheme() {
-        // Get Theme
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                return $u['siteTheme'];
-            endforeach;
-        }
-
-        return array();
+        return (isset($this->settings['siteTheme'])) ? $this->settings['siteTheme'] : array();
     }
 
     public function getLang() {
-        // Get Theme
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $u):
-                return $u['siteLang'];
-            endforeach;
-        }
-
-        return array();
+        return (isset($this->settings['siteLang'])) ? $this->settings['siteLang'] : array();
     }
 
     public function getUpdatedPages() {
-        // Get most recently updated pages
-        $this->db->select("pageTitle, hoosk_page_attributes.pageID, pageUpdated, pageContentHTML");
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $this->db->order_by("pageUpdated", "desc");
-        $this->db->limit(5);
-        $query = $this->db->get('hoosk_page_attributes');
+        $query = $this->page_attributes_model
+            ->select($this->page_content_model->getTable() . '.pageTitle', $this->page_content_model->getTable() . '.pageID', $this->page_attributes_model->getTable() . '.pageUpdated', $this->page_content_model->getTable() . '.pageContentHTML')
+            ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->orderBy($this->page_attributes_model->getTable() . '.pageUpdated', 'desc')
+            ->take(5)
+            ->get();
 
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        if (count($query) == 0) {
+            return array();
         }
 
-        return array();
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     /*     * *************************** */
     /*     * ** User Querys ************ */
     /*     * *************************** */
     public function countUsers() {
-        return $this->db->count_all('hoosk_user');
+        return $this->user_model->count();
     }
 
     public function getUsers($limit, $offset = 0) {
-        // Get a list of all user accounts
-        $this->db->select("userName, email, userID");
-        $this->db->order_by("userName", "asc");
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_user');
+        $query = $this->user_model->select('userName', 'email', 'userID')
+            ->orderBy('userName', 'asc')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
 
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        if (count($query) == 0) {
+            return array();
         }
 
-        return array();
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     public function getUser($id) {
-        // Get the user details
-        $this->db->select("*");
-        $this->db->where("userID", $id);
-        $query = $this->db->get('hoosk_user');
+        $query = $this->user_model->where('userID', '=', $id)
+            ->first();
 
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        if (count($query) == 0) {
+            return array();
         }
 
-        return array();
+        return $query->toArray();
     }
 
     public function getUserEmail($id) {
-        // Get the user email address
-        $this->db->select("email");
-        $this->db->where("userID", $id);
-        $query = $this->db->get('hoosk_user');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $rows) {
-                $email = $rows->email;
-                return $email;
-            }
+        $query = $this->user_model->select('email')->where('userID', '=', $id)
+            ->first();
+
+        if (count($query) == 0) {
+            return '';
+        } else {
+            return trim($query->email);
         }
     }
 
@@ -147,72 +120,83 @@ class Hoosk_model extends CI_Model {
         }
 
         if (empty($password)) {
-            $password=  $this->input->post('password');
+            $password = $this->input->post('password');
         }
 
-        // Create the user account
-        $data = array(
+        $this->user_model->insert(array(
+            // Create the user account
             'userName' => $username,
             'email'    => $email,
             'password' => md5($password . SALT),
             'RS'       => '',
-        );
-        
-        $this->db->insert('hoosk_user', $data);
+
+        ));
     }
 
-    public function updateUser($id) {
-        // update the user account
-        $data = array(
-            'email'    => $this->input->post('email'),
-            'password' => md5($this->input->post('password') . SALT),
-        );
-        $this->db->where('userID', $id);
-        $this->db->update('hoosk_user', $data);
+    public function updateUser($id, $email = '', $password = '') {
+        if (empty($email)) {
+            $email = $this->input->post('email');
+        }
+
+        if (empty($password)) {
+            $password = $this->input->post('password');
+        }
+
+        $password = md5($password . SALT);
+
+        $this->user_model
+            ->where('userID', '=', $id)
+            ->update(array(
+                // update the user account
+                'email'    => $email,
+                'password' => $password,
+            ));
     }
 
     public function removeUser($id) {
         // Delete a user account
-        $this->db->delete('hoosk_user', array('userID' => $id));
+        $this->user_model->where('userID', '=', $id)->delete();
     }
 
     public function login($username, $password) {
-        $this->db->select("*");
-        $this->db->where("userName", $username);
-        $this->db->where("password", $password);
-        $query = $this->db->get("hoosk_user");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $rows) {
-                $data = array(
-                    'userID'    => $rows->userID,
-                    'userName'  => $rows->userName,
-                    'logged_in' => true,
-                );
+        $query = $this->user_model->where('username', '=', $username)
+            ->where('password', '=', $password)
+            ->first();
 
-                $this->session->set_userdata($data);
-                return true;
-            }
-        } else {
+        if (count($query) == 0) {
             return false;
         }
+
+        $this->session->set_userdata(array(
+            'userID'    => $query->userID,
+            'userName'  => $query->userName,
+            'logged_in' => true,
+        ));
+        return true;
     }
 
     /*     * *************************** */
     /*     * ** Page Querys ************ */
     /*     * *************************** */
     public function pageSearch($term) {
-        $this->db->select("*");
-        $this->db->like("pageTitle", $term);
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($term == "") {
-            $this->db->limit(15);
+        $query = $this->page_attributes_model->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->where($this->page_content_model->getTable() . '.pageTitle', 'LIKE', $term);
+
+        if (isset($limit)) {
+            $query->limit($limit);
         }
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $p):
+
+        if (isset($offset)) {
+            $query->offset($offset);
+        }
+
+        if (count($query) == 0) {
+            echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
+        } else {
+            foreach ($query as $p) {
+                $p = $p->toArray();
+
                 echo '<tr>';
                 echo '<td>' . $p['navTitle'] . '</td>';
                 echo '<td>' . $p['pageUpdated'] . '</td>';
@@ -220,132 +204,157 @@ class Hoosk_model extends CI_Model {
                 echo '<td>' . ($p['pagePublished'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
                 echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/pages/jumbo/' . $p['pageID'] . '" class="btn btn-small btn-primary">' . $this->lang->line('btn_jumbotron') . '</a> <a href="' . BASE_URL . '/admin/pages/edit/' . $p['pageID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/pages/delete/' . $p['pageID'] . '"><i class="fa fa-remove"> </i></a></td>';
                 echo '</tr>';
-            endforeach;
-        } else {
-            echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
+            }
         }
     }
 
     public function countPages() {
-        return $this->db->count_all('hoosk_page_attributes');
+        return $this->page_attributes_model->count();
     }
 
-    public function getPages($limit, $offset = 0) {
-        // Get a list of all pages
-        $this->db->select("*");
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+    public function getPages($limit = 0, $offset = 0) {
+        $query = $this->page_attributes_model->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID');
+        if ($limit > 0) {
+            $query->limit($limit);
         }
-        return array();
+
+        if ($offset > 0) {
+            $query->offset($offset);
+        }
+
+        $query = $query->get();
+
+        if (count($query) == 0) {
+            return array();
+        }
+
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     public function getPagesAll() {
-        // Get a list of all pages
-        $this->db->select("*");
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        }
-        return array();
+        return $this->getPages(0, 0);
     }
 
-    public function createPage() {
-        // Create the page
-        $data = array(
-            'pagePublished'   => $this->input->post('pagePublished'),
-            'pageTemplate'    => $this->input->post('pageTemplate'),
-            'pageURL'         => $this->input->post('pageURL'),
-            'pageParent'      => 0,
-            'pageBanner'      => 0,
-            'enableJumbotron' => 0,
-            'enableSlider'    => 0,
-        );
-        $this->db->insert('hoosk_page_attributes', $data);
-        if ($this->input->post('content') != "") {
-            $sirTrevorInput = $this->input->post('content');
-            $converter      = new Converter();
-            $HTMLContent    = $converter->toHtml($sirTrevorInput);
+    public function createPage($published = null, $template = null, $url = null, $parent = null, $banner = null, $jumbo = null, $slider = null, $content = null) {
+        if (is_null($published)) {
+            $published = $this->input->post('pagePublished');
+        }
+
+        if (is_null($template)) {
+            $template = $this->input->post('pageTemplate');
+        }
+
+        if (is_null($url)) {
+            $url = $this->input->post('pageURL');
+        }
+
+        if (is_null($parent)) {
+            $parent = 0;
+        }
+
+        if (is_null($banner)) {
+            $banner = 0;
+        }
+
+        if (is_null($jumbo)) {
+            $jumbo = 0;
+        }
+
+        if (is_null($slider)) {
+            $slider = 0;
+        }
+
+        if (is_null($content)) {
+            $content = $this->input->post('content');
+        }
+
+        if (!empty($content)) {
+            $converter   = new Converter();
+            $HTMLContent = $converter->toHtml($content);
         } else {
-            $HTMLContent = "";
+            $HTMLContent = '';
         }
 
-        $this->db->select("*");
-        $this->db->where("pageURL", $this->input->post('pageURL'));
-        $query = $this->db->get("hoosk_page_attributes");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $rows) {
-                $contentdata = array(
-                    'pageID'          => $rows->pageID,
-                    'pageTitle'       => $this->input->post('pageTitle'),
-                    'navTitle'        => $this->input->post('navTitle'),
-                    'pageContent'     => $this->input->post('content'),
-                    'pageContentHTML' => $HTMLContent,
-                    'jumbotron'       => '',
-                    'jumbotronHTML'   => '',
-                );
+        $m                  = $this->page_attributes_model->newInstance();
+        $m->pagePublished   = $published;
+        $m->pageTemplate    = $template;
+        $m->pageURL         = $url;
+        $m->pageParent      = $parent;
+        $m->pageBanner      = $banner;
+        $m->enableJumbotron = $jumbo;
+        $m->enableSlider    = $slider;
+        $m->enableSearch    = 0;
+        $m->save();
 
-                $this->db->insert('hoosk_page_content', $contentdata);
+        $this->page_content_model->insert(array(
+            'pageID'          => $m->pageID,
+            'pageTitle'       => $this->input->post('pageTitle'),
+            'navTitle'        => $this->input->post('navTitle'),
+            'pageContent'     => $this->input->post('content'),
+            'pageContentHTML' => $HTMLContent,
+            'jumbotron'       => '',
+            'jumbotronHTML'   => '',
+        ));
 
-                $metadata = array(
-                    'pageID'          => $rows->pageID,
-                    'pageKeywords'    => $this->input->post('pageKeywords'),
-                    'pageDescription' => $this->input->post('pageDescription'),
-                );
-
-                $this->db->insert('hoosk_page_meta', $metadata);
-            }
-        }
+        $this->page_meta_model->insert(array(
+            'pageID'          => $m->pageID,
+            'pageKeywords'    => $this->input->post('pageKeywords'),
+            'pageDescription' => $this->input->post('pageDescription'),
+        ));
     }
 
     public function getPage($id) {
-        // Get the page details
-        $this->db->select("*");
-        $this->db->where("hoosk_page_attributes.pageID", $id);
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->page_attributes_model
+            ->select('*')
+            ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_meta_model->getTable() . '.pageID')
+            ->where($this->page_attributes_model->getTable() . '.pageID', '=', $id)
+            ->get();
+
+        if (count($query) == 0) {
+            return array();
         }
-        return array();
+
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     public function getPageBanners($id) {
-        // Get the page banners
-        $this->db->select("*");
-        $this->db->where("pageID", $id);
-        $this->db->order_by("slideOrder ASC");
-        $query = $this->db->get('hoosk_banner');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->banner_model->where('pageID', '=', $id)
+            ->orderBy('sliderOrder', 'ASC')
+            ->first();
+
+        if (count($query) == 0) {
+            return array();
         }
-        return array();
+
+        return $query->toArray();
     }
 
     public function removePage($id) {
-        // Delete a page
-        $this->db->delete('hoosk_page_content', array('pageID' => $id));
-        $this->db->delete('hoosk_page_meta', array('pageID' => $id));
-        $this->db->delete('hoosk_page_attributes', array('pageID' => $id));
+        $this->page_content_model->where('pageID', '=', $id)->delete();
+        $this->page_meta_model->where('pageID', '=', $id)->delete();
+        $this->page_attributes_model->where('pageID', '=', $id)->delete();
     }
 
     public function getPageURL($id) {
-        // Get the page URL
-        $this->db->select("pageURL");
-        $this->db->where("pageID", $id);
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $rows) {
-                $pageURL = $rows->pageURL;
-                return $pageURL;
-            }
+        $query = $this->page_attributes_model->where('pageID', '=', $id)->first();
+
+        if (count($query) == 0) {
+            return '';
         }
+
+        return $query->pageURL;
     }
 
     public function updatePage($id) {
@@ -415,20 +424,6 @@ class Hoosk_model extends CI_Model {
         // Clear the sliders
         $this->db->delete('hoosk_banner', array('pageID' => $id));
 
-        /*for($i=0;$i<=$_POST['total_upload_pics'];$i++)
-        {
-        if(isset($_POST['slide' . $i]))
-        {
-        $slidedata = array(
-        'pageID' => $id,
-        'slideImage' => $this->input->post('slide'.$i),
-        'slideLink' => $this->input->post('link'.$i),
-        'slideOrder' => $i,
-        );
-        $this->db->insert('hoosk_banner', $slidedata));
-        }
-        }*/
-
         $sliders = explode('{', $this->input->post('pics'));
 
         for ($i = 1; $i < count($sliders); $i++) {
@@ -450,29 +445,43 @@ class Hoosk_model extends CI_Model {
     /*     * ** Navigation Querys ****** */
     /*     * *************************** */
     public function countNavigation() {
-        return $this->db->count_all('hoosk_navigation');
+        return $this->navigation_model->count();
     }
 
-    public function getAllNav($limit, $offset = 0) {
-        // Get a list of all pages
-        $this->db->select("*");
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_navigation');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+    public function getAllNav($limit = 0, $offset = 0) {
+        $query = $this->navigation_model->select('*');
+        if ($limit > 0) {
+            $query->limit($limit);
         }
-        return array();
+
+        if ($offset > 0) {
+            $query->offset($offset);
+        }
+
+        $query = $query->get();
+
+        if (count($query) == 0) {
+            return array();
+        }
+
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     public function getNav($id) {
-        // Get a list of all pages
-        $this->db->select("*");
-        $this->db->where("navSlug", $id);
-        $query = $this->db->get('hoosk_navigation');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $return = array();
+        $query  = $this->navigation_model->where('navSlug', '=', $id)
+            ->get();
+
+        foreach ($query as $row) {
+            $return = $row->toArray();
         }
-        return array();
+
+        return $return;
     }
 
     //Get page details for building nav
@@ -682,68 +691,89 @@ class Hoosk_model extends CI_Model {
     /*     * ** Category Querys ******** */
     /*     * *************************** */
     public function countCategories() {
-        return $this->db->count_all('hoosk_post_category');
+        return $this->post_category_model->count();
     }
 
     public function getCategories() {
-        // Get a list of all categories
-        $this->db->select("*");
-        $query = $this->db->get('hoosk_post_category');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        }
-        return array();
+        return $this->getCategoriesAll(0, 0);
     }
 
-    public function getCategoriesAll($limit, $offset = 0) {
-        // Get a list of all categories
-        $this->db->select("*");
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_post_category');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+    public function getCategoriesAll($limit = 0, $offset = 0) {
+        $query = $this->post_category_model;
+        if ($limit > 0) {
+            $query->limit($limit);
         }
-        return array();
+
+        if ($offset > 0) {
+            $query->offset($offset);
+        }
+
+        $query = $query->get();
+        if (count($query) == 0) {
+            return array();
+        }
+
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
-    public function createCategory() {
-        // Create the category
+    public function createCategory($title = '', $slug = '', $desc = '') {
+        if (empty($title)) {
+            $title = $this->input->post('categoryTitle');
+        }
 
-        $data = array(
-            'categoryTitle'       => $this->input->post('categoryTitle'),
-            'categorySlug'        => $this->input->post('categorySlug'),
-            'categoryDescription' => $this->input->post('categoryDescription'),
-        );
+        if (empty($slug)) {
+            $slug = $this->input->post('categorySlug');
+        }
 
-        $this->db->insert('hoosk_post_category', $data);
+        if (empty($desc)) {
+            $desc = $tihs->input->post('categoryDescription');
+        }
+
+        $this->post_category_model->insert(array(
+            'categoryTitle'       => $title,
+            'categorySlug'        => $slug,
+            'categoryDescription' => $desc,
+        ));
     }
 
     public function getCategory($id) {
-        // Get the category details
-        $this->db->select("*");
-        $this->db->where("categoryID", $id);
-        $query = $this->db->get('hoosk_post_category');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->post_category_model->where('categoryID', '=', $id)->first();
+
+        if (count($query) == 0) {
+            return array();
         }
-        return array();
+
+        return $query->toArray();
     }
 
     public function removeCategory($id) {
         // Delete a category
-        $this->db->delete('hoosk_post_category', array('categoryID' => $id));
+        $this->post_category_model->where('categoryID', '=', $id)->delete();
     }
 
-    public function updateCategory($id) {
-        // Update the category
-        $data = array(
-            'categoryTitle'       => $this->input->post('categoryTitle'),
-            'categorySlug'        => $this->input->post('categorySlug'),
-            'categoryDescription' => $this->input->post('categoryDescription'),
-        );
+    public function updateCategory($id, $title = '', $slug = '', $desc = '') {
+        if (empty($title)) {
+            $title = $this->input->post('categoryTitle');
+        }
 
-        $this->db->where("categoryID", $id);
-        $this->db->update('hoosk_post_category', $data);
+        if (empty($slug)) {
+            $slug = $this->input->post('categorySlug');
+        }
+
+        if (empty($desc)) {
+            $desc = $this->input->post('categoryDescription');
+        }
+
+        $this->post_category_model->where('categoryID', '=', $id)->update(array(
+            'categoryTitle'       => $title,
+            'categorySlug'        => $slug,
+            'categoryDescription' => $desc,
+        ));
     }
 
     /*     * *************************** */
@@ -751,29 +781,32 @@ class Hoosk_model extends CI_Model {
     /*     * *************************** */
 
     public function getSocial() {
-        $this->db->select("*");
-        $query = $this->db->get('hoosk_social');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->social_model->get();
+        if (count($query) == 0) {
+            return array();
         }
-        return array();
+
+        $return = array();
+        foreach ($query as $row) {
+            $return[] = $row->toArray();
+        }
+
+        return $return;
     }
 
     public function updateSocial() {
-        $this->db->select("*");
-        $query = $this->db->get("hoosk_social");
-        if ($query->num_rows() > 0) {
-            foreach ($query->result() as $rows) {
-                $data               = array();
-                $data['socialLink'] = $this->input->post($rows->socialName);
-                if (isset($_POST['checkbox' . $rows->socialName])) {
-                    $data['socialEnabled'] = $this->input->post('checkbox' . $rows->socialName);
-                } else {
-                    $data['socialEnabled'] = 0;
-                }
-                $this->db->where("socialName", $rows->socialName);
-                $this->db->update('hoosk_social', $data);
+        foreach ($this->getSocial() as $social) {
+            $link    = $this->input->post($social['socialName']);
+            $enabled = $this->input->post('checkbox' . $social['socialName']);
+
+            if (is_null($link)) {
+                continue;
             }
+
+            $this->social_model->where('socialName', '=', $social['socialName'])->update(array(
+                'socialLink'    => $link,
+                'socialEnabled' => (!is_null($enabled)) ? $enabled : 0,
+            ));
         }
     }
 }

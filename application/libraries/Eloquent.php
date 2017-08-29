@@ -30,4 +30,6 @@ class Eloquent extends I_Model {
      * @var bool
      */
     public $incrementing = true;
+
+    public $timestamps = false;
 }
