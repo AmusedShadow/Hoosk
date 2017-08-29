@@ -88,6 +88,20 @@ echo form_dropdown('timezone', $timezones, 'America/New_York');
 					</div> <!-- /controls -->
 				</div> <!-- /control-group -->
 
+				<div class="control-group">
+					<label class="control-label" for="defaultUsername">Default Username</label>
+					<div class="controls">
+						<input type="text" id="defaultUsername" name="defaultUsername" value="<?php echo set_value('defaultUsername', 'admin'); ?>" class="span5">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
+				<div class="control-group">
+					<label class="control-label" for="defaultPassword">Default Password</label>
+					<div class="controls">
+						<input type="text" id="defaultPassword" name="defaultPassword" value="<?php echo set_value('defaultPassword'); ?>" class="span5">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
         <button class="btn-primary btn">Install</button>
         </div>
         <div class="col col-lg-3 col-sm-3"></div>

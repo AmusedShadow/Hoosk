@@ -51,6 +51,8 @@ class Installer extends CI_Controller {
         $this->form_validation->set_rules('dbPass', 'Database Password', 'required');
         $this->form_validation->set_rules('dbName', 'Database Name', 'required|callback__tryDatabaseConnect|callback__tryConfigWrite');
         $this->form_validation->set_rules('timezone', 'Timezone', 'required');
+        $this->form_validation->set_rules('defaultUsername','Default Username','required');
+        $this->form_validation->set_rules('defaultPassword','Default Password','required');
 
         //if the validation hasn't run or returned falsed lets load the installer view
         if ($this->form_validation->run() === false) {
@@ -276,7 +278,7 @@ class Installer extends CI_Controller {
 
         $this->load->model('hoosk_model');
 
-        $this->hoosk_model->createUser('demo', 'info@hoosk.org', 'demo');
+        $this->hoosk_model->createUser($this->input->post('defaultUsername'), 'me@example.com', $this->input->post('defaultPassword'));
     }
 
     protected function timezones() {
