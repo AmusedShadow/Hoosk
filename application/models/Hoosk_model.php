@@ -484,7 +484,7 @@ class Hoosk_model extends CI_Model {
             ->get();
 
         foreach ($query as $row) {
-            $return = $row->toArray();
+            $return[] = $row->toArray();
         }
 
         return $return;
