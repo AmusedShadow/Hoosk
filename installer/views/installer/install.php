@@ -83,7 +83,7 @@ echo validation_errors('<div class="alert alert-info">', '</div>');
 					<label class="control-label" for="timezone">Timezone</label>
 					<div class="controls">
 						<?php
-echo form_dropdown('timezone', $timezones);
+echo form_dropdown('timezone', $timezones, 'America/New_York');
 ?>
 					</div> <!-- /controls -->
 				</div> <!-- /control-group -->
