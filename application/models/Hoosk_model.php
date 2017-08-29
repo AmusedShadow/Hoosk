@@ -18,6 +18,8 @@ class Hoosk_model extends CI_Model {
         $this->load->EloquentModel('Social_model');
         $this->load->EloquentModel('Banner_model');
         $this->load->EloquentModel('Navigation_model');
+        $this->load->EloquentModel('Post_model');
+        $this->load->EloquentModel('Post_category');
 
         $this->settings = $this->settings_model->where('siteID', '=', 0)->first()->toArray();
     }
@@ -486,22 +488,32 @@ class Hoosk_model extends CI_Model {
 
     //Get page details for building nav
     public function getPageNav($url) {
-        // Get the page details
-        $this->db->select("*");
-        $this->db->where("hoosk_page_attributes.pageURL", $url);
-        $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
-        $this->db->join('hoosk_page_meta', 'hoosk_page_meta.pageID = hoosk_page_attributes.pageID');
-        $query = $this->db->get('hoosk_page_attributes');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->page_attributes_model
+            ->leftJoin($this->page_content_model->getTable(), $this->page_content_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->leftJoin($this->page_meta_model->getTable(), $this->page_meta_model->getTable() . '.pageID', '=', $this->page_attributes_model->getTable() . '.pageID')
+            ->where($this->page_attributes_model->getTable() . '.pageURL', '=', $url)
+            ->first();
+
+        $return = array();
+        if (count($query) > 0) {
+            $return = $query->toArray();
         }
-        return array();
+
+        return $return;
     }
 
-    public function insertNav() {
-        $navigationHTML = $this->input->post('convertedNav');
+    public function insertNav($nav = null, $serial = null) {
+        if (is_null($nav)) {
+            $nav = $this->input->post('convertedNav');
+        }
+
+        if (is_null($serial)) {
+            $serial = $this->input->post('serialNav');
+        }
+
+        $navigationHTML = $nav;
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
-        $navigationEdit = $this->input->post('seriaNav');
+        $navigationEdit = $serial;
         $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button><button style="display: none;" data-action="expand" type="button">Expand</button>', "", $navigationEdit);
 
         $data = array(
@@ -510,13 +522,22 @@ class Hoosk_model extends CI_Model {
             'navEdit'  => $navigationEdit,
             'navHTML'  => $navigationHTML,
         );
-        $this->db->insert('hoosk_navigation', $data);
+
+        $this->navigation_model->insert($data);
     }
 
-    public function updateNav($id) {
-        $navigationHTML = $this->input->post('convertedNav');
+    public function updateNav($id, $nav = null, $serial = null) {
+        if (is_null($nav)) {
+            $nav = $this->input->post('convertedNav');
+        }
+
+        if (is_null($serial)) {
+            $serial = $this->input->post('seriaNav');
+        }
+
+        $navigationHTML = $nav;
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
-        $navigationEdit = $this->input->post('seriaNav');
+        $navigationEdit = $serial;
         $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button><button style="display: none;" data-action="expand" type="button">Expand</button>', "", $navigationEdit);
 
         $data = array(
@@ -524,24 +545,17 @@ class Hoosk_model extends CI_Model {
             'navEdit'  => $navigationEdit,
             'navHTML'  => $navigationHTML,
         );
-        $this->db->where("navSlug", $id);
-        $this->db->update('hoosk_navigation', $data);
+        $this->navigation_model->where('navSlug', '=', $id)->update($data);
     }
 
     public function removeNav($id) {
         // Delete a nav
-        $this->db->delete('hoosk_navigation', array('navSlug' => $id));
+        $this->navigation_model->where('navSlug', '=', $id)->delete();
     }
 
     public function getSettings() {
         // Get the settings
-        $this->db->select("*");
-        $this->db->where("siteID", 0);
-        $query = $this->db->get('hoosk_settings');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        }
-        return array();
+        return $this->settings;
     }
 
     public function updateSettings() {
@@ -566,25 +580,29 @@ class Hoosk_model extends CI_Model {
         if ($this->input->post('siteFavicon') != "") {
             $data['siteFavicon'] = $this->input->post('siteFavicon');
         }
-        $this->db->where("siteID", 0);
-        $this->db->update('hoosk_settings', $data);
+
+        $this->settings_model->where('siteID', '=', 0)->update($data);
     }
 
     /*     * *************************** */
     /*     * ** Post Querys ************ */
     /*     * *************************** */
     public function postSearch($term) {
-        $this->db->select("*");
-        $this->db->like("postTitle", $term);
-        $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
-        $this->db->order_by("unixStamp", "desc");
-        if ($term == "") {
-            $this->db->limit(15);
+        $query = $this->post_model
+            ->leftJoin($this->post_category_model->getTable(), $this->post_category_model->getTable() . '.categoryID', '=', $this->post_model->getTable() . '.categoryID')
+            ->where($this->post_model->getTable() . '.postTitle', 'LIKE', $term)
+            ->orderBy('unixStamp', 'DESC');
+
+        if (empty($term)) {
+            $query->limit(15);
         }
-        $query = $this->db->get('hoosk_post');
-        if ($query->num_rows() > 0) {
-            $results = $query->result_array();
-            foreach ($results as $p):
+
+        $query = $query->get();
+        if (count($query) == 0) {
+            echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
+        } else {
+            foreach ($query as $row) {
+                $p = $row->toArray();
                 echo '<tr>';
                 echo '<td>' . $p['postTitle'] . '</td>';
                 echo '<td>' . $p['categoryTitle'] . '</td>';
@@ -592,27 +610,35 @@ class Hoosk_model extends CI_Model {
                 echo '<td>' . ($p['published'] ? '<span class="fa fa-2x fa-check-circle"></span>' : '<span class="fa fa-2x fa-times-circle"></span>') . '</td>';
                 echo '<td class="td-actions"><a href="' . BASE_URL . '/admin/posts/edit/' . $p['postID'] . '" class="btn btn-small btn-success"><i class="fa fa-pencil"> </i></a> <a data-toggle="modal" data-target="#ajaxModal" class="btn btn-danger btn-small" href="' . BASE_URL . '/admin/posts/delete/' . $p['postID'] . '"><i class="fa fa-remove"> </i></a></td>';
                 echo '</tr>';
-            endforeach;
-        } else {
-            echo "<tr><td colspan='5'><p>" . $this->lang->line('no_results') . "</p></td></tr>";
+            }
         }
     }
 
     public function countPosts() {
-        return $this->db->count_all('hoosk_post');
+        return $this->post_model->count();
     }
 
-    public function getPosts($limit, $offset = 0) {
-        // Get a list of all posts
-        $this->db->select("*");
-        $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
-        $this->db->order_by("unixStamp", "desc");
-        $this->db->limit($limit, $offset);
-        $query = $this->db->get('hoosk_post');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+    public function getPosts($limit = 0, $offset = 0) {
+        $query = $this->post_model
+            ->leftJoin($this->post_category_model->getTable(), $this->post_category_model->getTable() . '.categoryID', '=', $this->post_model->getTable() . '.categoryID')
+            ->orderBy('unixStamp', 'DESC');
+
+        if ($limit > 0) {
+            $query->limit($limit);
         }
-        return array();
+
+        if ($offset > 0) {
+            $query->offset($offset);
+        }
+
+        $return = array();
+        if (count($query) > 0) {
+            foreach ($query as $row) {
+                $return[] = $row->toArray();
+            }
+        }
+
+        return $return;
     }
 
     public function createPost() {
@@ -639,24 +665,26 @@ class Hoosk_model extends CI_Model {
         if ($this->input->post('postImage') != "") {
             $data['postImage'] = $this->input->post('postImage');
         }
-        $this->db->insert('hoosk_post', $data);
+        $this->post_model->insert($data);
     }
 
     public function getPost($id) {
-        // Get the post details
-        $this->db->select("*");
-        $this->db->where("postID", $id);
-        $this->db->join('hoosk_post_category', 'hoosk_post_category.categoryID = hoosk_post.categoryID');
-        $query = $this->db->get('hoosk_post');
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
+        $query = $this->post_model
+            ->leftJoin($this->post_category_model->getTable(), $this->post_category_model->getTable() . '.categoryID', '=', $this->post_model->getTable() . '.categoryID')
+            ->where($this->post_model->getTable() . '.postID', '=', $id)
+            ->first();
+
+        $return = array();
+        if (count($query) > 0) {
+            $return = $query->toArray();
         }
-        return array();
+
+        return $return;
     }
 
     public function removePost($id) {
         // Delete a post
-        $this->db->delete('hoosk_post', array('postID' => $id));
+        $this->post_model->where('postID', '=', $id)->delete();
     }
 
     public function updatePost($id) {
@@ -683,8 +711,7 @@ class Hoosk_model extends CI_Model {
         if ($this->input->post('postImage') != "") {
             $data['postImage'] = $this->input->post('postImage');
         }
-        $this->db->where("postID", $id);
-        $this->db->update('hoosk_post', $data);
+        $this->post_model->where('postID', '=', $id)->update($data);
     }
 
     /*     * *************************** */

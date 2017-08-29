@@ -2,48 +2,25 @@
     exit('No direct script access allowed');
 }
 
-class Hoosk_page_model extends CI_Model
-{
-    public function __construct()
-    {
+class Hoosk_page_model extends CI_Model {
+    public function __construct() {
         // Call the Model constructor
         parent::__construct();
         $this->load->database();
+
+        $this->load->EloquentModel('Page_content_model');
+        $this->load->EloquentModel('Page_meta_model');
+        $this->load->EloquentModel('Page_attributes_model');
+        $this->load->EloquentModel('Post_category');
+        $this->load->EloquentModel('Post');
+        $this->load->EloquentModel('Settings_model');
     }
 
     /*     * *************************** */
     /*     * ** Page Querys ************ */
     /*     * *************************** */
-    /*function getSiteName() {
-    // Get Theme
-    $this->db->select("*");
-    $this->db->where("siteID", 0);
-    $query = $this->db->get('hoosk_settings');
-    if ($query->num_rows() > 0) {
-    $results = $query->result_array();
-    foreach ($results as $u):
-    return $u['siteTitle'];
-    endforeach;
-    }
-    return array();
-    }
 
-    function getTheme() {
-    // Get Theme
-    $this->db->select("*");
-    $this->db->where("siteID", 0);
-    $query = $this->db->get('hoosk_settings');
-    if ($query->num_rows() > 0) {
-    $results = $query->result_array();
-    foreach ($results as $u):
-    return $u['siteTheme'];
-    endforeach;
-    }
-    return array();
-    }*/
-
-    public function getPage($pageURL)
-    {
+    public function getPage($pageURL) {
         // Get page
         $this->db->select("*");
         $this->db->join('hoosk_page_content', 'hoosk_page_content.pageID = hoosk_page_attributes.pageID');
@@ -69,10 +46,16 @@ class Hoosk_page_model extends CI_Model
             return $page;
         }
         return array('pageID' => "", 'pageTemplate' => "");
+
+        /*
+        $this->page_attributes_model
+        ->leftJoin($this->page_content_model->getTable(),$this->page_content_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
+        ->leftJoin($this->page_meta_model->getTable(),$this->page_meta_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
+        ->where()
+        /*
     }
 
-    public function getCategory($catSlug)
-    {
+    public function getCategory($catSlug) {
         // Get category
         $this->db->select("*");
         $this->db->where("categorySlug", $catSlug);
@@ -93,8 +76,7 @@ class Hoosk_page_model extends CI_Model
         return array('categoryID' => "");
     }
 
-    public function getArticle($postURL)
-    {
+    public function getArticle($postURL) {
         // Get article
         $this->db->select("*");
         $this->db->where("postURL", $postURL);
@@ -121,8 +103,7 @@ class Hoosk_page_model extends CI_Model
         return array('postID' => "");
     }
 
-    public function getSettings()
-    {
+    public function getSettings() {
         // Get settings
         $this->db->select("*");
         $this->db->where("siteID", 0);
