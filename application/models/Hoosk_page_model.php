@@ -12,7 +12,7 @@ class Hoosk_page_model extends CI_Model {
         $this->load->EloquentModel('Page_meta_model');
         $this->load->EloquentModel('Page_attributes_model');
         $this->load->EloquentModel('Post_category');
-        $this->load->EloquentModel('Post');
+        $this->load->EloquentModel('Post_model');
         $this->load->EloquentModel('Settings_model');
     }
 
@@ -48,11 +48,11 @@ class Hoosk_page_model extends CI_Model {
         return array('pageID' => "", 'pageTemplate' => "");
 
         /*
-        $this->page_attributes_model
-        ->leftJoin($this->page_content_model->getTable(),$this->page_content_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
-        ->leftJoin($this->page_meta_model->getTable(),$this->page_meta_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
-        ->where()
-        /*
+    $this->page_attributes_model
+    ->leftJoin($this->page_content_model->getTable(),$this->page_content_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
+    ->leftJoin($this->page_meta_model->getTable(),$this->page_meta_model->getTable().'.pageID','=',$this->page_attributes_model->getTable().'.pageID')
+    ->where()
+     */
     }
 
     public function getCategory($catSlug) {
