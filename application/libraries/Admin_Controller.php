@@ -55,4 +55,34 @@ class Admin_Controller extends CI_Controller {
             $this->adminUser = $adm[0];
         }
     }
+
+    /**
+     * _views
+     * A helper method for loading views and such
+     *
+     * @access protected
+     * @param  array   $views  - An array of views that should be loaded
+     * @param  array   $data   - Additional data that should be sent to the views
+     * @param  boolean $header [description]
+     * @param  boolean $footer [description]
+     */
+    protected function _views($views = array(), $header = true, $footer = true) {
+        //add the current user data to the data sent to the views
+        $this->data['currentUser'] = $this->adminUser;
+
+        //should we load the header?
+        if ($header == true) {
+            $this->data['header'] = $this->load->view('admin/header', $this->data, true);
+        }
+
+        //should we load the footer
+        if ($footer == true) {
+            $this->data['footer'] = $this->load->view('admin/footer', $this->data, true);
+        }
+
+        //loop through our views and load them
+        foreach ($views as $view) {
+            $this->load->view($view, $this->data);
+        }
+    }
 }
