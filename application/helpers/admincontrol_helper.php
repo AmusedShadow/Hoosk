@@ -7,6 +7,7 @@ class Admincontrol_helper {
         $CI = &get_instance();
         $CI->load->library('session');
         $CI->load->helper('url');
+        $CI->load->EloquentModel('User_model');
 
         $userID    = $CI->session->userdata('userID');
         $username  = $CI->session->userdata('userName');
@@ -16,8 +17,21 @@ class Admincontrol_helper {
         $checkCRC = hash('sha256', $CI->config->item('encryption_key') . '+' . SALT . '+' . $userID);
         $destroy  = false;
 
-        if ((empty($userID)) || (is_null($userID)) || ($userID <= 0)) {
+        if ((empty($userID)) || (is_null($userID)) || (!is_numeric($userID)) || ($userID <= 0)) {
             $destroy = true;
+        } else {
+            //lets make sure this userID actually exists
+
+            $data = array();
+            try {
+                $data = $CI->user_model->find($userID);
+            } catch (\Exception $e) {
+                $destroy = true;
+            }
+
+            if (count($data) == 0) {
+                $destroy = true;
+            }
         }
 
         if ((empty($username)) || is_null($username)) {

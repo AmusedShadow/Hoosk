@@ -9,6 +9,9 @@ class Admin_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
+        //load the database up
+        $this->load->database();
+
         //load some models
         $this->load->model('Hoosk_model');
         $this->load->EloquentModel('Settings_model');
