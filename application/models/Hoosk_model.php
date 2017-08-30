@@ -93,11 +93,12 @@ class Hoosk_model extends CI_Model {
         $query = $this->user_model->where('userID', '=', $id)
             ->first();
 
-        if (count($query) == 0) {
-            return array();
+        $return = array();
+        if (count($query) > 0) {
+            $return[] = $query->toArray();
         }
 
-        return $query->toArray();
+        return $return;
     }
 
     public function getUserEmail($id) {

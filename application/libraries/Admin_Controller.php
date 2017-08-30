@@ -11,6 +11,7 @@ class Admin_Controller extends CI_Controller {
         //load some models
         $this->load->model('Hoosk_model');
         $this->load->EloquentModel('Settings_model');
+        $this->load->EloquentModel('User_model');
 
         //load some helpers
         $this->load->helper('admincontrol');
@@ -21,6 +22,7 @@ class Admin_Controller extends CI_Controller {
 
         //load some libraries
         $this->load->library('session'); //why is this loaded via library? I thought it was a driver?
+        $this->load->library('form_validation');
 
         //start out view data
         $this->data['current'] = $this->uri->segment(2); //Define what page we are on for nav

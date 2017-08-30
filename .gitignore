@@ -2,6 +2,7 @@
 .php_cs.cache
 /application/sessions/*
 !/application/sessions/index.html
+/application/cache/rss_*
 
 # Windows image file caches
 Thumbs.db
