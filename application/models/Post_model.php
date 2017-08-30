@@ -80,15 +80,15 @@ class Post_model extends Eloquent {
         $CI->load->EloquentModel('Post_category_model');
 
         $category = $CI->post_category_model->getTable();
-        $me = $this->getTable();
+        $me       = $this->getTable();
 
-        $m = $this->newInstance();
-        $query = $m->leftJoin($category,$category.'.categoryID','=',$me.'.categoryID')
-        ->where($me.'.postID','=',$id)
-        ->first();
+        $m     = $this->newInstance();
+        $query = $m->leftJoin($category, $category . '.categoryID', '=', $me . '.categoryID')
+            ->where($me . '.postID', '=', $id)
+            ->first();
 
         $return = array();
-        if (count($query)>0) {
+        if (count($query) > 0) {
             $return = $query->toArray();
         }
 

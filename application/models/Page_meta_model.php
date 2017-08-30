@@ -60,18 +60,18 @@ class Page_meta_model extends Eloquent {
         $CI->load->EloquentModel('Page_content_model');
         $CI->load->EloquentModel('Page_attributes_model');
 
-        $content = $CI->page_content_model->getTable();
+        $content    = $CI->page_content_model->getTable();
         $attributes = $CI->page_attributes_model->getTable();
-        $me = $this->getTable();
+        $me         = $this->getTable();
 
-        $m = $this->newInstance();
-        $query = $m->leftJoin($content,$content.'.pageID','=',$me.'.pageID')
-        ->leftJoin($attributes,$attributes.'.pageID','=',$me.'.pageID')
-        ->where($me.'.metaID','=',$id)
-        ->first();
+        $m     = $this->newInstance();
+        $query = $m->leftJoin($content, $content . '.pageID', '=', $me . '.pageID')
+            ->leftJoin($attributes, $attributes . '.pageID', '=', $me . '.pageID')
+            ->where($me . '.metaID', '=', $id)
+            ->first();
 
         $return = array();
-        if (count($query)>0) {
+        if (count($query) > 0) {
             $return = $query->toArray();
         }
 

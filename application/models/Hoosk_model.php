@@ -545,8 +545,8 @@ class Hoosk_model extends CI_Model {
         $navigationHTML = str_replace("<ul></ul>", "", $navigationHTML);
         $navigationEdit = $serial;
         $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button><button style="display: none;" data-action="expand" type="button">Expand</button>', "", $navigationEdit);
-        $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button>',"",$navigationEdit);
-        $navigationEdit = str_replace('<button data-action="expand" type="button" style="display: none;">Expand</button>','',$navigationEdit);
+        $navigationEdit = str_replace('<button data-action="collapse" type="button">Collapse</button>', "", $navigationEdit);
+        $navigationEdit = str_replace('<button data-action="expand" type="button" style="display: none;">Expand</button>', '', $navigationEdit);
 
         $data = array(
             'navTitle' => $this->input->post('navTitle'),
@@ -782,9 +782,9 @@ class Hoosk_model extends CI_Model {
 
     public function getCategory($id) {
         $query = $this->post_category_model->where('categoryID', '=', $id)->first();
-        
+
         $return = array();
-        if (count($query)>0) {
+        if (count($query) > 0) {
             $return[] = $query->toArray();
         }
 
