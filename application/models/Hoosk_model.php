@@ -169,11 +169,15 @@ class Hoosk_model extends CI_Model {
             return false;
         }
 
+        $CRC = hash('sha256', $this->config->item('encryption_key') . '+' . SALT . '+' . $query->userID);
+
         $this->session->set_userdata(array(
             'userID'    => $query->userID,
             'userName'  => $query->userName,
             'logged_in' => true,
+            'crc'       => $CRC,
         ));
+
         return true;
     }
 

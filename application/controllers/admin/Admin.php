@@ -51,9 +51,8 @@ class Admin extends Admin_Controller {
     public function loginCheck() {
         $username = $this->input->post('username');
         $password = md5($this->input->post('password') . SALT);
-        $result   = $this->Hoosk_model->login($username, $password);
-        if ($result) {
-            redirect(BASE_URL . '/admin', 'refresh');
+        if ($this->Hoosk_model->login($username, $password) == true) {
+            redirect(site_url('/admin'));
         } else {
             $this->data['error'] = "1";
             $this->login();
