@@ -2,18 +2,47 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Users extends Admin_Controller {
-    public function index() {
+    /**
+     * __construct
+     * Class construct
+     * We will inherit the parent construct and
+     * then check for a "logged" in session
+     *
+     * @access public
+     */
+    public function __construct() {
+        //inherit the parent construct
+        parent::__construct();
+
+        //verify our session
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+    }
+
+    /**
+     * index
+     * This will display all of the users enrolled in this sites
+     * as administrators
+     *
+     * @access public
+     */
+    public function index() {
         //Get users from database
         $this->data['users'] = $this->user_model->getAllUsers();
 
         //Load the view
-        $this->views(array('admin/users'));
+        $this->_views(array('admin/users'));
     }
 
+    /**
+     * addUser
+     * Allows adding additional administrators to
+     * the site.
+     * We setup form validation rules then either display
+     * an add form or create the user
+     *
+     * @access public
+     */
     public function addUser() {
-        Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
-
         //Set validation rules
         $this->form_validation->set_rules('username', 'username', 'trim|alpha_dash|required|is_unique[hoosk_user.userName]');
         $this->form_validation->set_rules('email', 'email address', 'trim|required|valid_email|is_unique[hoosk_user.email]');
@@ -22,7 +51,7 @@ class Users extends Admin_Controller {
 
         if ($this->form_validation->run() == false) {
             //Load the view
-            $this->views(array('admin/user_new'));
+            $this->_views(array('admin/user_new'));
         } else {
             //Validation passed - add the user
             $this->user_model->createNewUser($this->input->post('username'), $this->input->post('email'), $this->input->post('password'));
@@ -31,8 +60,16 @@ class Users extends Admin_Controller {
         }
     }
 
+    /**
+     * editUser
+     * Allows an administrator to edit an existing account
+     * You may modify the email and password fields
+     *
+     * @access public
+     * @todo : Password changes should not be required
+     * @todo : Username should be available to be changed
+     */
     public function editUser() {
-        Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
         //Get user details from database
         $this->data['users'] = $this->user_model->getUser($this->uri->segment(4));
 
@@ -48,7 +85,7 @@ class Users extends Admin_Controller {
 
         if ($this->form_validation->run() === false) {
             //Load the view
-            $this->views(array('admin/user_edit'));
+            $this->_views(array('admin/user_edit'));
         } else {
             //Update the user
             $this->Hoosk_model->updateUser($this->uri->segment(4));
@@ -57,10 +94,26 @@ class Users extends Admin_Controller {
         }
     }
 
+    /**
+     * delete
+     * Allows an administrator to delete an existing account
+     * We verify the userID is valid, then we make our form
+     * validation rules. If the validation passes we delete
+     * the user otherwise we load the user_delete view
+     *
+     * @access public
+     * @todo : You should not be able to delete the user who is currently logged in
+     */
     public function delete() {
-        Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+        //Get user details from database
+        $this->data['users'] = $this->user_model->getUser($this->uri->segment(4));
 
-        $this->form_validation->set_rules('deleteid', 'User ID', 'required|numeric');
+        //if the userID isn't valid we won't have an array so lets error out
+        if (count($this->data['users']) == 0) {
+            show_error('Invalid Users ID!');
+        }
+
+        $this->form_validation->set_rules('deleteid', 'User ID', 'required|numeric'); //we should allow deleting of the currentUser
 
         if ($this->form_validation->run() == false) {
             $this->data['form'] = $this->Hoosk_model->getUser($this->uri->segment(4));
@@ -71,17 +124,31 @@ class Users extends Admin_Controller {
         }
     }
 
-    protected function views($views = array(), $data = array(), $header = true, $footer = true) {
+    /**
+     * _views
+     * A helper method for loading views and such
+     *
+     * @access protected
+     * @param  array   $views  - An array of views that should be loaded
+     * @param  array   $data   - Additional data that should be sent to the views
+     * @param  boolean $header [description]
+     * @param  boolean $footer [description]
+     */
+    protected function _views($views = array(), $header = true, $footer = true) {
+        //add the current user data to the data sent to the views
         $this->data['currentUser'] = $this->adminUser;
 
+        //should we load the header?
         if ($header == true) {
             $this->data['header'] = $this->load->view('admin/header', $this->data, true);
         }
 
+        //should we load the footer
         if ($footer == true) {
             $this->data['footer'] = $this->load->view('admin/footer', $this->data, true);
         }
 
+        //loop through our views and load them
         foreach ($views as $view) {
             $this->load->view($view, $this->data);
         }
