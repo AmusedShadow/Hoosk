@@ -84,29 +84,38 @@ class Admin extends Admin_Controller {
 
     public function settings() {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
-        $this->load->helper('directory');
-        $this->data['themesdir'] = directory_map($_SERVER["DOCUMENT_ROOT"] . '/theme/', 1);
-        $this->data['langdir']   = directory_map(APPPATH . '/language/', 1);
 
-        $this->data['settings'] = $this->Hoosk_model->getSettings();
-        $this->data['current']  = $this->uri->segment(2);
-        $this->data['header']   = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer']   = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/settings', $this->data);
-    }
+        $this->form_validation->set_rules('siteTitle', $this->lang->line('settings_name'), 'required');
+        $this->form_validation->set_rules('siteFooter', $this->lang->line('settings_footer'), 'required');
+        $this->form_validation->set_rules('siteTheme', $this->lang->line('setting_theme'), 'required');
+        $this->form_validation->set_rules('siteLang', $this->lang->line('setting_lang'), 'required');
+        //$this->form_validation->set_rules('file_upload',$this->lang->line('settings_logo'),'trim');
+        //$this->form_validation->set_rules('favicon_upload',$this->lang->line('settings_favicon'),'trim');
+        $this->form_validation->set_rules('siteMaintenance', $this->lang->line('settings_maintenance'), 'required');
+        $this->form_validation->set_rules('siteMaintenanceHeading', $this->lang->line('settings_maintenance_heading'), 'trim');
+        $this->form_validation->set_rules('siteMaintenanceMeta', $this->lang->line('settings_maintenance_meta'), 'trim');
+        $this->form_validation->set_rules('siteMaintenanceContent', $this->lang->line('settings_maintenance_content'), 'trim');
+        $this->form_validation->set_rules('siteAdditionalJS', $this->lang->line('settings_additional_js'), 'trim');
 
-    public function updateSettings() {
-        Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
-        $path_upload = $_SERVER["DOCUMENT_ROOT"] . '/uploads/';
-        $path_images = $_SERVER["DOCUMENT_ROOT"] . '/images/';
-        if ($this->input->post('siteLogo') != "") {
-            rename($path_upload . $this->input->post('siteLogo'), $path_images . $this->input->post('siteLogo'));
+        if ($this->form_validation->run() === false) {
+            $this->load->helper('directory');
+            $this->data['themesdir'] = directory_map($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . 'theme' . DIRECTORY_SEPARATOR, 1);
+            $this->data['langdir']   = directory_map(APPPATH . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR, 1);
+
+            $this->data['settings'] = $this->Hoosk_model->getSettings();
+            $this->_views(array('admin/settings'));
+        } else {
+            $path_upload = $_SERVER["DOCUMENT_ROOT"] . '/uploads/';
+            $path_images = $_SERVER["DOCUMENT_ROOT"] . '/images/';
+            if ($this->input->post('siteLogo') != "") {
+                rename($path_upload . $this->input->post('siteLogo'), $path_images . $this->input->post('siteLogo'));
+            }
+            if ($this->input->post('siteFavicon') != "") {
+                rename($path_upload . $this->input->post('siteFavicon'), $path_images . $this->input->post('siteFavicon'));
+            }
+            $this->Hoosk_model->updateSettings();
+            redirect(site_url('/admin/settings'));
         }
-        if ($this->input->post('siteFavicon') != "") {
-            rename($path_upload . $this->input->post('siteFavicon'), $path_images . $this->input->post('siteFavicon'));
-        }
-        $this->Hoosk_model->updateSettings();
-        redirect(BASE_URL . '/admin', 'refresh');
     }
 
     public function uploadLogo() {

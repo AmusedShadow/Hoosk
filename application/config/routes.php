@@ -81,7 +81,6 @@ $route['admin/navigation/update/(:any)']       = "admin/navigation/update";
 $route['admin/navigation/(:any)']              = "admin/navigation";
 $route['admin/settings']                       = "admin/admin/settings";
 $route['admin/settings/submit']                = "admin/admin/uploadLogo";
-$route['admin/settings/update']                = "admin/admin/updateSettings";
 $route['admin/social']                         = "admin/admin/social";
 $route['admin/social/update']                  = "admin/admin/updateSocial";
 $route['admin/posts']                          = "admin/posts";
