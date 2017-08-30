@@ -18,62 +18,56 @@ class Hoosk_default extends CI_Controller {
     }
 
     public function index() {
-        if (!$this->maintenanceMode) {
-            $totSegments = $this->uri->total_segments();
-            if (!is_numeric($this->uri->segment($totSegments))) {
-                $pageURL = $this->uri->segment($totSegments);
-            } elseif (is_numeric($this->uri->segment($totSegments))) {
-                $pageURL = $this->uri->segment($totSegments - 1);
-            }
-            if ($pageURL == "") {
-                $pageURL = "home";
-            }
-            $this->data['page'] = $this->Hoosk_page_model->getPage($pageURL);
-            if ($this->data['page']['pageTemplate'] != "") {
-                $this->data['header'] = $this->load->view('templates/header', $this->data, true);
-                $this->data['footer'] = $this->load->view('templates/footer', '', true);
-                $this->load->view('templates/' . $this->data['page']['pageTemplate'], $this->data);
-            } else {
-                $this->error();
-            }
+        $totSegments = $this->uri->total_segments();
+
+        if (!is_numeric($this->uri->segment($totSegments))) {
+            $pageURL = $this->uri->segment($totSegments);
+        } elseif (is_numeric($this->uri->segment($totSegments))) {
+            $pageURL = $this->uri->segment($totSegments - 1);
+        }
+
+        if ($pageURL == "") {
+            $pageURL = "home";
+        }
+
+        $this->data['page'] = $this->Hoosk_page_model->getPage($pageURL);
+
+        if ($this->data['page']['pageTemplate'] != "") {
+            $this->data['header'] = $this->load->view('templates/header', $this->data, true);
+            $this->data['footer'] = $this->load->view('templates/footer', '', true);
+            $this->load->view('templates/' . $this->data['page']['pageTemplate'], $this->data);
         } else {
-            $this->maintenance();
+            $this->_error();
         }
     }
 
     public function category() {
-        if (!$this->maintenanceMode) {
-            $catSlug            = $this->uri->segment(2);
-            $this->data['page'] = $this->Hoosk_page_model->getCategory($catSlug);
-            if ($this->data['page']['categoryID'] != "") {
-                $this->data['header'] = $this->load->view('templates/header', $this->data, true);
-                $this->data['footer'] = $this->load->view('templates/footer', '', true);
-                $this->load->view('templates/category', $this->data);
-            } else {
-                $this->error();
-            }
+        $catSlug            = $this->uri->segment(2);
+        $this->data['page'] = $this->Hoosk_page_model->getCategory($catSlug);
+
+        if ($this->data['page']['categoryID'] != "") {
+            $this->data['header'] = $this->load->view('templates/header', $this->data, true);
+            $this->data['footer'] = $this->load->view('templates/footer', '', true);
+            $this->load->view('templates/category', $this->data);
         } else {
-            $this->maintenance();
+            $this->_error();
         }
     }
 
     public function article() {
-        if (!$this->maintenanceMode) {
-            $articleURL         = $this->uri->segment(2);
-            $this->data['page'] = $this->Hoosk_page_model->getArticle($articleURL);
-            if ($this->data['page']['postID'] != "") {
-                $this->data['header'] = $this->load->view('templates/header', $this->data, true);
-                $this->data['footer'] = $this->load->view('templates/footer', '', true);
-                $this->load->view('templates/article', $this->data);
-            } else {
-                $this->error();
-            }
+        $articleURL         = $this->uri->segment(2);
+        $this->data['page'] = $this->Hoosk_page_model->getArticle($articleURL);
+
+        if ($this->data['page']['postID'] != "") {
+            $this->data['header'] = $this->load->view('templates/header', $this->data, true);
+            $this->data['footer'] = $this->load->view('templates/footer', '', true);
+            $this->load->view('templates/article', $this->data);
         } else {
-            $this->maintenance();
+            $this->_error();
         }
     }
 
-    public function error() {
+    public function _error() {
         $this->data['page']['pageTitle']       = "Oops, Error";
         $this->data['page']['pageDescription'] = "Oops, Error";
         $this->data['page']['pageKeywords']    = "Oops, Error";
@@ -84,7 +78,7 @@ class Hoosk_default extends CI_Controller {
         $this->load->view('templates/' . $this->data['page']['pageTemplate'], $this->data);
     }
 
-    public function maintenance() {
+    public function _maintenance() {
         $this->data['page']['pageTitle']       = "Maintenance Mode";
         $this->data['page']['pageDescription'] = "Maintenance Mode";
         $this->data['page']['pageKeywords']    = "Maintenance Mode";
@@ -98,19 +92,24 @@ class Hoosk_default extends CI_Controller {
     public function feed() {
         if (($this->uri->segment(2) == "atom") || ($this->uri->segment(2) == "rss")) {
             $posts = getFeedPosts();
+
             $this->load->library('feed');
+
             $feed              = new Feed();
             $feed->title       = SITE_NAME;
             $feed->description = SITE_NAME;
             $feed->link        = BASE_URL;
             $feed->pubdate     = date("m/d/y H:i:s", $posts[0]['unixStamp']);
+
             foreach ($posts as $post) {
                 $feed->add($post['postTitle'], BASE_URL . '/article/' . $post['postURL'], date("m/d/y H:i:s", $post['unixStamp']), $post['postExcerpt']);
             }
+
             $feed->render($this->uri->segment(2));
         } elseif ($this->uri->segment(2) == "json") {
             $posts      = getFeedPosts();
             $json_posts = array();
+
             foreach ($posts as $post) {
                 $single_post = array(
                     'postTitle'       => $post['postTitle'],
@@ -120,18 +119,46 @@ class Hoosk_default extends CI_Controller {
                     'postContentHTML' => $post['postContentHTML'],
                     'postContentJSON' => json_decode($post['postContent']),
                 );
+
                 array_push($json_posts, $single_post);
             }
+
             $response = array('status' => 'OK');
 
-            $this->output
-                ->set_status_header(200)
+            $this->output->set_status_header(200)
                 ->set_content_type('application/json', 'utf-8')
                 ->set_output(json_encode($json_posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
                 ->_display();
             exit;
         } else {
-            $this->error();
+            $this->_error();
+        }
+    }
+
+    public function _remap($method, $params = array()) {
+        $valid  = array('index', 'category', 'article', 'feed');
+        $method = trim(strtolower($method));
+
+        if ($this->maintenanceMode == '1') {
+            $this->_maintenance();
+        } else {
+            switch ($method) {
+            case 'category':
+                $this->category();
+                break;
+
+            case 'article':
+                $this->article();
+                break;
+
+            case 'feed':
+                $this->feed();
+                break;
+
+            default:
+                $this->index();
+                break;
+            }
         }
     }
 }

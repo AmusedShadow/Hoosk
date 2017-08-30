@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Admin extends Admin_Controller {
     public function index() {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
+
         $this->data['current']         = $this->uri->segment(2);
         $this->data['recenltyUpdated'] = $this->Hoosk_model->getUpdatedPages();
         if (RSS_FEED) {
@@ -12,10 +13,10 @@ class Admin extends Admin_Controller {
             $this->rssparser->set_cache_life(30);
             $this->data['hooskFeed'] = $this->rssparser->getFeed(3);
         }
+
         $this->data['maintenaceActive'] = $this->Hoosk_model->checkMaintenance();
-        $this->data['header']           = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer']           = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/home', $this->data);
+
+        $this->_views(array('admin/home'));
     }
 
     public function upload() {
@@ -43,9 +44,7 @@ class Admin extends Admin_Controller {
     }
 
     public function login() {
-        $this->data['header'] = $this->load->view('admin/headerlog', '', true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/login', $this->data);
+        $this->_views(array('admin/login'));
     }
 
     public function loginCheck() {
@@ -136,11 +135,8 @@ class Admin extends Admin_Controller {
     public function social() {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
 
-        $this->data['social']  = $this->Hoosk_model->getSocial();
-        $this->data['current'] = $this->uri->segment(2);
-        $this->data['header']  = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer']  = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/social', $this->data);
+        $this->data['social'] = $this->Hoosk_model->getSocial();
+        $this->_views(array('admin/social'));
     }
 
     public function updateSocial() {

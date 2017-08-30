@@ -20,16 +20,12 @@ class Categories extends Admin_Controller {
         //Get categorys from database
         $this->data['categories'] = $this->Hoosk_model->getCategoriesAll($result_per_page, $this->uri->segment(4));
         //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/post_categories', $this->data);
+        $this->_views(array('admin/post_categories'));
     }
 
     public function addCategory() {
         //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/post_category_new', $this->data);
+        $this->_views(array('admin/post_category_new'));
     }
 
     public function confirm() {
