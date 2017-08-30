@@ -1,13 +1,7 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Social_model extends Eloquent {
-    /**
-     * The connection name for the model.
-     *
-     * @var string
-     */
-    protected $connection;
-
     /**
      * The table associated with the model.
      *
