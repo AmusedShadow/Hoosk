@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Admin_Controller extends CI_Controller {
     protected $data         = array();
     protected $siteSettings = array();
+    protected $adminUser    = array();
 
     public function __construct() {
         parent::__construct();
@@ -47,5 +48,11 @@ class Admin_Controller extends CI_Controller {
 
         //load the language file
         $this->lang->load('admin', LANG);
+
+        //get the currently logged in user
+        $adm = $this->user_model->getUserByUsername($this->session->userdata('userName'));
+        if (isset($adm[0])) {
+            $this->adminUser = $adm[0];
+        }
     }
 }

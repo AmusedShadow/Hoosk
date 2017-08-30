@@ -68,4 +68,17 @@ class User_model extends Eloquent {
 
         return $return;
     }
+
+    public function getUserByUsername($username) {
+        $m = $this->newInstance();
+
+        $query = $m->where('userName', '=', $username)->first();
+
+        $return = array();
+        if (count($query) > 0) {
+            return $this->getUser($query->userID);
+        }
+
+        return $return;
+    }
 }

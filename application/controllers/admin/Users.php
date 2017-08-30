@@ -160,6 +160,8 @@ class Users extends Admin_Controller {
     }
 
     protected function views($views = array(), $data = array(), $header = true, $footer = true) {
+        $this->data['currentUser'] = $this->adminUser;
+
         if ($header == true) {
             $this->data['header'] = $this->load->view('admin/header', $this->data, true);
         }
