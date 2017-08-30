@@ -22,4 +22,16 @@ class Settings_model extends Eloquent {
      * @var bool
      */
     public $incrementing = true;
+
+    public function getSiteSettings() {
+        $m     = $this->newInstance();
+        $query = $m->where('siteID', '=', 0)->first();
+
+        $return = array();
+        if (count($query) > 0) {
+            $return = $query->toArray();
+        }
+
+        return $return;
+    }
 }

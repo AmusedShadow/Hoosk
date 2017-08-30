@@ -1,20 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends CI_Controller {
-    public function __construct() {
-        parent::__construct();
-        define("HOOSK_ADMIN", 1);
-        $this->load->helper(array('admincontrol', 'url', 'hoosk_admin', 'form'));
-        $this->load->library('session');
-        $this->load->model('Hoosk_model');
-        define('LANG', $this->Hoosk_model->getLang());
-        $this->lang->load('admin', LANG);
-        define('SITE_NAME', $this->Hoosk_model->getSiteName());
-        define('THEME', $this->Hoosk_model->getTheme());
-        define('THEME_FOLDER', BASE_URL . '/theme/' . THEME);
-    }
-
+class Admin extends Admin_Controller {
     public function index() {
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
         $this->data['current']         = $this->uri->segment(2);

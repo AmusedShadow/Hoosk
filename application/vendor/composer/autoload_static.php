@@ -78,7 +78,17 @@ class ComposerStaticInitf279e35fa9dacdecfaf50ac9428b0c59
     );
 
     public static $classMap = array (
+        'Admin_Controller' => __DIR__ . '/../..' . '/libraries/Admin_Controller.php',
+        'Capsule' => __DIR__ . '/../..' . '/libraries/Capsule.php',
+        'Container' => __DIR__ . '/../..' . '/libraries/Container.php',
+        'Eloquent' => __DIR__ . '/../..' . '/libraries/Eloquent.php',
+        'Events' => __DIR__ . '/../..' . '/libraries/Events.php',
+        'Feed' => __DIR__ . '/../..' . '/libraries/Feed.php',
         'LinebreakConverter' => __DIR__ . '/../..' . '/third_party/WAK/LinebreakConverter.php',
+        'MY_Form_validation' => __DIR__ . '/../..' . '/libraries/MY_Form_validation.php',
+        'MY_Loader' => __DIR__ . '/../..' . '/core/MY_Loader.php',
+        'RSSParser' => __DIR__ . '/../..' . '/libraries/Rssparser.php',
+        'Sioen' => __DIR__ . '/../..' . '/libraries/Sioen.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

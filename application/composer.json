@@ -5,6 +5,6 @@
         "illuminate/container": "^5.4"
     },
     "autoload": {
-    	"classmap": ["third_party/WAK"]
+    	"classmap": ["third_party/WAK","libraries","core"]
     }
 }

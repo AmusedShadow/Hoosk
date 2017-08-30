@@ -6,5 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Admin_Controller' => $baseDir . '/libraries/Admin_Controller.php',
+    'Capsule' => $baseDir . '/libraries/Capsule.php',
+    'Container' => $baseDir . '/libraries/Container.php',
+    'Eloquent' => $baseDir . '/libraries/Eloquent.php',
+    'Events' => $baseDir . '/libraries/Events.php',
+    'Feed' => $baseDir . '/libraries/Feed.php',
     'LinebreakConverter' => $baseDir . '/third_party/WAK/LinebreakConverter.php',
+    'MY_Form_validation' => $baseDir . '/libraries/MY_Form_validation.php',
+    'MY_Loader' => $baseDir . '/core/MY_Loader.php',
+    'RSSParser' => $baseDir . '/libraries/Rssparser.php',
+    'Sioen' => $baseDir . '/libraries/Sioen.php',
 );

@@ -1,20 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Categories extends CI_Controller {
+class Categories extends Admin_Controller {
     public function __construct() {
         parent::__construct();
-        define("HOOSK_ADMIN", 1);
-        $this->load->model('Hoosk_model');
-        $this->load->helper(array('admincontrol', 'url', 'file', 'form'));
-        $this->load->library('session');
-        define('LANG', $this->Hoosk_model->getLang());
-        $this->lang->load('admin', LANG);
-        //Define what page we are on for nav
-        $this->data['current'] = $this->uri->segment(2);
-        define('SITE_NAME', $this->Hoosk_model->getSiteName());
-        define('THEME', $this->Hoosk_model->getTheme());
-        define('THEME_FOLDER', BASE_URL . '/theme/' . THEME);
         //check session exists
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
     }

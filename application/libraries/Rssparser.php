@@ -25,33 +25,31 @@ return $data;
 }
  */
 
-class RSSParser
-{
+class RSSParser {
     public $feed_uri         = null; // Feed URI
     public $data             = false; // Associative array containing all the feed items
     public $channel_data     = array(); // Store RSS Channel Data in an array
     public $feed_unavailable = null; // Boolean variable which indicates whether an RSS feed was unavailable
     public $cache_life       = 0; // Cache lifetime
-    public $cache_dir        = './hoosk/hoosk0/cache/'; // Cache directory
+    public $cache_dir        = ''; // Cache directory
     public $write_cache_flag = false; // Flag to write to cache
     public $callback         = false; // Callback to read custom data
 
-    public function __construct($callback = false)
-    {
+    public function __construct($callback = false) {
         if ($callback) {
             $this->callback = $callback;
         }
+
+        $this->cache_dir = FCPATH . 'application/cache/';
     }
 
     // --------------------------------------------------------------------
-    public function get_http_response_code($url)
-    {
+    public function get_http_response_code($url) {
         $headers = get_headers($url);
         return substr($headers[0], 9, 3);
     }
 
-    public function parse()
-    {
+    public function parse() {
         // Are we caching?
         if ($this->cache_life != 0) {
             $filename = $this->cache_dir . 'rss_Parse_' . md5($this->feed_uri);
@@ -152,16 +150,14 @@ class RSSParser
 
     // --------------------------------------------------------------------
 
-    public function set_cache_life($period = null)
-    {
+    public function set_cache_life($period = null) {
         $this->cache_life = $period;
         return $this;
     }
 
     // --------------------------------------------------------------------
 
-    public function set_feed_url($url = null)
-    {
+    public function set_feed_url($url = null) {
         $this->feed_uri = $url;
         return $this;
     }
@@ -172,8 +168,7 @@ class RSSParser
      * @param No of items to return from the feed
      * @return Associative array of items
      */
-    public function getFeed($num)
-    {
+    public function getFeed($num) {
         $this->parse();
 
         $c      = 0;
@@ -193,8 +188,7 @@ class RSSParser
     // --------------------------------------------------------------------
 
     /* Return channel data for the feed */
-    public function &getChannelData()
-    {
+    public function &getChannelData() {
         $flag = false;
 
         if (!empty($this->channel_data)) {
@@ -207,16 +201,14 @@ class RSSParser
     // --------------------------------------------------------------------
 
     /* Were we unable to retreive the feeds ?  */
-    public function errorInResponse()
-    {
+    public function errorInResponse() {
         return $this->feed_unavailable;
     }
 
     // --------------------------------------------------------------------
 
     /* Initialize the feed data */
-    public function clear()
-    {
+    public function clear() {
         $this->feed_uri     = null;
         $this->data         = false;
         $this->channel_data = array();
