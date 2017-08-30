@@ -88,4 +88,26 @@ class Post_model extends Eloquent {
 
         return $return;
     }
+
+    public function getPosts() {
+        $CI = &get_instance();
+        $CI->load->EloquentModel('Post_category_model');
+
+        $category = $CI->post_category_model->getTable();
+        $me       = $this->getTable();
+
+        $m     = $this->newInstance();
+        $query = $m->leftJoin($category, $category . '.categoryID', '=', $me . '.categoryID')
+            ->orderBy('unixStamp', 'DESC')
+            ->get();
+
+        $return = array();
+        if (count($query) > 0) {
+            foreach ($query as $row) {
+                $return[] = $row->toArray();
+            }
+        }
+
+        return $return;
+    }
 }

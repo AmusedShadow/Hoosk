@@ -2,49 +2,52 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Posts extends Admin_Controller {
+    /**
+     * construct
+     * Class construct
+     *
+     * @access public
+     */
     public function __construct() {
         parent::__construct();
+
         //check session exists
         Admincontrol_helper::is_logged_in($this->session->userdata('userName'));
     }
 
+    /**
+     * index
+     * The index page. This displays a lists of posts
+     *
+     * @access public
+     */
     public function index() {
-        $this->load->library('pagination');
-        $result_per_page      = 15; // the number of result per page
-        $config['base_url']   = BASE_URL . '/admin/posts/';
-        $config['total_rows'] = $this->Hoosk_model->countPosts();
-        $config['per_page']   = $result_per_page;
-
-        $this->pagination->initialize($config);
-
         //Get posts from database
-        $this->data['posts'] = $this->Hoosk_model->getPosts($result_per_page, $this->uri->segment(3));
+        $this->data['posts'] = $this->post_model->getPosts();
+
         //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/posts', $this->data);
+        $this->_views(array('admin/posts'));
     }
 
+    /**
+     * addPost
+     * Allows an administrator to add a post. We setup
+     * some form validation rules and if they don't run or fail
+     * we will display an entry form.
+     * Otherwise we save the post and redirect the user back to the
+     * listing page
+     *
+     * @access public
+     */
     public function addPost() {
-        $this->data['categories'] = $this->Hoosk_model->getCategories();
-        //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/post_new', $this->data);
-    }
-
-    public function confirm() {
-        //Load the form validation library
-        $this->load->library('form_validation');
         //Set validation rules
         $this->form_validation->set_rules('postURL', 'post URL', 'trim|alpha_dash|required|is_unique[hoosk_post.postURL]');
         $this->form_validation->set_rules('postTitle', 'post title', 'trim|required');
         $this->form_validation->set_rules('postExcerpt', 'post excerpt', 'trim|required');
 
-        if ($this->form_validation->run() == false) {
-
-            //Validation failed
-            $this->addPost();
+        if ($this->form_validation->run() === false) {
+            $this->data['categories'] = $this->Hoosk_model->getCategories();
+            $this->_views(array('admin/post_new'));
         } else {
             //Validation passed
             if ($this->input->post('postImage') != "") {
@@ -54,34 +57,38 @@ class Posts extends Admin_Controller {
                 //moving temporary file to images folder
                 rename($path_upload . $this->input->post('postImage'), $path_images . $this->input->post('postImage'));
             }
+
             //Add the post
             $this->load->library('Sioen');
             $this->Hoosk_model->createPost();
             //Return to post list
-            redirect(BASE_URL . '/admin/posts', 'refresh');
+            redirect(site_url('/admin/posts'));
         }
     }
 
+    /**
+     * editPost
+     * The allows an administrator to edit an existing post
+     * We setup some validation rules. If the validation
+     * hasn't run or failed display the edit form other
+     * wise save our modification and redirect
+     *
+     * @access public
+     * @todo : SECURITY CONCERN - Uploads should be sanitized/verified
+     * @todo : We should put in a validation rule to make sure this postID exists
+     */
     public function editPost() {
-        $this->data['categories'] = $this->Hoosk_model->getCategories();
-        //Get post details from database
-        $this->data['posts'] = $this->Hoosk_model->getPost($this->uri->segment(4));
-        //Load the view
-        $this->data['header'] = $this->load->view('admin/header', $this->data, true);
-        $this->data['footer'] = $this->load->view('admin/footer', '', true);
-        $this->load->view('admin/post_edit', $this->data);
-    }
-
-    public function edited() {
-        //Load the form validation library
-        $this->load->library('form_validation');
         //Set validation rules
         $this->form_validation->set_rules('postURL', 'post URL', 'trim|alpha_dash|required|is_unique[hoosk_post.postURL.postID.' . $this->uri->segment(4) . ']');
         $this->form_validation->set_rules('postTitle', 'post title', 'trim|required');
 
         if ($this->form_validation->run() == false) {
             //Validation failed
-            $this->editPost();
+            $this->data['categories'] = $this->Hoosk_model->getCategories();
+            //Get post details from database
+            $this->data['posts'] = $this->Hoosk_model->getPost($this->uri->segment(4));
+
+            $this->_views(array('admin/post_edit'));
         } else {
             //Validation passed
             if ($this->input->post('postImage') != "") {
@@ -95,20 +102,29 @@ class Posts extends Admin_Controller {
             $this->load->library('Sioen');
             $this->Hoosk_model->updatePost($this->uri->segment(4));
             //Return to post list
-            redirect(BASE_URL . '/admin/posts', 'refresh');
+            redirect(site_url('/admin/posts'));
         }
     }
 
+    /**
+     * delete
+     * Allows an administrator to delete an existing post
+     * We setup some validation rules. If the validation
+     * hasn't run or fails show the delete form otherwise
+     * delete the post.
+     *
+     * @access public
+     * @todo : Form validation rule to make sure the postID exists
+     */
     public function delete() {
-        if ($this->input->post('deleteid')):
-            $this->Hoosk_model->removePost($this->input->post('deleteid'));
-            redirect(BASE_URL . '/admin/posts');else:
+        $this->form_validation->set_rules('deleteid', 'Post ID', 'required|numeric');
+
+        if ($this->form_validation->run() == false) {
             $this->data['form'] = $this->Hoosk_model->getPost($this->uri->segment(4));
             $this->load->view('admin/post_delete.php', $this->data);
-        endif;
-    }
-
-    public function postSearch() {
-        $this->Hoosk_model->postSearch($this->input->post('term'));
+        } else {
+            $this->Hoosk_model->removePost($this->input->post('deleteid'));
+            redirect(site_url('/admin/posts'));
+        }
     }
 }

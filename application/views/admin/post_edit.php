@@ -43,22 +43,22 @@
          <div class="panel-body">
 
             <?php foreach ($posts as $p) {
-            echo form_error('postTitle', '<div class="alert alert-danger">', '</div>'); ?>
+    echo form_error('postTitle', '<div class="alert alert-danger">', '</div>');?>
             <?php echo form_error('postURL', '<div class="alert alert-danger">', '</div>'); ?>
 			<?php
-			$attr = array('id' => 'contentForm');
-			 echo form_open(BASE_URL.'/admin/posts/edited/'.$this->uri->segment(4), $attr); ?>
-						<?php 	$data = array(
-						  'id'          => 'content',
-						  'name'          => 'content',
-						  'class'       => 'js-st-instance',
-						);
-						if ($this->input->post('content')){
-							$set = $this->input->post('content');
-						} else {
-							$set = $p['postContent'];
-						}
-						echo form_textarea($data, set_value('content',$set, FALSE)); ?>
+$attr = array('id' => 'contentForm');
+    echo form_open(BASE_URL . '/admin/posts/edit/' . $this->uri->segment(4), $attr);?>
+						<?php $data = array(
+        'id'    => 'content',
+        'name'  => 'content',
+        'class' => 'js-st-instance',
+    );
+    if ($this->input->post('content')) {
+        $set = $this->input->post('content');
+    } else {
+        $set = $p['postContent'];
+    }
+    echo form_textarea($data, set_value('content', $set, FALSE));?>
 				</div>
                     <div class="panel-footer">
                     <a class="btn btn-primary" data-toggle="modal" href="#attributes"><?php echo $this->lang->line('btn_next'); ?></a>
@@ -81,30 +81,30 @@
             		<?php echo form_error('postTitle', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="postTitle"><?php echo $this->lang->line('posts_new_title'); ?></label>
 					<div class="controls">
-                    <?php 	$data = array(
-						  'name'        => 'postTitle',
-						  'id'          => 'postTitle',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('postTitle', $p['postTitle'], FALSE)
-						);
+                    <?php $data = array(
+        'name'  => 'postTitle',
+        'id'    => 'postTitle',
+        'class' => 'form-control',
+        'value' => set_value('postTitle', $p['postTitle'], FALSE),
+    );
 
-						echo form_input($data); ?>
+    echo form_input($data);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
 				<div class="form-group">
             		<?php echo form_error('file_upload', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="file_upload"><?php echo $this->lang->line('posts_new_feature'); ?></label>
 					<div class="controls">
-						<div><img src="<?php if ($p['postImage'] != "") { echo BASE_URL.'/images/'.$p['postImage']; } ?>" id="logo_preloaded" <?php if ($p['postImage'] == "") { echo "style='display:none;'"; } ?>></div>
+						<div><img src="<?php if ($p['postImage'] != "") {echo BASE_URL . '/images/' . $p['postImage'];}?>" id="logo_preloaded" <?php if ($p['postImage'] == "") {echo "style='display:none;'";}?>></div>
 						<img src="<?php echo BASE_URL; ?>/theme/admin/images/ajax-loader.gif" style="margin:-7px 5px 0 5px;display:none;" id="loading_pic" />
 						<?php
-							$data = array(
-								'name'		=> 'file_upload',
-								'id'		=> 'file_upload',
-								'class'		=> 'form-control'
-							);
-							echo form_upload($data);
-						?>
+$data = array(
+        'name'  => 'file_upload',
+        'id'    => 'file_upload',
+        'class' => 'form-control',
+    );
+    echo form_upload($data);
+    ?>
 						<input type="hidden" id="postImage" name="postImage" />
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -112,14 +112,14 @@
               <div class="form-group">
 					<label class="control-label" for="postExcerpt"><?php echo $this->lang->line('posts_new_excerpt'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'postExcerpt',
-						  'id'          => 'postExcerpt',
-						  'class'       => 'form-control',
-						  'rows'		=>	'4',
-						);
+						 <?php $data = array(
+        'name'  => 'postExcerpt',
+        'id'    => 'postExcerpt',
+        'class' => 'form-control',
+        'rows'  => '4',
+    );
 
-						echo form_textarea($data, set_value('postExcerpt', $p['postExcerpt'], FALSE)); ?>
+    echo form_textarea($data, set_value('postExcerpt', $p['postExcerpt'], FALSE));?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -128,14 +128,14 @@
             		<?php echo form_error('postURL', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="postURL"><?php echo $this->lang->line('posts_new_url'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'postURL',
-						  'id'          => 'postURL',
-						  'class'       => 'form-control URLField',
-						  'value'		=> set_value('postURL', $p['postURL'], FALSE)
-						);
+						 <?php $data = array(
+        'name'  => 'postURL',
+        'id'    => 'postURL',
+        'class' => 'form-control URLField',
+        'value' => set_value('postURL', $p['postURL'], FALSE),
+    );
 
-						echo form_input($data); ?>
+    echo form_input($data);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -145,12 +145,12 @@
 					<label class="control-label" for="categoryID"><?php echo $this->lang->line('posts_new_category'); ?></label>
 					<div class="controls">
                         <?php
-						$att = 'id="categoryID" class="form-control"';
-						$data = array();
-						foreach ($categories as $c){
-						$data[$c['categoryID']] = $c['categoryTitle'];
-						}
-						echo form_dropdown('categoryID', $data, $p['categoryID'], $att); ?>
+$att  = 'id="categoryID" class="form-control"';
+    $data = array();
+    foreach ($categories as $c) {
+        $data[$c['categoryID']] = $c['categoryTitle'];
+    }
+    echo form_dropdown('categoryID', $data, $p['categoryID'], $att);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
                   <div class="form-group">
@@ -158,37 +158,37 @@
                       <label class="control-label" for="published"><?php echo $this->lang->line('posts_new_published'); ?></label>
                       <div class="controls">
                           <?php
-                          $att = 'id="published" class="form-control"';
-                          $data = array(
-                              1 => 'Yes',
-                              0 => 'No'
-                          );
+$att  = 'id="published" class="form-control"';
+    $data = array(
+        1 => 'Yes',
+        0 => 'No',
+    );
 
-                          echo form_dropdown('published', $data, $p['published'], $att); ?>
+    echo form_dropdown('published', $data, $p['published'], $att);?>
                       </div> <!-- /controls -->
                   </div> <!-- /form-group -->
                 <div class="form-group">
                     <div id="datetimepicker1" class="input-append date">
                     <label class="control-label" for="categoryID"><?php echo $this->lang->line('posts_new_date'); ?></label>
                         <div class="controls">
-                        <?php 	$data = array(
-						  'name'        => 'datePosted',
-						  'id'          => 'datetimepicker',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('datePosted', $p['datePosted'], FALSE)
-						);
+                        <?php $data = array(
+        'name'  => 'datePosted',
+        'id'    => 'datetimepicker',
+        'class' => 'form-control',
+        'value' => set_value('datePosted', $p['datePosted'], FALSE),
+    );
 
-						echo form_input($data); ?>
+    echo form_input($data);?>
 
 
-						 <?php 	$data = array(
-						  'name'        => 'unixStamp',
-						  'id'          => 'unixStamp',
-						  'style'		=> 'display:none;',
-						  'value'		=> set_value('unixStamp', $p['unixStamp'], FALSE)
-						);
+						 <?php $data = array(
+        'name'  => 'unixStamp',
+        'id'    => 'unixStamp',
+        'style' => 'display:none;',
+        'value' => set_value('unixStamp', $p['unixStamp'], FALSE),
+    );
 
-						echo form_input($data); ?>
+    echo form_input($data);?>
 
                         </div>
                     </div>
@@ -199,8 +199,8 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo $this->lang->line('btn_back'); ?></button>
             <a class="btn btn-primary" onClick="formSubmit()"><?php echo $this->lang->line('btn_save'); ?></a>
             </div></div>
-           <?php  echo form_close();
-		   } ?>
+           <?php echo form_close();
+} ?>
      </div>
       <!-- /colmd12 -->
 

@@ -6,14 +6,6 @@
                 <?php echo $this->lang->line('posts_header'); ?>
             </h1>
 		</div>
-         <div class="col-lg-4">
-        	<div class="input-group searchContainer">
-			  <input type="text" class="form-control" id="searchString">
-			  <span class="input-group-btn">
-				<button class="btn btn-default" type="button" id="searchBtn" onClick="doPostSearch();"><span class="fa fa-search"></span></button>
-			  </span>
-			</div><!-- /input-group -->
-        </div>
         <div class="col-lg-12">
             <ol class="breadcrumb">
                 <li>
@@ -64,7 +56,6 @@ foreach ($posts as $p) {
               	<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
               </div>
               <div id="paginationContainer">
-				  <?php echo $this->pagination->create_links(); ?>
 			  </div>
             </div>
           </div>

@@ -42,15 +42,15 @@
 
          <div class="panel-body">
 			<?php
-			$attr = array('id' => 'contentForm');
-			echo form_open(BASE_URL.'/admin/posts/new/add', $attr); ?>
-						<?php 	$data = array(
-						  'name'        => 'content',
-						  'id'          => 'content',
-						  'class'       => 'js-st-instance',
-						);
+$attr = array('id' => 'contentForm');
+echo form_open(BASE_URL . '/admin/posts/new', $attr);?>
+						<?php $data = array(
+    'name'  => 'content',
+    'id'    => 'content',
+    'class' => 'js-st-instance',
+);
 
-						echo form_textarea($data, set_value('content', $this->input->post('content'), FALSE)); ?>
+echo form_textarea($data, set_value('content', $this->input->post('content'), FALSE));?>
 
 
 
@@ -78,14 +78,14 @@
             		<?php echo form_error('postTitle', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="postTitle"><?php echo $this->lang->line('posts_new_title'); ?></label>
 					<div class="controls">
-                    <?php 	$data = array(
-						  'name'        => 'postTitle',
-						  'id'          => 'postTitle',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('postTitle', '', FALSE)
-						);
+                    <?php $data = array(
+    'name'  => 'postTitle',
+    'id'    => 'postTitle',
+    'class' => 'form-control',
+    'value' => set_value('postTitle', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
                <div class="form-group">
@@ -95,13 +95,13 @@
 						<div><img src="" id="logo_preloaded" style='display:none;'></div>
 						<img src="<?php echo BASE_URL; ?>/theme/admin/images/ajax-loader.gif" style="margin:-7px 5px 0 5px;display:none;" id="loading_pic" />
 						<?php
-							$data = array(
-								'name'		=> 'file_upload',
-								'id'		=> 'file_upload',
-								'class'		=> 'form-control'
-							);
-							echo form_upload($data);
-						?>
+$data = array(
+    'name'  => 'file_upload',
+    'id'    => 'file_upload',
+    'class' => 'form-control',
+);
+echo form_upload($data);
+?>
 						<input type="hidden" id="postImage" name="postImage" />
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -109,14 +109,14 @@
                     <?php echo form_error('postExcerpt', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="postExcerpt"><?php echo $this->lang->line('posts_new_excerpt'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'postExcerpt',
-						  'id'          => 'postExcerpt',
-						  'class'       => 'form-control',
-						  'rows'		=>	'4',
-						);
+						 <?php $data = array(
+    'name'  => 'postExcerpt',
+    'id'    => 'postExcerpt',
+    'class' => 'form-control',
+    'rows'  => '4',
+);
 
-						echo form_textarea($data, set_value('postExcerpt', '', FALSE)); ?>
+echo form_textarea($data, set_value('postExcerpt', '', FALSE));?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -125,14 +125,14 @@
             		<?php echo form_error('postURL', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="postURL"><?php echo $this->lang->line('posts_new_url'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'postURL',
-						  'id'          => 'postURL',
-						  'class'       => 'form-control URLField',
-						  'value'		=> set_value('postURL', '', FALSE)
-						);
+						 <?php $data = array(
+    'name'  => 'postURL',
+    'id'    => 'postURL',
+    'class' => 'form-control URLField',
+    'value' => set_value('postURL', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -141,12 +141,12 @@
 					<label class="control-label" for="categoryID"><?php echo $this->lang->line('posts_new_category'); ?></label>
 					<div class="controls">
                         <?php
-						$att = 'id="categoryID" class="form-control"';
-						$data = array();
-						foreach ($categories as $c){
-						$data[$c['categoryID']] = $c['categoryTitle'];
-						}
-						echo form_dropdown('categoryID', $data, '0', $att); ?>
+$att  = 'id="categoryID" class="form-control"';
+$data = array();
+foreach ($categories as $c) {
+    $data[$c['categoryID']] = $c['categoryTitle'];
+}
+echo form_dropdown('categoryID', $data, '0', $att);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
                   <div class="form-group">
@@ -154,35 +154,35 @@
                       <label class="control-label" for="published"><?php echo $this->lang->line('posts_new_published'); ?></label>
                       <div class="controls">
                           <?php
-                          $att = 'id="published" class="form-control"';
-                          $data = array(
-                              1 => 'Yes',
-                              0 => 'No'
-                          );
+$att  = 'id="published" class="form-control"';
+$data = array(
+    1 => 'Yes',
+    0 => 'No',
+);
 
-                          echo form_dropdown('published', $data, '1', $att); ?>
+echo form_dropdown('published', $data, '1', $att);?>
                       </div> <!-- /controls -->
                   </div> <!-- /form-group -->
             <div class="form-group">
                     <div id="datetimepicker1" class="input-append date">
                     <label class="control-label" for="categoryID"><?php echo $this->lang->line('posts_new_date'); ?></label>
                         <div class="controls">
-                        <?php 	$data = array(
-						  'name'        => 'datePosted',
-						  'id'          => 'datetimepicker',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('datePosted', '', FALSE)
-						);
+                        <?php $data = array(
+    'name'  => 'datePosted',
+    'id'    => 'datetimepicker',
+    'class' => 'form-control',
+    'value' => set_value('datePosted', '', FALSE),
+);
 
-						echo form_input($data); ?>
- 					 <?php 	$data = array(
-						  'name'        => 'unixStamp',
-						  'id'          => 'unixStamp',
-						  'style'		=> 'display:none;',
-						  'value'		=> set_value('unixStamp', '', FALSE)
-						);
+echo form_input($data);?>
+ 					 <?php $data = array(
+    'name'  => 'unixStamp',
+    'id'    => 'unixStamp',
+    'style' => 'display:none;',
+    'value' => set_value('unixStamp', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
                         </div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo $this->lang->line('btn_back'); ?></button>
             <a class="btn btn-primary" onClick="formSubmit()"><?php echo $this->lang->line('btn_save'); ?></a>
             </div></div>
-           <?php  echo form_close(); ?>
+           <?php echo form_close(); ?>
      </div>
       <!-- /span12 -->
 

@@ -688,7 +688,7 @@ class Hoosk_model extends CI_Model {
 
         $return = array();
         if (count($query) > 0) {
-            $return = $query->toArray();
+            $return[] = $query->toArray();
         }
 
         return $return;

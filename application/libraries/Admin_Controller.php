@@ -13,6 +13,8 @@ class Admin_Controller extends CI_Controller {
         $this->load->model('Hoosk_model');
         $this->load->EloquentModel('Settings_model');
         $this->load->EloquentModel('User_model');
+        $this->load->EloquentModel('Post_model');
+        $this->load->EloquentModel('Post_category_model');
 
         //load some helpers
         $this->load->helper('admincontrol');
