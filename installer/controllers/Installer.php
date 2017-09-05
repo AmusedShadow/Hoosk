@@ -19,11 +19,6 @@ class Installer extends CI_Controller {
             show_error('The installer has already run!');
         }
 
-        //if the hoosk.sql file doesn't exists error out
-        if (!file_exists(APPPATH . 'hoosk.sql')) {
-            show_error('Unable to locate hoosk.sql file');
-        }
-
         //without a timezone set php flakes
         $dtz = @date_default_timezone_get();
         //setup the default timezone
@@ -51,8 +46,8 @@ class Installer extends CI_Controller {
         $this->form_validation->set_rules('dbPass', 'Database Password', 'required');
         $this->form_validation->set_rules('dbName', 'Database Name', 'required|callback__tryDatabaseConnect|callback__tryConfigWrite');
         $this->form_validation->set_rules('timezone', 'Timezone', 'required');
-        $this->form_validation->set_rules('defaultUsername','Default Username','required');
-        $this->form_validation->set_rules('defaultPassword','Default Password','required');
+        $this->form_validation->set_rules('defaultUsername', 'Default Username', 'required');
+        $this->form_validation->set_rules('defaultPassword', 'Default Password', 'required');
 
         //if the validation hasn't run or returned falsed lets load the installer view
         if ($this->form_validation->run() === false) {

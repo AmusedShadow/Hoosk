@@ -49,7 +49,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:    my-controller/index    -> my_controller/index
 |        my-controller/my-method    -> my_controller/my_method
  */
-$route['install/complete']                     = "admin/admin/complete";
 $route['attachments']                          = "admin/admin/upload";
 $route['admin']                                = "admin/admin";
 $route['admin/login']                          = "admin/admin/login";
@@ -104,7 +103,6 @@ $route['feed/(:any)']                          = "hoosk_default/feed";
 $route['search/term']        = 'search/index';
 $route['search/term/(:any)'] = 'search/index';
 
-$route['(.+)']                 = "hoosk_default";
 $route['default_controller']   = "hoosk_default";
-$route['404_override']         = '';
+$route['404_override']         = 'hoosk_default/index';
 $route['translate_uri_dashes'] = FALSE;
