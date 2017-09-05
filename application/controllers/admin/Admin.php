@@ -44,7 +44,8 @@ class Admin extends Admin_Controller {
     }
 
     public function login() {
-        $this->_views(array('admin/login'));
+        $this->data['header'] = $this->load->view('admin/headerlog', '', true);
+        $this->_views(array('admin/login'), false, false);
     }
 
     public function loginCheck() {

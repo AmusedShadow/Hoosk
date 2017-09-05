@@ -41,15 +41,15 @@
          <div class="panel-body">
 
 			<?php
-			$attr = array('id' => 'contentForm');
-			echo form_open(BASE_URL.'/admin/pages/new/add', $attr); ?>
-						<?php 	$data = array(
-						  'name'        => 'content',
-						  'id'          => 'content',
-						  'class'       => 'js-st-instance'
-						);
+$attr = array('id' => 'contentForm');
+echo form_open(BASE_URL . '/admin/pages/new/add', $attr);?>
+						<?php $data = array(
+    'name'  => 'content',
+    'id'    => 'content',
+    'class' => 'js-st-instance',
+);
 
-						echo form_textarea($data, set_value('content', $this->input->post('content'), FALSE)); ?>
+echo form_textarea($data, set_value('content', $this->input->post('content'), FALSE));?>
 
 
 
@@ -76,14 +76,14 @@
             		<?php echo form_error('pageTitle', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="pageTitle"><?php echo $this->lang->line('pages_new_title'); ?></label>
 					<div class="controls">
-                    <?php 	$data = array(
-						  'name'        => 'pageTitle',
-						  'id'          => 'pageTitle',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('pageTitle', '', FALSE)
-						);
+                    <?php $data = array(
+    'name'  => 'pageTitle',
+    'id'    => 'pageTitle',
+    'class' => 'form-control',
+    'value' => set_value('pageTitle', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
 
@@ -91,28 +91,28 @@
             		<?php echo form_error('navTitle', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="navTitle"><?php echo $this->lang->line('pages_new_nav'); ?></label>
 					<div class="controls">
-                    <?php 	$data = array(
-						  'name'        => 'navTitle',
-						  'id'          => 'navTitle',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('navTitle', '', FALSE)
-						);
+                    <?php $data = array(
+    'name'  => 'navTitle',
+    'id'    => 'navTitle',
+    'class' => 'form-control',
+    'value' => set_value('navTitle', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
 
                 <div class="form-group">
 					<label class="control-label" for="pageKeywords"><?php echo $this->lang->line('pages_new_keywords'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'pageKeywords',
-						  'id'          => 'pageKeywords',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('pageKeywords', '', FALSE)
-						);
+						 <?php $data = array(
+    'name'  => 'pageKeywords',
+    'id'    => 'pageKeywords',
+    'class' => 'form-control',
+    'value' => set_value('pageKeywords', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -120,14 +120,14 @@
 				<div class="form-group">
 					<label class="control-label" for="pageDescription"><?php echo $this->lang->line('pages_new_description'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'pageDescription',
-						  'id'          => 'pageDescription',
-						  'class'       => 'form-control',
-						  'value'		=> set_value('pageDescription', '', FALSE)
-						);
+						 <?php $data = array(
+    'name'  => 'pageDescription',
+    'id'    => 'pageDescription',
+    'class' => 'form-control',
+    'value' => set_value('pageDescription', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -136,14 +136,14 @@
             		<?php echo form_error('pageURL', '<div class="alert alert-danger">', '</div>'); ?>
 					<label class="control-label" for="pageURL"><?php echo $this->lang->line('pages_new_url'); ?></label>
 					<div class="controls">
-						 <?php 	$data = array(
-						  'name'        => 'pageURL',
-						  'id'          => 'pageURL',
-						  'class'       => 'form-control URLField',
-						  'value'		=> set_value('pageURL', '', FALSE)
-						);
+						 <?php $data = array(
+    'name'  => 'pageURL',
+    'id'    => 'pageURL',
+    'class' => 'form-control URLField',
+    'value' => set_value('pageURL', '', FALSE),
+);
 
-						echo form_input($data); ?>
+echo form_input($data);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -154,13 +154,13 @@
 					<div class="controls">
 
                         <?php
-						$att = 'id="pagePublished" class="form-control"';
-						$data = array(
-						  '1'        => $this->lang->line('option_yes'),
-						  '0'         => $this->lang->line('option_no'),
-						);
+$att  = 'id="pagePublished" class="form-control"';
+$data = array(
+    '1' => $this->lang->line('option_yes'),
+    '0' => $this->lang->line('option_no'),
+);
 
-						echo form_dropdown('pagePublished', $data, '1', $att); ?>
+echo form_dropdown('pagePublished', $data, '1', $att);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -171,16 +171,16 @@
 
                         <?php
 
-						$att = 'id="pageTemplate" class="form-control"';
-						$data = array();
-						foreach ($templates as $t){
-						$t = str_replace(".php", "", $t);
-						if (($t != "header") && ($t != "footer") && ($t != "error") && ($t != "article") && ($t != "category") && ($t != "index.html")){
-						$data[$t] = $t;
-						}
-						}
+$att  = 'id="pageTemplate" class="form-control"';
+$data = array();
+foreach ($templates as $t) {
+    $t = str_replace(".php", "", $t);
+    if (($t != "header") && ($t != "footer") && ($t != "error") && ($t != "article") && ($t != "category") && ($t != "index.html")) {
+        $data[$t] = $t;
+    }
+}
 
-						echo form_dropdown('pageTemplate', $data, 'home', $att); ?>
+echo form_dropdown('pageTemplate', $data, 'home', $att);?>
 
 					</div> <!-- /controls -->
 				</div> <!-- /form-group -->
@@ -189,7 +189,7 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo $this->lang->line('btn_back'); ?></button>
             <a class="btn btn-primary" onClick="formSubmit()"><?php echo $this->lang->line('btn_save'); ?></a>
             </div></div>
-           <?php  echo form_close(); ?>
+           <?php echo form_close(); ?>
      </div>
       <!-- /colmd12 -->
 
@@ -198,6 +198,7 @@
     </div>
     <!-- /container -->
 
+<!--
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
@@ -211,7 +212,12 @@
 	SirTrevor.onBeforeSubmit();
 </script>
 <script type="text/javascript">
+-->
 
+<script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
+
+
+<script>
 function formSubmit(){
   $.ajax({
     url: "/admin/check/session",
@@ -224,10 +230,15 @@ function formSubmit(){
         keyboard: false
       }).modal('show');
     } else {
-      SirTrevor.onBeforeSubmit();
     	document.getElementById("contentForm").submit();
     }
   });
 }
+</script>
+
+<script>
+$(function() {
+    $('#content').trumbowyg();
+});
 </script>
 <?php echo $footer; ?>

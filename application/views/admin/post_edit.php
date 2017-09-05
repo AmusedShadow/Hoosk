@@ -208,22 +208,31 @@ $att  = 'id="published" class="form-control"';
       <!-- /row -->
     </div>
 
-<script src="<?php echo ADMIN_THEME; ?>/js/datepicker/jquery.datetimepicker.js"></script>
+<!--
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor-bootstrap.js"></script>
+-->
+
+<script src="<?php echo ADMIN_THEME; ?>/js/datepicker/jquery.datetimepicker.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/date.js"></script>
+<script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
+<script>
+$(function() {
+    $('#content').trumbowyg();
+});
+</script>
 
 <script type="text/javascript">
 	jQuery('#datetimepicker').datetimepicker({
 		format:'m/d/Y H:m:s'
 			});
-	new SirTrevor.Editor({ el: $('.js-st-instance'),
-  	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe"]
-	});
-	SirTrevor.onBeforeSubmit();
+	//new SirTrevor.Editor({ el: $('.js-st-instance'),
+  //	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe"]
+	//});
+	//SirTrevor.onBeforeSubmit();
 </script>
 <script type="text/javascript">
   function formSubmit(){
@@ -238,7 +247,7 @@ $att  = 'id="published" class="form-control"';
           keyboard: false
         }).modal('show');
       } else {
-        SirTrevor.onBeforeSubmit();
+        //SirTrevor.onBeforeSubmit();
       	var unixtime = Date.parse(document.getElementById('datetimepicker').value).getTime()/1000;
       	document.getElementById("unixStamp").value = unixtime;
       	document.getElementById("contentForm").submit();
