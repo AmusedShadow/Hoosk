@@ -6,15 +6,11 @@ class Hoosk_default extends CI_Controller {
         parent::__construct();
         $this->load->model('Hoosk_page_model');
         $this->load->helper('hoosk_page_helper');
-        $this->load->library('session');
         $this->data['settings'] = $this->Hoosk_page_model->getSettings();
         define('SITE_NAME', $this->data['settings']['siteTitle']);
         define('THEME', $this->data['settings']['siteTheme']);
         define('THEME_FOLDER', BASE_URL . '/theme/' . THEME);
         $this->maintenanceMode = $this->data['settings']['siteMaintenance'];
-        if (($this->maintenanceMode) && ($this->session->userdata('logged_in'))) {
-            $this->maintenanceMode = false;
-        }
     }
 
     public function index() {
@@ -30,7 +26,9 @@ class Hoosk_default extends CI_Controller {
             $pageURL = "home";
         }
 
-        $this->data['page'] = $this->Hoosk_page_model->getPage($pageURL);
+        $this->data['page']                    = $this->Hoosk_page_model->getPage($pageURL);
+        $this->data['page']['pageContentHTML'] = $this->data['page']['pageContent'];
+        $this->data['page']['jumbotronHTML']   = $this->data['page']['jumbotron'];
 
         if ($this->data['page']['pageTemplate'] != "") {
             $this->data['header'] = $this->load->view('templates/header', $this->data, true);

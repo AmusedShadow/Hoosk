@@ -198,22 +198,6 @@ echo form_dropdown('pageTemplate', $data, 'home', $att);?>
     </div>
     <!-- /container -->
 
-<!--
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor-bootstrap.js"></script>
-
-<script type="text/javascript">
-	new SirTrevor.Editor({ el: $('.js-st-instance'),
-  	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe"]
-	});
-	SirTrevor.onBeforeSubmit();
-</script>
-<script type="text/javascript">
--->
-
 <script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
 
 

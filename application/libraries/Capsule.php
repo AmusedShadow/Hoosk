@@ -41,7 +41,7 @@ class Capsule extends Manager {
                 'charset'   => $data['char_set'],
                 'collation' => $data['dbcollat'],
                 'prefix'    => $data['dbprefix'],
-            ));
+            ), $name);
         }
 
         if (!in_array('eloquent', array_keys(is_loaded()))) {

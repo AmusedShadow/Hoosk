@@ -280,13 +280,6 @@ class Hoosk_model extends CI_Model {
             $content = $this->input->post('content');
         }
 
-        if (!empty($content)) {
-            $converter   = new Converter();
-            $HTMLContent = $converter->toHtml($content);
-        } else {
-            $HTMLContent = '';
-        }
-
         $m                  = $this->page_attributes_model->newInstance();
         $m->pagePublished   = $published;
         $m->pageTemplate    = $template;
@@ -299,13 +292,12 @@ class Hoosk_model extends CI_Model {
         $m->save();
 
         $this->page_content_model->insert(array(
-            'pageID'          => $m->pageID,
-            'pageTitle'       => $this->input->post('pageTitle'),
-            'navTitle'        => $this->input->post('navTitle'),
-            'pageContent'     => $this->input->post('content'),
-            'pageContentHTML' => $HTMLContent,
-            'jumbotron'       => '',
-            'jumbotronHTML'   => '',
+            'pageID'        => $m->pageID,
+            'pageTitle'     => $this->input->post('pageTitle'),
+            'navTitle'      => $this->input->post('navTitle'),
+            'pageContent'   => $this->input->post('content'),
+            'jumbotron'     => '',
+            'jumbotronHTML' => '',
         ));
 
         $this->page_meta_model->insert(array(
@@ -369,15 +361,6 @@ class Hoosk_model extends CI_Model {
 
     public function updatePage($id) {
         // Update the page
-
-        if ($this->input->post('content') != "") {
-            $sirTrevorInput = $this->input->post('content');
-            $converter      = new Converter();
-            $HTMLContent    = $converter->toHtml($sirTrevorInput);
-        } else {
-            $HTMLContent = "";
-        }
-
         if ($id != 1) {
             $data = array(
                 'pagePublished' => $this->input->post('pagePublished'),
@@ -393,10 +376,9 @@ class Hoosk_model extends CI_Model {
         $this->db->where("pageID", $id);
         $this->db->update('hoosk_page_attributes', $data);
         $contentdata = array(
-            'pageTitle'       => $this->input->post('pageTitle'),
-            'navTitle'        => $this->input->post('navTitle'),
-            'pageContent'     => $this->input->post('content'),
-            'pageContentHTML' => $HTMLContent,
+            'pageTitle'   => $this->input->post('pageTitle'),
+            'navTitle'    => $this->input->post('navTitle'),
+            'pageContent' => $this->input->post('content'),
         );
         $this->db->where("pageID", $id);
         $this->db->update('hoosk_page_content', $contentdata);
@@ -410,13 +392,6 @@ class Hoosk_model extends CI_Model {
 
     public function updateJumbotron($id) {
         // Update the jumbotron
-        if ($this->input->post('jumbotron') != "") {
-            $sirTrevorInput = $this->input->post('jumbotron');
-            $converter      = new Converter();
-            $HTMLContent    = $converter->toHtml($sirTrevorInput);
-        } else {
-            $HTMLContent = "";
-        }
         $data = array(
             'enableJumbotron' => $this->input->post('enableJumbotron'),
             'enableSlider'    => $this->input->post('enableSlider'),
@@ -425,8 +400,7 @@ class Hoosk_model extends CI_Model {
         $this->db->where("pageID", $id);
         $this->db->update('hoosk_page_attributes', $data);
         $contentdata = array(
-            'jumbotron'     => $this->input->post('jumbotron'),
-            'jumbotronHTML' => $HTMLContent,
+            'jumbotron' => $this->input->post('jumbotron'),
         );
         $this->db->where("pageID", $id);
         $this->db->update('hoosk_page_content', $contentdata);
@@ -659,24 +633,16 @@ class Hoosk_model extends CI_Model {
 
     public function createPost() {
         // Create the post
-        if ($this->input->post('content') != "") {
-            $sirTrevorInput = $this->input->post('content');
-            $converter      = new Converter();
-            $HTMLContent    = $converter->toHtml($sirTrevorInput);
-        } else {
-            $HTMLContent = "";
-        }
         $data = array(
-            'postTitle'       => $this->input->post('postTitle'),
-            'categoryID'      => $this->input->post('categoryID'),
-            'postURL'         => $this->input->post('postURL'),
-            'postContent'     => $this->input->post('content'),
-            'postContentHTML' => $HTMLContent,
-            'postExcerpt'     => $this->input->post('postExcerpt'),
-            'published'       => $this->input->post('published'),
-            'datePosted'      => $this->input->post('datePosted'),
-            'unixStamp'       => $this->input->post('unixStamp'),
-            'postImage'       => '',
+            'postTitle'   => $this->input->post('postTitle'),
+            'categoryID'  => $this->input->post('categoryID'),
+            'postURL'     => $this->input->post('postURL'),
+            'postContent' => $this->input->post('content'),
+            'postExcerpt' => $this->input->post('postExcerpt'),
+            'published'   => $this->input->post('published'),
+            'datePosted'  => $this->input->post('datePosted'),
+            'unixStamp'   => $this->input->post('unixStamp'),
+            'postImage'   => '',
         );
         if ($this->input->post('postImage') != "") {
             $data['postImage'] = $this->input->post('postImage');
@@ -705,24 +671,15 @@ class Hoosk_model extends CI_Model {
 
     public function updatePost($id) {
         // Update the post
-
-        if ($this->input->post('content') != "") {
-            $sirTrevorInput = $this->input->post('content');
-            $converter      = new Converter();
-            $HTMLContent    = $converter->toHtml($sirTrevorInput);
-        } else {
-            $HTMLContent = "";
-        }
         $data = array(
-            'postTitle'       => $this->input->post('postTitle'),
-            'categoryID'      => $this->input->post('categoryID'),
-            'postURL'         => $this->input->post('postURL'),
-            'postContent'     => $this->input->post('content'),
-            'postContentHTML' => $HTMLContent,
-            'postExcerpt'     => $this->input->post('postExcerpt'),
-            'published'       => $this->input->post('published'),
-            'datePosted'      => $this->input->post('datePosted'),
-            'unixStamp'       => $this->input->post('unixStamp'),
+            'postTitle'   => $this->input->post('postTitle'),
+            'categoryID'  => $this->input->post('categoryID'),
+            'postURL'     => $this->input->post('postURL'),
+            'postContent' => $this->input->post('content'),
+            'postExcerpt' => $this->input->post('postExcerpt'),
+            'published'   => $this->input->post('published'),
+            'datePosted'  => $this->input->post('datePosted'),
+            'unixStamp'   => $this->input->post('unixStamp'),
         );
         if ($this->input->post('postImage') != "") {
             $data['postImage'] = $this->input->post('postImage');

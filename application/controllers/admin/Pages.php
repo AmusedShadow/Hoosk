@@ -46,7 +46,6 @@ class Pages extends Admin_Controller {
         } else {
             //Validation passed
             //Add the page
-            $this->load->library('Sioen');
             $this->Hoosk_model->createPage();
             //Return to page list
             redirect(BASE_URL . '/admin/pages', 'refresh');
@@ -79,7 +78,6 @@ class Pages extends Admin_Controller {
         } else {
             //Validation passed
             //Update the page
-            $this->load->library('Sioen');
             $this->Hoosk_model->updatePage($this->uri->segment(4));
             //Return to page list
             redirect(BASE_URL . '/admin/pages', 'refresh');
@@ -98,7 +96,6 @@ class Pages extends Admin_Controller {
     }
 
     public function jumboAdd() {
-        $this->load->library('Sioen');
         $this->Hoosk_model->updateJumbotron($this->uri->segment(4));
         redirect(BASE_URL . '/admin/pages', 'refresh');
     }

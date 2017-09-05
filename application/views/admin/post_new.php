@@ -202,13 +202,6 @@ echo form_input($data);?>
 
 <script src="<?php echo ADMIN_THEME; ?>/js/datepicker/jquery.datetimepicker.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/date.js"></script>
-<!--
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor-bootstrap.js"></script>
--->
 <script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
 <script>
 $(function() {

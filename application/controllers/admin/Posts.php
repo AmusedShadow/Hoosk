@@ -59,7 +59,6 @@ class Posts extends Admin_Controller {
             }
 
             //Add the post
-            $this->load->library('Sioen');
             $this->Hoosk_model->createPost();
             //Return to post list
             redirect(site_url('/admin/posts'));
@@ -99,7 +98,6 @@ class Posts extends Admin_Controller {
                 rename($path_upload . $this->input->post('postImage'), $path_images . $this->input->post('postImage'));
             }
             //Update the post
-            $this->load->library('Sioen');
             $this->Hoosk_model->updatePost($this->uri->segment(4));
             //Return to post list
             redirect(site_url('/admin/posts'));

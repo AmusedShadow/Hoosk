@@ -209,20 +209,6 @@ $att  = 'id="pagePublished" class="form-control"';
     </div>
     <!-- /container -->
 
-<!--
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor.js"></script>
-<script src="<?php echo ADMIN_THEME; ?>/js/trevor/sir-trevor-bootstrap.js"></script>
-<script type="text/javascript">
-	new SirTrevor.Editor({ el: $('.js-st-instance'),
-  	blockTypes: ["Columns", "Heading", "Text", "ImageExtended", "Quote", "Accordion", "Button", "Video", "List", "Iframe","Linebreaks"]
-	});
-	SirTrevor.onBeforeSubmit();
-</script>
-
--->
 <script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
 
 
@@ -250,26 +236,4 @@ $(function() {
     $('#content').trumbowyg();
 });
 </script>
-<!--
-<script type="text/javascript">
-
-function formSubmit(){
-  $.ajax({
-    url: "/admin/check/session",
-  }).done(function(data) {
-    sessionExist = data;
-    if(sessionExist==0){
-      $('.modal').modal('hide');
-      $('#loginModal').modal({
-        backdrop: 'static',
-        keyboard: false
-      }).modal('show');
-    } else {
-      SirTrevor.onBeforeSubmit();
-    	document.getElementById("contentForm").submit();
-    }
-  });
-}
-</script>
--->
 <?php echo $footer; ?>

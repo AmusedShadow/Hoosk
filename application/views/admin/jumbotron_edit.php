@@ -52,16 +52,16 @@
                 </div>
             	<div class="panel-body text-center">
 					<?php foreach ($pages as $p) {
-                    echo form_error('pageTitle', '<div class="alert">', '</div>');
-                    $attr = "id='contentForm'";
-                   echo form_open(BASE_URL.'/admin/pages/jumbotron/'.$this->uri->segment(4), $attr); ?>
-                                <?php 	$data = array(
-                                  'id'          => 'jumbotron',
-                                  'name'          => 'jumbotron',
-                                  'class'       => 'js-st-instance',
-                                );
+    echo form_error('pageTitle', '<div class="alert">', '</div>');
+    $attr = "id='contentForm'";
+    echo form_open(BASE_URL . '/admin/pages/jumbotron/' . $this->uri->segment(4), $attr);?>
+                                <?php $data = array(
+        'id'    => 'jumbotron',
+        'name'  => 'jumbotron',
+        'class' => 'js-st-instance',
+    );
 
-					echo form_textarea($data, set_value('jumbotron', $p['jumbotron'], FALSE)); ?>
+    echo form_textarea($data, set_value('jumbotron', $p['jumbotron'], FALSE));?>
                 </div>
                 <div class="panel-footer">
                     <a class="btn btn-primary" data-toggle="modal" href="#attributes"><?php echo $this->lang->line('btn_next'); ?></a>
@@ -83,13 +83,13 @@
 					<label class="control-label" for="enableJumbotron"><?php echo $this->lang->line('pages_jumbo_enable'); ?></label>
 
                         <?php
-						$att = 'id="enableJumbotron" class="form-control"';
-						$data = array(
-						  '1'        => $this->lang->line('option_yes'),
-						  '0'         => $this->lang->line('option_no'),
-						);
+$att  = 'id="enableJumbotron" class="form-control"';
+    $data = array(
+        '1' => $this->lang->line('option_yes'),
+        '0' => $this->lang->line('option_no'),
+    );
 
-						echo form_dropdown('enableJumbotron', $data, $p['enableJumbotron'], $att); ?>
+    echo form_dropdown('enableJumbotron', $data, $p['enableJumbotron'], $att);?>
 
 				</div> <!-- /form-group -->
               </div>
@@ -119,23 +119,23 @@
 
 						<label class="control-label" for="enableJumbotron"><?php echo $this->lang->line('pages_slider_enable'); ?></label>
                         <?php
-						$att = 'id="enableSlider" class="form-control"';
-						$data = array(
-						  '1'        => $this->lang->line('option_yes'),
-						  '0'         => $this->lang->line('option_no'),
-						);
+$att  = 'id="enableSlider" class="form-control"';
+    $data = array(
+        '1' => $this->lang->line('option_yes'),
+        '0' => $this->lang->line('option_no'),
+    );
 
-						echo form_dropdown('enableSlider', $data, $p['enableSlider'], $att); ?>
+    echo form_dropdown('enableSlider', $data, $p['enableSlider'], $att);?>
 
 				</div> <!-- /form-group -->
 
                 <button onclick="addNewPic();" class="btn btn-primary" type="button"><?php echo $this->lang->line('pages_slider_add'); ?></button>
                 <hr />
                 <div class="slider">
-               <?php $i=0;
+               <?php $i = 0;
 
-                 foreach ($slides as $s) {
-                  $i++;?>
+    foreach ($slides as $s) {
+        $i++;?>
                  <div class="control-group" id="pic_element<?php echo $i; ?>">
                     <label class="control-label">
                         <span><?php echo $this->lang->line('pages_slider_title'); ?></span>
@@ -143,28 +143,28 @@
                         <button id="delete<?php echo $i; ?>" class="close" type="button" onClick="removePrePic('<?php echo $i; ?>');">×</button>
                     </label>
                     <div class="controls">
-                        <div><img src="<?php if ($s['slideImage'] != "") { echo BASE_URL.'/uploads/'.$s['slideImage']; } ?>" id="logo_preloaded<?php echo $i; ?>" <?php if ($s['slideImage'] == "") { echo "style='display:none;'"; } ?>></div>
+                        <div><img src="<?php if ($s['slideImage'] != "") {echo BASE_URL . '/uploads/' . $s['slideImage'];}?>" id="logo_preloaded<?php echo $i; ?>" <?php if ($s['slideImage'] == "") {echo "style='display:none;'";}?>></div>
                         <img src="<?php echo BASE_URL; ?>/theme/admin/images/ajax-loader.gif" style="margin:-7px 5px 0 5px;display:none;" id="loading_pic<?php echo $i; ?>" />
                         <?php
-                            $data = array(
-                                'name'		=> 'file_upload'.$i,
-                                'id'		=> 'file_upload'.$i,
-                                'class'		=> 'span5',
-                            );
-                            echo form_upload($data);
-                        ?>
+$data = array(
+            'name'  => 'file_upload' . $i,
+            'id'    => 'file_upload' . $i,
+            'class' => 'span5',
+        );
+        echo form_upload($data);
+        ?>
                         <p><?php echo $this->lang->line('pages_slider_alt'); ?></p>
-                         <input class="form-control" type="text" id="alt<?php echo $i; ?>" name="alt<?php echo $i; ?>" <?php if ($s['slideAlt'] != "") { echo 'value="'.$s['slideAlt'].'"'; } else { echo  ''; } ?> />
+                         <input class="form-control" type="text" id="alt<?php echo $i; ?>" name="alt<?php echo $i; ?>" <?php if ($s['slideAlt'] != "") {echo 'value="' . $s['slideAlt'] . '"';} else {echo '';}?> />
                          <p><?php echo $this->lang->line('pages_slider_link'); ?></p>
-                        <input class="form-control" type="text" id="link<?php echo $i; ?>" name="link<?php echo $i; ?>" <?php if ($s['slideLink'] != "") { echo 'value="'.$s['slideLink'].'"'; } else { echo  ''; } ?> />
+                        <input class="form-control" type="text" id="link<?php echo $i; ?>" name="link<?php echo $i; ?>" <?php if ($s['slideLink'] != "") {echo 'value="' . $s['slideLink'] . '"';} else {echo '';}?> />
 
                         <input type="hidden" id="slide<?php echo $i; ?>" name="slide<?php echo $i; ?>" value="<?php echo $s['slideImage']; ?>" />
                     </div> <!-- /controls -->
                 </div> <!-- /control-group -->
                 <?php
-                     }
+}
 
-            ?>
+    ?>
             </div>
             <input type="hidden" id="pics" name="pics" value="" />
 
@@ -179,8 +179,8 @@
           </div>
         </div>
 
-           <?php  echo form_close();
-		   } ?>
+           <?php echo form_close();
+} ?>
      </div>
       <!-- /colmd12 -->
 
@@ -189,7 +189,7 @@
     </div>
     <!-- /container -->
 
-
+<!--
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/underscore.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/eventable.js"></script>
 <script src="<?php echo ADMIN_THEME; ?>/js/trevor/sortable.min.js"></script>
@@ -201,6 +201,13 @@
 	});
 	SirTrevor.onBeforeSubmit();
 
+</script>
+-->
+<script src="/bower_components/trumbowyg/dist/trumbowyg.min.js"></script>
+<script>
+$(function() {
+    $('#jumbotron').trumbowyg();
+});
 </script>
 <script type="text/javascript">
 function formSubmit(){
@@ -229,7 +236,7 @@ function formSubmit(){
 
   	document.getElementById('pics').value = data_to_post;
 
-  	SirTrevor.onBeforeSubmit();
+  	//SirTrevor.onBeforeSubmit();
   	document.getElementById("contentForm").submit();
   }
   });
