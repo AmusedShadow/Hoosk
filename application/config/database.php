@@ -75,12 +75,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'          => '',
-    'hostname'     => DB_HOST,
-    'username'     => DB_USERNAME,
-    'password'     => DB_PASS,
-    'database'     => DB_NAME,
+    'hostname'     => defined('DB_HOST') ? DB_HOST : '',
+    'username'     => defined('DB_USERNAME') ? DB_USERNAME : '',
+    'password'     => defined('DB_PASS') ? DB_PASS : '',
+    'database'     => defined('DB_NAME') ? DB_NAME : '',
     'dbdriver'     => 'pdo',
-    'subdriver'    => DB_DRIVER,
+    'subdriver'    => defined('DB_DRIVER') ? DB_DRIVER : '',
     'dbprefix'     => '',
     'pconnect'     => FALSE,
     'db_debug'     => (ENVIRONMENT !== 'production'),

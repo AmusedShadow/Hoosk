@@ -1,0 +1,22 @@
+<?php
+
+//database details
+define('DB_HOST','localhost'); //database hostname
+define('DB_USERNAME','root'); //database username
+define('DB_PASS','password'); //database password
+define('DB_NAME','hoosk4'); //database name
+define('DB_DRIVER','mysql');
+
+//url details
+define('BASE_URL','http://localhost:8081'); //base url
+define('EMAIL_URL','http://localhost:8081'); //email/cookie url
+
+//base settings
+define('ADMIN_THEME',BASE_URL . '/theme/admin');
+define('SALT','bYxLOf25rCqhMeV1JulteDhRvsGZ17DmbxplEDTu9f3PqNqYCXVUUtgvKznZaPk8a0WS2GEyzgO7oPwr1sWNCJcFczEwfQBAdBkjHOGFpLk44i4Mj6riuIm2pg3lAymZSL5HbQonR7s093ItFJ5eiAXcRV9wNWanKKHTyMdXS6Ij8UQx6vBd');
+define('RSS_FEED',true);
+define('SITENAME_TXT','site name');
+
+$assign_to_config['encryption_key'] = 'xbMKJC09XiEkjUe4hGoF7sWBfQcSnw2q'; //custom encryption key
+
+date_default_timezone_set('America/New_York');

@@ -57,7 +57,7 @@ if (file_exists('config.php')) {
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------
@@ -113,11 +113,7 @@ $system_path = 'system';
  *
  * NO TRAILING SLASH!
  */
-if ($installerRun == false) {
-    $application_folder = 'installer';
-} else {
-    $application_folder = 'application';
-}
+$application_folder = 'application';
 
 /*
  *---------------------------------------------------------------

@@ -50,9 +50,9 @@ class MY_Loader extends CI_Loader {
             }
         }
 
-        if (!defined('HOOSK_ADMIN')):
+        if ((!defined('HOOSK_ADMIN')) && (defined('THEME'))) {
             $_ci_path = 'theme/' . THEME . '/' . $_ci_file;
-        endif;
+        }
         ##########################################################################################
 
         if (!$file_exists && !file_exists($_ci_path)) {
