@@ -8,6 +8,7 @@ class Hoosk_model extends CI_Model {
         // Call the Model constructor
         parent::__construct();
         $this->load->database();
+        $this->load->library('capsule');
 
         $this->load->EloquentModel('Settings_model');
         $this->load->EloquentModel('Page_content_model');

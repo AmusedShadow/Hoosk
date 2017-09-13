@@ -29,19 +29,25 @@ class Capsule extends Manager {
         $this->setAsGlobal();
         $this->bootEloquent();
 
-        $CI->config->load('database', true);
         $config = $CI->config->item('database');
-        foreach ($config as $name => $data) {
-            $this->addConnection(array(
-                'driver'    => $data['subdriver'],
-                'host'      => $data['hostname'],
-                'database'  => $data['database'],
-                'username'  => $data['username'],
-                'password'  => $data['password'],
-                'charset'   => $data['char_set'],
-                'collation' => $data['dbcollat'],
-                'prefix'    => $data['dbprefix'],
-            ), $name);
+        if (is_null($config)) {
+            $CI->config->load('database', true);
+        }
+
+        $config = $CI->config->item('database');
+        if (count($config) > 0) {
+            foreach ($config as $name => $data) {
+                $this->addConnection(array(
+                    'driver'    => $data['subdriver'],
+                    'host'      => $data['hostname'],
+                    'database'  => $data['database'],
+                    'username'  => $data['username'],
+                    'password'  => $data['password'],
+                    'charset'   => $data['char_set'],
+                    'collation' => $data['dbcollat'],
+                    'prefix'    => $data['dbprefix'],
+                ), $name);
+            }
         }
 
         if (!in_array('eloquent', array_keys(is_loaded()))) {

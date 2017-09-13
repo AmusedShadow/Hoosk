@@ -147,9 +147,9 @@ class MY_Loader extends CI_Loader {
     public function database($params = '', $return = FALSE, $query_builder = NULL) {
         // Grab the super object
         $CI = &get_instance();
-        if (!isset($CI->capsule)) {
-            $CI->load->library('capsule');
-        }
+        //if (!isset($CI->capsule)) {
+        //    $CI->load->library('capsule');
+        //}
 
         return parent::database($params, $return, $query_builder);
     }

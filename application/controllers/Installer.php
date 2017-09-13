@@ -61,8 +61,6 @@ class Installer extends CI_Controller {
             $this->_buildConfigFile(); //build the configuration file and save it
             $this->_runMigrations(); //setup sql tables and such
             $this->_fixDefaultAccount(); //removes the existing demo account and creates a new one
-            echo 'YES';
-            exit;
             $this->load->view('installer/congrats'); //load our congrats view
         }
     }
@@ -118,9 +116,6 @@ class Installer extends CI_Controller {
             'dbcollat'    => 'utf8_general_ci',
             'autoinit'    => false,
         );
-
-        $cfg['default'] = $testConfig;
-        $this->config->set_item('database', $cfg);
 
         //if we have all of the required information lets try testing our connection
         if ((!empty($testConfig['hostname'])) && (!empty($testConfig['username']))
@@ -204,6 +199,7 @@ class Installer extends CI_Controller {
 
         //save our file
         file_put_contents(FCPATH . 'config.php', $fileData);
+        @include FCPATH . 'config.php';
     }
 
     /**
@@ -263,7 +259,7 @@ class Installer extends CI_Controller {
 
     protected function _runMigrations() {
         $this->load->library('Schema');
-        $this->load->library('migration');
+        $this->load->library('Migration');
 
         if ($this->migration->current() === FALSE) {
             show_error($this->migration->error_string());
@@ -271,7 +267,17 @@ class Installer extends CI_Controller {
     }
 
     protected function _fixDefaultAccount() {
-        define('SALT', $this->salt);
+        //define('SALT', $this->salt);
+
+        //because the database config loaded already we have to update the config before loading capsule or anything
+        $this->config->load('database', true);
+        $db                         = $this->config->item('database');
+        $db['default']['hostname']  = $this->input->post('dbHost');
+        $db['default']['username']  = $this->input->post('dbUserName');
+        $db['default']['password']  = $this->input->post('dbPass');
+        $db['default']['database']  = $this->input->post('dbName');
+        $db['default']['subdriver'] = 'mysql';
+        $this->config->set_item('database', $db);
 
         $this->load->model('hoosk_model');
 
